@@ -13,6 +13,10 @@ public:
     IGame(){}
     virtual ~IGame(){}
 
+    virtual bool getIsRunning() = 0;
+
+    virtual void setIsRunning(bool value) = 0;
+
     virtual void update() = 0;
 private:
 };
@@ -23,9 +27,14 @@ public:
     Game(){}
     virtual ~Game(){}
 
+    virtual bool getIsRunning(){return isRunning;}
+
+    virtual void setIsRunning(bool value){isRunning = value;}
+
     virtual void update();
 
 private:
+    bool isRunning{false};
 
 };
 

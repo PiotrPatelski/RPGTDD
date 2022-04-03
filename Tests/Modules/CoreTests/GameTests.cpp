@@ -19,18 +19,14 @@ struct GameLoopTest : public testing::Test
 
 TEST_F(GameLoopTest, gameIsNotUpdatedWhenItIsNotRunning)
 {
-    ASSERT_FALSE(sut->getIsGameRunning());
-}
-
-TEST_F(GameLoopTest, gameIsRunningWhenItIsSetToRun)
-{
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(false));
+    EXPECT_CALL(game, update()).Times(0);
     sut->run();
-
-    ASSERT_TRUE(sut->getIsGameRunning());
 }
 
 TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
 {
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(true));
     EXPECT_CALL(game, update());
     sut->run();
 }
