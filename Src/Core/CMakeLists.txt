@@ -2,10 +2,12 @@ set(MODULE_NAME Core)
 
 set(SOURCES
     Source/Game.cpp
+    Source/GameLoop.cpp
     )
 
 set(HEADERS
     Headers/Game.h
+    Headers/GameLoop.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})
