@@ -1,5 +1,5 @@
 #!/bin/bash
-exeName="RPGTDD.exe";
+exeName="RPGTDD";
 exePath=`dirname $(realpath $0)`/../build/Src/$exeName
 if test -e "$exePath";
 then

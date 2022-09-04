@@ -1,5 +1,5 @@
 #!/bin/bash
-exeName="CoreTests.exe";
+exeName="CoreTests";
 exePath=`dirname $(realpath $0)`/../build/Tests/Modules/CoreTests/$exeName
 if test -e "$exePath";
 then
