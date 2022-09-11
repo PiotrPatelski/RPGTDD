@@ -10,6 +10,7 @@ namespace Core
 using ::testing::NiceMock;
 using ::testing::Test;
 using ::testing::Return;
+using ::testing::InSequence;
 
 struct GameLoopTest : public testing::Test
 {
@@ -17,18 +18,15 @@ struct GameLoopTest : public testing::Test
     std::unique_ptr<IGameLoop> sut = std::make_unique<GameLoop>(game);
 };
 
-TEST_F(GameLoopTest, gameIsNotUpdatedWhenItIsNotRunning)
+TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
 {
+    InSequence seq;
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(true));
+    EXPECT_CALL(game, update());
     EXPECT_CALL(game, getIsRunning()).WillOnce(Return(false));
     EXPECT_CALL(game, update()).Times(0);
     sut->run();
-}
 
-TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
-{
-    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(true));
-    EXPECT_CALL(game, update());
-    sut->run();
 }
 
 }

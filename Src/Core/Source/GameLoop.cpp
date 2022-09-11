@@ -12,7 +12,7 @@ GameLoop::GameLoop(IGame& game)
 
 void GameLoop::run()
 {
-    if(game.getIsRunning())
+    while(game.getIsRunning())
     {
         game.update();
     }
