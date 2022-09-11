@@ -14,4 +14,9 @@ void Game::updateDeltaTime()
 
 }
 
+void Game::render()
+{
+
+}
+
 }

@@ -26,7 +26,6 @@ TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
     EXPECT_CALL(game, getIsRunning()).WillOnce(Return(false));
     EXPECT_CALL(game, update()).Times(0);
     sut->run();
-
 }
 
 TEST_F(GameLoopTest, gameUpdatesDeltaTimeWhenItIsRunning)
@@ -37,7 +36,16 @@ TEST_F(GameLoopTest, gameUpdatesDeltaTimeWhenItIsRunning)
     EXPECT_CALL(game, getIsRunning()).WillOnce(Return(false));
     EXPECT_CALL(game, updateDeltaTime()).Times(0);
     sut->run();
+}
 
+TEST_F(GameLoopTest, gameCallsRenderWhenItIsRunning)
+{
+    InSequence seq;
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(true));
+    EXPECT_CALL(game, render());
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(false));
+    EXPECT_CALL(game, render()).Times(0);
+    sut->run();
 }
 
 }

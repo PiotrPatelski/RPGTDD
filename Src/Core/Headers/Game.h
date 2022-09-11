@@ -18,8 +18,8 @@ public:
     virtual void setIsRunning(bool value) = 0;
 
     virtual void update() = 0;
-
     virtual void updateDeltaTime() = 0;
+    virtual void render() = 0;
 private:
 };
 
@@ -34,9 +34,8 @@ public:
     virtual void setIsRunning(bool value){isRunning = value;}
 
     virtual void update();
-
     virtual void updateDeltaTime();
-
+    virtual void render();
 private:
     bool isRunning{false};
 

@@ -16,6 +16,7 @@ void GameLoop::run()
     {
         game.update();
         game.updateDeltaTime();
+        game.render();
     }
 }
 
