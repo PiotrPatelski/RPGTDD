@@ -15,6 +15,7 @@ void GameLoop::run()
     while(game.getIsRunning())
     {
         game.update();
+        game.updateDeltaTime();
     }
 }
 

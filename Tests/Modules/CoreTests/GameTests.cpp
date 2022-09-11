@@ -29,4 +29,15 @@ TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
 
 }
 
+TEST_F(GameLoopTest, gameUpdatesDeltaTimeWhenItIsRunning)
+{
+    InSequence seq;
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(true));
+    EXPECT_CALL(game, updateDeltaTime());
+    EXPECT_CALL(game, getIsRunning()).WillOnce(Return(false));
+    EXPECT_CALL(game, updateDeltaTime()).Times(0);
+    sut->run();
+
+}
+
 }

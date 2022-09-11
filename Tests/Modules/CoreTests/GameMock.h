@@ -14,6 +14,7 @@ public:
     MOCK_METHOD(bool, getIsRunning, (), (override));
     MOCK_METHOD(void, setIsRunning, (bool), (override));
     MOCK_METHOD(void, update, (), (override));
+    MOCK_METHOD(void, updateDeltaTime, (), (override));
 };    
 
 }
