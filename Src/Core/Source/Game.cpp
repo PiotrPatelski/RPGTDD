@@ -4,6 +4,13 @@
 namespace Core
 {
 
+Game::Game(IWindowManager& windowMngr)
+:   IGame::IGame(),
+    windowMngr{windowMngr}
+{
+
+}
+
 void Game::update()
 {
 

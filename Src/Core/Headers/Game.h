@@ -3,6 +3,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <WindowManager.h>
 
 namespace Core
 {
@@ -13,9 +14,7 @@ public:
     IGame(){}
     virtual ~IGame(){}
 
-    virtual bool getIsRunning() = 0;
-
-    virtual void setIsRunning(bool value) = 0;
+    virtual bool isWindowActive() = 0;
 
     virtual void update() = 0;
     virtual void updateDeltaTime() = 0;
@@ -26,18 +25,16 @@ private:
 class Game : public IGame
 {
 public:
-    Game(){}
+    Game(IWindowManager&);
     virtual ~Game(){}
 
-    virtual bool getIsRunning(){return isRunning;}
-
-    virtual void setIsRunning(bool value){isRunning = value;}
+    virtual bool isWindowActive(){return windowMngr.isWindowActive();}
 
     virtual void update();
     virtual void updateDeltaTime();
     virtual void render();
 private:
-    bool isRunning{false};
+    IWindowManager& windowMngr;
 
 };
 

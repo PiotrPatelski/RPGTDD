@@ -12,7 +12,7 @@ GameLoop::GameLoop(IGame& game)
 
 void GameLoop::run()
 {
-    while(game.getIsRunning())
+    while(game.isWindowActive())
     {
         game.update();
         game.updateDeltaTime();
