@@ -7,9 +7,8 @@
 int main()
 {
     std::cout<<"Entered main.cpp..."<<std::endl;
-    auto windowBuilder = std::make_unique<Core::WindowManagerBuilder>();
-    std::unique_ptr<Core::IWindowManager> windowMngr = windowBuilder->build();
-    Core::Game sfmlRpg(*windowMngr.release());
+    auto windowMngr = Core::WindowManagerBuilder{}.build();
+    Core::Game sfmlRpg(windowMngr);
     Core::GameLoop gameInstance(sfmlRpg);
     gameInstance.run();
 

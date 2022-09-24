@@ -52,22 +52,20 @@ TEST_F(GameLoopTest, gameCallsRenderWhenItIsRunning)
 
 struct GameTest : public testing::Test
 {
-    std::unique_ptr<WindowManagerMock> windowMngr = std::make_unique<NiceMock<WindowManagerMock>>();
-    std::unique_ptr<IGame> sut = std::make_unique<Game>(*windowMngr);
+    NiceMock<WindowManagerMock> windowMngr;
+    std::unique_ptr<IGame> sut = std::make_unique<Game>(windowMngr);
 };
 
 TEST_F(GameTest, gameChecksIfWindowIsActive)
 {
-    // EXPECT_CALL(windowMngrBuilder, build());
-
-    EXPECT_CALL(*windowMngr, isWindowActive()).WillOnce(Return(true));
+    EXPECT_CALL(windowMngr, isWindowActive()).WillOnce(Return(true));
     bool result = sut->isWindowActive();
     ASSERT_TRUE(result);
 }
 
 TEST_F(GameTest, gameChecksIfWindowIsNotActive)
 {
-    EXPECT_CALL(*windowMngr, isWindowActive()).WillOnce(Return(false));
+    EXPECT_CALL(windowMngr, isWindowActive()).WillOnce(Return(false));
     bool result = sut->isWindowActive();
     ASSERT_FALSE(result);
 }

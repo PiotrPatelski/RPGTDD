@@ -3,9 +3,9 @@
 namespace Core
 {
 
-std::unique_ptr<IWindowManager> WindowManagerBuilder::build()
+WindowManager WindowManagerBuilder::build()
 { 
-    return std::make_unique<WindowManager>(sf::VideoMode(800, 600), "SFML window");
+    return WindowManager(sf::VideoMode(800, 600), "SFML window");
 }
 
 }

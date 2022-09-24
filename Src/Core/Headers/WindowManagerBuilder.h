@@ -11,7 +11,7 @@ public:
     IWindowManagerBuilder(){}
     virtual ~IWindowManagerBuilder(){}
 
-    virtual std::unique_ptr<IWindowManager> build() = 0;
+    virtual WindowManager build() = 0;
 };
 
 class WindowManagerBuilder : public IWindowManagerBuilder
@@ -20,7 +20,7 @@ public:
     WindowManagerBuilder(){}
     virtual ~WindowManagerBuilder(){}
 
-    virtual std::unique_ptr<IWindowManager> build() override;
+    virtual WindowManager build() override;
 };
 
 }
