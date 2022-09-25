@@ -12,6 +12,8 @@ class WindowManagerMock : public IWindowManager
 {
 public:
     MOCK_METHOD(bool, isWindowActive, (), (override));
+    MOCK_METHOD(void, clearWindow, (), (override));
+    MOCK_METHOD(void, displayWindow, (), (override));
 };
 
 

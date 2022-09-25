@@ -12,7 +12,9 @@ public:
     IWindowManager(){}
     virtual ~IWindowManager(){}
 
-    virtual bool isWindowActive() = 0;  
+    virtual bool isWindowActive() = 0;
+    virtual void clearWindow() = 0;
+    virtual void displayWindow() = 0;
 };
 
 class WindowManager : public IWindowManager
@@ -22,6 +24,8 @@ public:
     virtual ~WindowManager(){}
 
     virtual bool isWindowActive(){return window->isOpen();}
+    virtual void clearWindow(){window->clear();}
+    virtual void displayWindow(){window->display();}
 private:
     std::unique_ptr<sf::RenderWindow> window;
 };

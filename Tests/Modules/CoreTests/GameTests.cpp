@@ -70,4 +70,16 @@ TEST_F(GameTest, gameChecksIfWindowIsNotActive)
     ASSERT_FALSE(result);
 }
 
+TEST_F(GameTest, windowManagerClearsWindow)
+{
+    EXPECT_CALL(windowMngr, clearWindow());
+    sut->render();
+}
+
+TEST_F(GameTest, WindowManagerDisplaysWindow)
+{
+    EXPECT_CALL(windowMngr, displayWindow());
+    sut->render();
+}
+
 }

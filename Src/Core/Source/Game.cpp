@@ -23,7 +23,8 @@ void Game::updateDeltaTime()
 
 void Game::render()
 {
-
+    windowMngr.clearWindow();
+    windowMngr.displayWindow();
 }
 
 }
