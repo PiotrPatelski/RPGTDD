@@ -2,9 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <WindowManagerBuilder.h>
-#include "WindowManagerMock.h"
-
+#include <Clock.h>
 
 namespace Core
 {
@@ -14,10 +12,11 @@ using ::testing::Return;
 using ::testing::NiceMock;
 using ::testing::ByMove;
 
-class WindowManagerBuilderMock : public IWindowManagerBuilder
+class ClockMock : public IClock
 {
 public:
-
+    MOCK_METHOD(void, updateDeltaTime, (), (override));
+    MOCK_METHOD(float, getDeltaTime, (), (override));
 };
 
 }

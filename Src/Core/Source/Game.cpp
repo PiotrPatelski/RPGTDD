@@ -4,9 +4,10 @@
 namespace Core
 {
 
-Game::Game(IWindowManager& windowMngr)
+Game::Game(IWindow& window, IClock& clock)
 :   IGame::IGame(),
-    windowMngr{windowMngr}
+    window{window},
+    clock{clock}
 {
 
 }
@@ -18,13 +19,13 @@ void Game::update()
 
 void Game::updateDeltaTime()
 {
-
+    clock.updateDeltaTime();
 }
 
 void Game::render()
 {
-    windowMngr.clearWindow();
-    windowMngr.displayWindow();
+    window.clear();
+    window.displayWindow();
 }
 
 }

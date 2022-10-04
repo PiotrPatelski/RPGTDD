@@ -3,8 +3,9 @@ set(MODULE_NAME CoreTests)
 set(SOURCES GameTests.cpp)
 set(HEADERS
     GameMock.h
-    WindowManagerMock.h
-    WindowManagerBuilderMock.h)
+    WindowMock.h
+    WindowBuilderMock.h
+    ClockMock.h)
 
 add_executable(
     ${MODULE_NAME} 

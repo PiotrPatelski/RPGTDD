@@ -20,6 +20,6 @@
 #include <string>
 #include <cmath>
 #include <ranges>
-#include <thread>
+#include <chrono>
 
 #endif

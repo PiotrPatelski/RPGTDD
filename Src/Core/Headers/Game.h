@@ -3,7 +3,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <WindowManager.h>
+#include <Window.h>
+#include <Clock.h>
 
 namespace Core
 {
@@ -25,16 +26,17 @@ private:
 class Game : public IGame
 {
 public:
-    Game(IWindowManager&);
+    Game(IWindow&, IClock&);
     virtual ~Game(){}
 
-    virtual bool isWindowActive(){return windowMngr.isWindowActive();}
+    virtual bool isWindowActive(){return window.isActive();}
 
     virtual void update();
     virtual void updateDeltaTime();
     virtual void render();
 private:
-    IWindowManager& windowMngr;
+    IWindow& window;
+    IClock& clock;
 
 };
 

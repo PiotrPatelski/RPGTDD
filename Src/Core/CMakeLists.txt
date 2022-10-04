@@ -3,15 +3,17 @@ set(MODULE_NAME Core)
 set(SOURCES
     Source/Game.cpp
     Source/GameLoop.cpp
-    Source/WindowManager.cpp
-    Source/WindowManagerBuilder.cpp
+    Source/Window.cpp
+    Source/WindowBuilder.cpp
+    Source/Clock.cpp
     )
 
 set(HEADERS
     Headers/Game.h
     Headers/GameLoop.h
-    Headers/WindowManager.h
-    Headers/WindowManagerBuilder.h
+    Headers/Window.h
+    Headers/WindowBuilder.h
+    Headers/Clock.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

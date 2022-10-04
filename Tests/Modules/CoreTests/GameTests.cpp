@@ -3,8 +3,8 @@
 #include <Game.h>
 #include <GameLoop.h>
 #include "GameMock.h"
-#include "WindowManagerBuilderMock.h"
-
+#include "WindowBuilderMock.h"
+#include "ClockMock.h"
 
 namespace Core
 {
@@ -52,34 +52,64 @@ TEST_F(GameLoopTest, gameCallsRenderWhenItIsRunning)
 
 struct GameTest : public testing::Test
 {
-    NiceMock<WindowManagerMock> windowMngr;
-    std::unique_ptr<IGame> sut = std::make_unique<Game>(windowMngr);
+    NiceMock<WindowMock> window;
+    NiceMock<ClockMock> clock;
+    std::unique_ptr<IGame> sut = std::make_unique<Game>(window, clock);
 };
 
 TEST_F(GameTest, gameChecksIfWindowIsActive)
 {
-    EXPECT_CALL(windowMngr, isWindowActive()).WillOnce(Return(true));
+    EXPECT_CALL(window, isActive()).WillOnce(Return(true));
     bool result = sut->isWindowActive();
     ASSERT_TRUE(result);
 }
 
 TEST_F(GameTest, gameChecksIfWindowIsNotActive)
 {
-    EXPECT_CALL(windowMngr, isWindowActive()).WillOnce(Return(false));
+    EXPECT_CALL(window, isActive()).WillOnce(Return(false));
     bool result = sut->isWindowActive();
     ASSERT_FALSE(result);
 }
 
-TEST_F(GameTest, windowManagerClearsWindow)
+TEST_F(GameTest, WindowClearsWindow)
 {
-    EXPECT_CALL(windowMngr, clearWindow());
+    EXPECT_CALL(window, clear());
     sut->render();
 }
 
-TEST_F(GameTest, WindowManagerDisplaysWindow)
+TEST_F(GameTest, WindowDisplaysWindow)
 {
-    EXPECT_CALL(windowMngr, displayWindow());
+    EXPECT_CALL(window, displayWindow());
     sut->render();
+}
+
+TEST_F(GameTest, ClockUpdatesDeltaTime)
+{
+    EXPECT_CALL(clock, updateDeltaTime());
+    sut->updateDeltaTime();
+}
+
+struct ClockTest : public testing::Test
+{
+
+    std::unique_ptr<IClock> sut = std::make_unique<Clock>();
+};
+
+TEST_F(ClockTest, deltaTimeIsUpdated)
+{
+    ASSERT_EQ(sut->getDeltaTime(),0);
+    sut->updateDeltaTime();
+    ASSERT_NE(sut->getDeltaTime(),0);
+}
+
+struct WindowTest : public testing::Test
+{
+    std::unique_ptr<IWindow> sut = std::make_unique<Window>(sf::VideoMode(1, 1), "TestWindow");
+};
+
+TEST_F(WindowTest, deltaTimeIsUpdated)
+{
+    ASSERT_TRUE(sut->isActive());
 }
 
 }
