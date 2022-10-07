@@ -9,11 +9,6 @@
 namespace Core
 {
 
-using ::testing::Test;
-using ::testing::Return;
-using ::testing::NiceMock;
-using ::testing::ByMove;
-
 class WindowBuilderMock : public IWindowBuilder
 {
 public:

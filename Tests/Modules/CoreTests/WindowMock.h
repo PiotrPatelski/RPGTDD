@@ -17,6 +17,7 @@ public:
     MOCK_METHOD(void, clear, (), (override));
     MOCK_METHOD(void, displayWindow, (), (override));
     MOCK_METHOD(void, handleSfmlEvents, (sf::Event), (override));
+    MOCK_METHOD(void, close, (), (override));
 };
 
 }

@@ -104,6 +104,22 @@ TEST_F(GameTest, GameShouldUpdateStateMachineUponUpdateCall)
     sut->update();
 }
 
+TEST_F(GameTest, GameShouldCloseWindowWhenStateMachineIsDone)
+{
+    EXPECT_CALL(stateMachine, update(_, _));
+    EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(true));
+    EXPECT_CALL(window, close());
+    sut->update();
+}
+
+TEST_F(GameTest, GameShouldNotCloseWindowWhenStateMachineIsNotDone)
+{
+    EXPECT_CALL(stateMachine, update(_, _));
+    EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(false));
+    EXPECT_CALL(window, close()).Times(0);
+    sut->update();
+}
+
 struct ClockTest : public testing::Test
 {
 
@@ -112,9 +128,10 @@ struct ClockTest : public testing::Test
 
 TEST_F(ClockTest, deltaTimeIsUpdated)
 {
-    ASSERT_EQ(sut->getDeltaTime(),0);
+    float startingTime = 0.f;
+    ASSERT_EQ(sut->getDeltaTime(),startingTime);
     sut->updateDeltaTime();
-    ASSERT_NE(sut->getDeltaTime(),0);
+    ASSERT_NE(sut->getDeltaTime(),startingTime);
 }
 
 struct WindowTest : public testing::Test

@@ -17,6 +17,8 @@ void Game::update()
 {
     window.handleSfmlEvents(sfmlEvent);
     stateMachine.update(window.isCurrentlyFocused(), clock.getDeltaTime());
+    if(stateMachine.isWorkDone())
+        window.close();
 }
 
 void Game::updateDeltaTime()
