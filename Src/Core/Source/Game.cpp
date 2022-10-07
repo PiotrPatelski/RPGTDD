@@ -14,7 +14,7 @@ Game::Game(IWindow& window, IClock& clock)
 
 void Game::update()
 {
-
+    window.handleSfmlEvents(sfmlEvent);
 }
 
 void Game::updateDeltaTime()

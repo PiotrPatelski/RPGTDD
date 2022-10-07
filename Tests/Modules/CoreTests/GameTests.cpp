@@ -13,6 +13,7 @@ using ::testing::NiceMock;
 using ::testing::Test;
 using ::testing::Return;
 using ::testing::InSequence;
+using ::testing::_;
 
 struct GameLoopTest : public testing::Test
 {
@@ -89,6 +90,13 @@ TEST_F(GameTest, ClockUpdatesDeltaTime)
     sut->updateDeltaTime();
 }
 
+TEST_F(GameTest, GameShouldProcessSfmlEventsWhenIsUpdated)
+{
+    EXPECT_CALL(window, handleSfmlEvents(_));
+    sut->update();
+}
+
+
 struct ClockTest : public testing::Test
 {
 
@@ -107,8 +115,15 @@ struct WindowTest : public testing::Test
     std::unique_ptr<IWindow> sut = std::make_unique<Window>(sf::VideoMode(1, 1), "TestWindow");
 };
 
-TEST_F(WindowTest, deltaTimeIsUpdated)
+TEST_F(WindowTest, windowIsActiveUponCreation)
 {
+    ASSERT_TRUE(sut->isActive());
+}
+
+TEST_F(WindowTest, windowRemainsActiveWhenNoClosingEventAppearedDuringUpdate)
+{
+    sf::Event event;
+    sut->handleSfmlEvents(event);
     ASSERT_TRUE(sut->isActive());
 }
 

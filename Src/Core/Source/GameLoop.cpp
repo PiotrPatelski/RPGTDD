@@ -14,8 +14,8 @@ void GameLoop::run()
 {
     while(game.isWindowActive())
     {
-        game.update();
         game.updateDeltaTime();
+        game.update();
         game.render();
     }
 }

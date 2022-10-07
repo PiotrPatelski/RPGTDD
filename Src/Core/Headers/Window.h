@@ -15,6 +15,7 @@ public:
     virtual bool isActive() = 0;
     virtual void clear() = 0;
     virtual void displayWindow() = 0;
+    virtual void handleSfmlEvents(sf::Event) = 0;
 };
 
 class Window : public IWindow
@@ -26,6 +27,7 @@ public:
     virtual bool isActive(){return window->isOpen();}
     virtual void clear(){window->clear();}
     virtual void displayWindow(){window->display();}
+    virtual void handleSfmlEvents(sf::Event) override;
 private:
     std::unique_ptr<sf::RenderWindow> window;
 };

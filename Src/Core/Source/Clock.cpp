@@ -12,6 +12,7 @@ Clock::Clock()
 
 void Clock::updateDeltaTime()
 {
+    /*Updates dt with the time it takes to update and render one frame*/
     deltaTime = deltaTimeClock.restart().asSeconds();
 }
 }

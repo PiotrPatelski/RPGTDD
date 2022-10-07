@@ -7,6 +7,7 @@ namespace Core
 {
 
 using ::testing::Test;
+using testing::Return;
 
 class WindowMock : public IWindow
 {
@@ -14,8 +15,7 @@ public:
     MOCK_METHOD(bool, isActive, (), (override));
     MOCK_METHOD(void, clear, (), (override));
     MOCK_METHOD(void, displayWindow, (), (override));
+    MOCK_METHOD(void, handleSfmlEvents, (sf::Event), (override));
 };
-
-
 
 }

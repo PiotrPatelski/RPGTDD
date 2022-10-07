@@ -38,6 +38,8 @@ private:
     IWindow& window;
     IClock& clock;
 
+    sf::Event sfmlEvent;
+
 };
 
 
