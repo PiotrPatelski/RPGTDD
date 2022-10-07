@@ -151,4 +151,10 @@ TEST_F(WindowTest, windowRemainsActiveWhenNoClosingEventAppearedDuringUpdate)
     ASSERT_TRUE(sut->isActive());
 }
 
+TEST_F(WindowTest, windowIsNotActiveWhenClosed)
+{
+    sut->close();
+    ASSERT_FALSE(sut->isActive());
+}
+
 }
