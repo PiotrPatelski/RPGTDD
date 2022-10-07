@@ -6,6 +6,7 @@ set(SOURCES
     Source/Window.cpp
     Source/WindowBuilder.cpp
     Source/Clock.cpp
+    Source/StateMachine.cpp
     )
 
 set(HEADERS
@@ -14,6 +15,7 @@ set(HEADERS
     Headers/Window.h
     Headers/WindowBuilder.h
     Headers/Clock.h
+    Headers/StateMachine.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

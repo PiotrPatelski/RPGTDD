@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <Window.h>
 #include <Clock.h>
+#include <StateMachine.h>
 
 namespace Core
 {
@@ -26,7 +27,7 @@ private:
 class Game : public IGame
 {
 public:
-    Game(IWindow&, IClock&);
+    Game(IWindow&, IClock&, IStateMachine&);
     virtual ~Game(){}
 
     virtual bool isWindowActive(){return window.isActive();}
@@ -37,6 +38,7 @@ public:
 private:
     IWindow& window;
     IClock& clock;
+    IStateMachine& stateMachine;
 
     sf::Event sfmlEvent;
 

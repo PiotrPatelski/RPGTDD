@@ -5,7 +5,8 @@ set(HEADERS
     GameMock.h
     WindowMock.h
     WindowBuilderMock.h
-    ClockMock.h)
+    ClockMock.h
+    StateMachineMock.h)
 
 add_executable(
     ${MODULE_NAME} 

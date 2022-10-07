@@ -13,6 +13,7 @@ class WindowMock : public IWindow
 {
 public:
     MOCK_METHOD(bool, isActive, (), (override));
+    MOCK_METHOD(bool, isCurrentlyFocused, (), (override));
     MOCK_METHOD(void, clear, (), (override));
     MOCK_METHOD(void, displayWindow, (), (override));
     MOCK_METHOD(void, handleSfmlEvents, (sf::Event), (override));

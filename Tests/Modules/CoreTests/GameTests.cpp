@@ -5,6 +5,7 @@
 #include "GameMock.h"
 #include "WindowBuilderMock.h"
 #include "ClockMock.h"
+#include "StateMachineMock.h"
 
 namespace Core
 {
@@ -55,7 +56,8 @@ struct GameTest : public testing::Test
 {
     NiceMock<WindowMock> window;
     NiceMock<ClockMock> clock;
-    std::unique_ptr<IGame> sut = std::make_unique<Game>(window, clock);
+    NiceMock<StateMachineMock> stateMachine;
+    std::unique_ptr<IGame> sut = std::make_unique<Game>(window, clock, stateMachine);
 };
 
 TEST_F(GameTest, gameChecksIfWindowIsActive)
@@ -96,6 +98,11 @@ TEST_F(GameTest, GameShouldProcessSfmlEventsWhenIsUpdated)
     sut->update();
 }
 
+TEST_F(GameTest, GameShouldUpdateStateMachineUponUpdateCall)
+{
+    EXPECT_CALL(stateMachine, update(_, _));
+    sut->update();
+}
 
 struct ClockTest : public testing::Test
 {

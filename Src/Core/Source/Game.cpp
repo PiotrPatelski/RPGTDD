@@ -4,10 +4,11 @@
 namespace Core
 {
 
-Game::Game(IWindow& window, IClock& clock)
+Game::Game(IWindow& window, IClock& clock, IStateMachine& stateMachine)
 :   IGame::IGame(),
     window{window},
-    clock{clock}
+    clock{clock},
+    stateMachine{stateMachine}
 {
 
 }
@@ -15,6 +16,7 @@ Game::Game(IWindow& window, IClock& clock)
 void Game::update()
 {
     window.handleSfmlEvents(sfmlEvent);
+    stateMachine.update(window.isCurrentlyFocused(), clock.getDeltaTime());
 }
 
 void Game::updateDeltaTime()
