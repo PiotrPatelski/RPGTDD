@@ -1,11 +1,10 @@
 #!/bin/bash
-exeName="CoreTests";
-exePath=`dirname $(realpath $0)`/../build/Tests/Modules/CoreTests/$exeName
-if test -e "$exePath";
+dirname=`dirname $(realpath $0)`/../build
+if test -d "$dirname";
 then
-    echo "$exePath has been found";
-    chmod +x $exePath
-    $exePath;
+    echo "$dirname has been found";
+    cd $dirname;
+    ctest -C Debug;
 else
-    echo "$exePath has not been found... aborting";
+    echo "$dirname has not been found";
 fi

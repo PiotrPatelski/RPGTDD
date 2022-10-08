@@ -28,3 +28,6 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(${MODULE_NAME})
+
+add_test(NAME CoreTestsInstance
+         COMMAND ${MODULE_NAME})

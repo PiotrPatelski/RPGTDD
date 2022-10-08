@@ -4,14 +4,14 @@ namespace Core
 {
 
 GameLoop::GameLoop(IGame& game)
-: IGameLoop::IGameLoop(game),
-  game(game)
+: game(game)
 {
 
 }
 
 void GameLoop::run()
 {
+    game.startStateMachine();
     while(game.isWindowActive())
     {
         game.updateDeltaTime();

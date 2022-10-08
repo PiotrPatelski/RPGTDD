@@ -1,5 +1,7 @@
 #pragma once
 
+#include <State.h>
+
 
 namespace Core
 {
@@ -17,13 +19,13 @@ public:
 class StateMachine : public IStateMachine
 {
 public:
-    StateMachine(){}
+    StateMachine();
     virtual ~StateMachine(){}
 
-    virtual bool isWorkDone(){return false;};
-    virtual void update(bool, float) override {};
+    virtual bool isWorkDone(){return activeState == nullptr;}
+    virtual void update(bool, float) override {}
 private:
-
+    std::unique_ptr<States::IState> activeState;
 };
 
 }

@@ -8,7 +8,7 @@ namespace Core
 class IGameLoop
 {
 public:
-    IGameLoop(IGame& game){}
+    IGameLoop(){}
     virtual ~IGameLoop(){}
     virtual void run() = 0;
 private:

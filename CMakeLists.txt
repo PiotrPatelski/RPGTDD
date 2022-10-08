@@ -28,6 +28,8 @@ if(NOT sfml_POPULATED)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
+include(CTest)
+
 #GCOVR
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 include(CodeCoverage)
@@ -41,13 +43,22 @@ set(COVERAGE_EXCLUDES
     "${googletest_SOURCE_DIR}"
     "${googletest_BUILD_DIR}"
     "${sfml_SOURCE_DIR}"
-    "${sfml_BINARY_DIR}")
+    "${sfml_BINARY_DIR}"
+    "${PROJECT_SOURCE_DIR}/Tests/*")
 
 
 setup_target_for_coverage_gcovr_html(
-    NAME TestCoverageHtml
+    NAME CoreTestsCoverageHtml
     EXECUTABLE CoreTests
     DEPENDENCIES CoreTests Core
+    EXCLUDE "${PROJECT_SOURCE_DIR}/Src/States/*"
+)
+
+setup_target_for_coverage_gcovr_html(
+    NAME StatesTestsCoverageHtml
+    EXECUTABLE StatesTests
+    DEPENDENCIES StatesTests States
+    EXCLUDE "${PROJECT_SOURCE_DIR}/Src/Core/*"
 )
 
 add_subdirectory(Src)

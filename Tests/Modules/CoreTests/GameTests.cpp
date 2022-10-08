@@ -52,6 +52,14 @@ TEST_F(GameLoopTest, gameCallsRenderWhenItIsRunning)
     sut->run();
 }
 
+TEST_F(GameLoopTest, gameStartsStateMachineWhenRun)
+{
+    InSequence seq;
+    EXPECT_CALL(game, startStateMachine()).Times(1);
+    ON_CALL(game, isWindowActive()).WillByDefault(Return(false));
+    sut->run();
+}
+
 struct GameTest : public testing::Test
 {
     NiceMock<WindowMock> window;
@@ -155,6 +163,16 @@ TEST_F(WindowTest, windowIsNotActiveWhenClosed)
 {
     sut->close();
     ASSERT_FALSE(sut->isActive());
+}
+
+struct StateMachineTest : public testing::Test
+{
+    std::unique_ptr<IStateMachine> sut = std::make_unique<StateMachine>();
+};
+
+TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
+{
+    ASSERT_TRUE(sut->isWorkDone());
 }
 
 }
