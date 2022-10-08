@@ -4,7 +4,6 @@ set(SOURCES
     Source/Game.cpp
     Source/GameLoop.cpp
     Source/Window.cpp
-    Source/WindowBuilder.cpp
     Source/Clock.cpp
     Source/StateMachine.cpp
     )
@@ -13,7 +12,6 @@ set(HEADERS
     Headers/Game.h
     Headers/GameLoop.h
     Headers/Window.h
-    Headers/WindowBuilder.h
     Headers/Clock.h
     Headers/StateMachine.h
     )

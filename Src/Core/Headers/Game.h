@@ -16,9 +16,11 @@ public:
     IGame(){}
     virtual ~IGame(){}
 
-    virtual bool isWindowActive() = 0;
+    virtual bool isWindowOpen() = 0;
 
     virtual void startStateMachine() = 0;
+    virtual void openWindow() = 0;
+
     virtual void update() = 0;
     virtual void updateDeltaTime() = 0;
     virtual void render() = 0;
@@ -31,9 +33,10 @@ public:
     Game(IWindow&, IClock&, IStateMachine&);
     virtual ~Game(){}
 
-    virtual bool isWindowActive() override {return window.isActive();}
+    virtual bool isWindowOpen() override {return window.isActive();}
 
     virtual void startStateMachine() override{}
+    virtual void openWindow() override {window.open();}
 
     virtual void update() override;
     virtual void updateDeltaTime() override;

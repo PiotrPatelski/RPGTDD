@@ -4,7 +4,6 @@ set(SOURCES GameTests.cpp)
 set(HEADERS
     GameMock.h
     WindowMock.h
-    WindowBuilderMock.h
     ClockMock.h
     StateMachineMock.h)
 

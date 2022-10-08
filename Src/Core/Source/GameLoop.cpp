@@ -6,17 +6,26 @@ namespace Core
 GameLoop::GameLoop(IGame& game)
 : game(game)
 {
-
+    std::cout << "GameLoop has set a game instance..." << std::endl;
 }
 
 void GameLoop::run()
 {
+    std::cout << "Starting game instance..." << std::endl;
     game.startStateMachine();
-    while(game.isWindowActive())
+    game.openWindow();
+    try
     {
-        game.updateDeltaTime();
-        game.update();
-        game.render();
+        while(game.isWindowOpen())
+        {
+            game.updateDeltaTime();
+            game.update();
+            game.render();
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "UNEXPECTED EXCEPTION APPEARED: "<< e.what() << '\n';
     }
 }
 

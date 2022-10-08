@@ -21,5 +21,7 @@
 #include <cmath>
 #include <ranges>
 #include <chrono>
+#include <functional>
+#include <stdexcept>
 
 #endif

@@ -3,7 +3,7 @@
 #include <Game.h>
 #include <GameLoop.h>
 #include "GameMock.h"
-#include "WindowBuilderMock.h"
+#include "WindowMock.h"
 #include "ClockMock.h"
 #include "StateMachineMock.h"
 
@@ -25,9 +25,9 @@ struct GameLoopTest : public testing::Test
 TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
 {
     InSequence seq;
-    EXPECT_CALL(game, isWindowActive()).WillOnce(Return(true));
+    EXPECT_CALL(game, isWindowOpen()).WillOnce(Return(true));
     EXPECT_CALL(game, update());
-    EXPECT_CALL(game, isWindowActive()).WillOnce(Return(false));
+    EXPECT_CALL(game, isWindowOpen()).WillOnce(Return(false));
     EXPECT_CALL(game, update()).Times(0);
     sut->run();
 }
@@ -35,9 +35,9 @@ TEST_F(GameLoopTest, gameIsUpdatingWhenItIsRunning)
 TEST_F(GameLoopTest, gameUpdatesDeltaTimeWhenItIsRunning)
 {
     InSequence seq;
-    EXPECT_CALL(game, isWindowActive()).WillOnce(Return(true));
+    EXPECT_CALL(game, isWindowOpen()).WillOnce(Return(true));
     EXPECT_CALL(game, updateDeltaTime());
-    EXPECT_CALL(game, isWindowActive()).WillOnce(Return(false));
+    EXPECT_CALL(game, isWindowOpen()).WillOnce(Return(false));
     EXPECT_CALL(game, updateDeltaTime()).Times(0);
     sut->run();
 }
@@ -45,18 +45,26 @@ TEST_F(GameLoopTest, gameUpdatesDeltaTimeWhenItIsRunning)
 TEST_F(GameLoopTest, gameCallsRenderWhenItIsRunning)
 {
     InSequence seq;
-    EXPECT_CALL(game, isWindowActive()).WillOnce(Return(true));
+    EXPECT_CALL(game, isWindowOpen()).WillOnce(Return(true));
     EXPECT_CALL(game, render());
-    EXPECT_CALL(game, isWindowActive()).WillOnce(Return(false));
+    EXPECT_CALL(game, isWindowOpen()).WillOnce(Return(false));
     EXPECT_CALL(game, render()).Times(0);
     sut->run();
 }
 
-TEST_F(GameLoopTest, gameStartsStateMachineWhenRun)
+TEST_F(GameLoopTest, gameStartsStateMachineWhenLoopIsRun)
 {
     InSequence seq;
     EXPECT_CALL(game, startStateMachine()).Times(1);
-    ON_CALL(game, isWindowActive()).WillByDefault(Return(false));
+    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
+    sut->run();
+}
+
+TEST_F(GameLoopTest, gameOpensWindowWhenLoopIsRun)
+{
+    InSequence seq;
+    EXPECT_CALL(game, openWindow()).Times(1);
+    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
     sut->run();
 }
 
@@ -71,14 +79,14 @@ struct GameTest : public testing::Test
 TEST_F(GameTest, gameChecksIfWindowIsActive)
 {
     EXPECT_CALL(window, isActive()).WillOnce(Return(true));
-    bool result = sut->isWindowActive();
+    bool result = sut->isWindowOpen();
     ASSERT_TRUE(result);
 }
 
 TEST_F(GameTest, gameChecksIfWindowIsNotActive)
 {
     EXPECT_CALL(window, isActive()).WillOnce(Return(false));
-    bool result = sut->isWindowActive();
+    bool result = sut->isWindowOpen();
     ASSERT_FALSE(result);
 }
 
@@ -144,16 +152,26 @@ TEST_F(ClockTest, deltaTimeIsUpdated)
 
 struct WindowTest : public testing::Test
 {
-    std::unique_ptr<IWindow> sut = std::make_unique<Window>(sf::VideoMode(1, 1), "TestWindow");
+    // std::unique_ptr<IWindow> sut = std::make_unique<Window>(sf::VideoMode(1, 1), "TestWindow");
+
+    
+    std::unique_ptr<IWindow> sut = std::make_unique<Window>();
 };
 
-TEST_F(WindowTest, windowIsActiveUponCreation)
+TEST_F(WindowTest, windowIsNotActiveUponCreation)
 {
+    ASSERT_FALSE(sut->isActive());
+}
+
+TEST_F(WindowTest, windowIsActiveWhenLaunched)
+{
+    sut->open();
     ASSERT_TRUE(sut->isActive());
 }
 
 TEST_F(WindowTest, windowRemainsActiveWhenNoClosingEventAppearedDuringUpdate)
 {
+    sut->open();
     sf::Event event;
     sut->handleSfmlEvents(event);
     ASSERT_TRUE(sut->isActive());
@@ -161,8 +179,19 @@ TEST_F(WindowTest, windowRemainsActiveWhenNoClosingEventAppearedDuringUpdate)
 
 TEST_F(WindowTest, windowIsNotActiveWhenClosed)
 {
+    sut->open();
     sut->close();
     ASSERT_FALSE(sut->isActive());
+}
+
+TEST_F(WindowTest, closingWindowThrowsWhenWindowIsNotOpen)
+{
+    ASSERT_THROW(sut->close(), std::runtime_error);
+}
+
+TEST_F(WindowTest, handlingSfmlEventsThrowsWhenWindowIsNotOpen)
+{
+    ASSERT_THROW(sut->handleSfmlEvents(sf::Event{}), std::runtime_error);
 }
 
 struct StateMachineTest : public testing::Test
