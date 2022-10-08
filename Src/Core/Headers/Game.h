@@ -35,7 +35,7 @@ public:
 
     virtual bool isWindowOpen() override {return window.isActive();}
 
-    virtual void startStateMachine() override{}
+    virtual void startStateMachine() override;
     virtual void openWindow() override {window.open();}
 
     virtual void update() override;

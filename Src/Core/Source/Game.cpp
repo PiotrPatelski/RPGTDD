@@ -13,11 +13,17 @@ Game::Game(IWindow& window, IClock& clock, IStateMachine& stateMachine)
 
 }
 
+void Game::startStateMachine()
+{
+    stateMachine.runState(std::make_unique<States::State>());
+}
+
 void Game::update()
 {
     window.handleSfmlEvents(sfmlEvent);
-    stateMachine.update(window.isCurrentlyFocused(), clock.getDeltaTime());
-    if(stateMachine.isWorkDone())
+    if(not stateMachine.isWorkDone())
+        stateMachine.update(window.isCurrentlyFocused(), clock.getDeltaTime());
+    else
         window.close();
 }
 

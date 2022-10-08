@@ -13,6 +13,8 @@ public:
     virtual ~IStateMachine(){}
 
     virtual bool isWorkDone() = 0;
+
+    virtual void runState(std::unique_ptr<States::IState>) = 0;
     virtual void update(bool, float) = 0;
 };
 
@@ -23,7 +25,9 @@ public:
     virtual ~StateMachine(){}
 
     virtual bool isWorkDone(){return activeState == nullptr;}
-    virtual void update(bool, float) override {}
+
+    virtual void runState(std::unique_ptr<States::IState>) override;
+    virtual void update(bool, float) override;
 private:
     std::unique_ptr<States::IState> activeState;
 };

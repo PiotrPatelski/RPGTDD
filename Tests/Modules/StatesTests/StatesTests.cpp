@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <State.h>
 
 namespace States
 {
@@ -12,12 +13,13 @@ using ::testing::_;
 
 struct StatesTest : public testing::Test
 {
-    
+    State sut;
 };
 
-TEST_F(StatesTest, dummyTest)
+TEST_F(StatesTest, stateIsDoneWhenSetAsDone)
 {
-    ASSERT_TRUE(true);
+    sut.markAsDone();
+    ASSERT_TRUE(sut.isDone());
 }
 
 }

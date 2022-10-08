@@ -5,7 +5,8 @@ set(HEADERS
     GameMock.h
     WindowMock.h
     ClockMock.h
-    StateMachineMock.h)
+    StateMachineMock.h
+    StateMock.h)
 
 add_executable(
     ${MODULE_NAME} 
@@ -19,6 +20,7 @@ target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
     Core
+    States
     CoreMocks
     mainUT
     gtest 

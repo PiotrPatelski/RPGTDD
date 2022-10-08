@@ -6,6 +6,7 @@
 #include "WindowMock.h"
 #include "ClockMock.h"
 #include "StateMachineMock.h"
+#include "StateMock.h"
 
 namespace Core
 {
@@ -90,6 +91,12 @@ TEST_F(GameTest, gameChecksIfWindowIsNotActive)
     ASSERT_FALSE(result);
 }
 
+TEST_F(GameTest, gameActivatesStateMachineWhenItsRun)
+{
+    EXPECT_CALL(stateMachine, runState(_));
+    sut->startStateMachine();
+}
+
 TEST_F(GameTest, WindowClearsWindow)
 {
     EXPECT_CALL(window, clear());
@@ -122,23 +129,22 @@ TEST_F(GameTest, GameShouldUpdateStateMachineUponUpdateCall)
 
 TEST_F(GameTest, GameShouldCloseWindowWhenStateMachineIsDone)
 {
-    EXPECT_CALL(stateMachine, update(_, _));
     EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(true));
+    EXPECT_CALL(stateMachine, update(_, _)).Times(0);
     EXPECT_CALL(window, close());
     sut->update();
 }
 
 TEST_F(GameTest, GameShouldNotCloseWindowWhenStateMachineIsNotDone)
 {
-    EXPECT_CALL(stateMachine, update(_, _));
     EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(false));
+    EXPECT_CALL(stateMachine, update(_, _));
     EXPECT_CALL(window, close()).Times(0);
     sut->update();
 }
 
 struct ClockTest : public testing::Test
 {
-
     std::unique_ptr<IClock> sut = std::make_unique<Clock>();
 };
 
@@ -151,10 +157,7 @@ TEST_F(ClockTest, deltaTimeIsUpdated)
 }
 
 struct WindowTest : public testing::Test
-{
-    // std::unique_ptr<IWindow> sut = std::make_unique<Window>(sf::VideoMode(1, 1), "TestWindow");
-
-    
+{    
     std::unique_ptr<IWindow> sut = std::make_unique<Window>();
 };
 
@@ -202,6 +205,33 @@ struct StateMachineTest : public testing::Test
 TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
 {
     ASSERT_TRUE(sut->isWorkDone());
+}
+
+TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
+{
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    EXPECT_CALL(*activeState, update(_));
+    sut->runState(std::move(activeState));
+    sut->update(true, 0.f);
+}
+
+TEST_F(StateMachineTest, stateMachineChecksIfActiveStateIsDoneWhenUpdated)
+{
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    EXPECT_CALL(*activeState, isDone());
+    sut->runState(std::move(activeState));
+    sut->update(true, 0.f);
+
+}
+
+TEST_F(StateMachineTest, stateMachineChangesStateWhenCurrentStateIsDone)
+{
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    ON_CALL(*activeState, isDone()).WillByDefault(Return(true));
+    EXPECT_CALL(*activeState, changeState());
+    sut->runState(std::move(activeState));
+    sut->update(true, 0.f);
+
 }
 
 }
