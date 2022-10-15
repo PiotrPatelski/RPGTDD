@@ -7,6 +7,7 @@
 #include "ClockMock.h"
 #include "StateMachineMock.h"
 #include "StateMock.h"
+#include "EngineContextMock.h"
 
 namespace Core
 {
@@ -16,6 +17,7 @@ using ::testing::Test;
 using ::testing::Return;
 using ::testing::InSequence;
 using ::testing::_;
+using ::testing::ReturnRef;
 
 struct GameLoopTest : public testing::Test
 {
@@ -71,10 +73,18 @@ TEST_F(GameLoopTest, gameOpensWindowWhenLoopIsRun)
 
 struct GameTest : public testing::Test
 {
+    virtual void SetUp()
+    {
+        ON_CALL(engineContext, getWindow).WillByDefault(ReturnRef(window));
+        ON_CALL(engineContext, getClock).WillByDefault(ReturnRef(clock));
+        ON_CALL(engineContext, getStateMachine).WillByDefault(ReturnRef(stateMachine));
+        sut = std::make_unique<Game>(engineContext);
+    }
+    NiceMock<EngineContextMock> engineContext;
     NiceMock<WindowMock> window;
     NiceMock<ClockMock> clock;
     NiceMock<StateMachineMock> stateMachine;
-    std::unique_ptr<IGame> sut = std::make_unique<Game>(window, clock, stateMachine);
+    std::unique_ptr<IGame> sut;
 };
 
 TEST_F(GameTest, gameChecksIfWindowIsActive)

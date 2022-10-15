@@ -3,7 +3,8 @@ set(HEADERS
     WindowMock.h
     ClockMock.h
     StateMachineMock.h
-    StateMock.h)
+    StateMock.h
+    EngineContextMock.h)
 
 add_library(Mocks ${HEADERS})
 set_target_properties(Mocks PROPERTIES LINKER_LANGUAGE CXX)

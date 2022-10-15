@@ -14,6 +14,7 @@ set(HEADERS
     Headers/Window.h
     Headers/Clock.h
     Headers/StateMachine.h
+    Headers/EngineContext.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

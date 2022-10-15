@@ -4,14 +4,12 @@
 namespace Core
 {
 
-Game::Game(IWindow& window, IClock& clock, IStateMachine& stateMachine)
+Game::Game(IEngineContext& engineContext)
 :   IGame::IGame(),
-    window{window},
-    clock{clock},
-    stateMachine{stateMachine}
-{
-
-}
+    window{engineContext.getWindow()},
+    clock{engineContext.getClock()},
+    stateMachine{engineContext.getStateMachine()}
+{}
 
 void Game::startStateMachine()
 {

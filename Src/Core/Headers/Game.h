@@ -6,6 +6,7 @@
 #include <Window.h>
 #include <Clock.h>
 #include <StateMachine.h>
+#include <EngineContext.h>
 
 namespace Core
 {
@@ -30,7 +31,7 @@ private:
 class Game : public IGame
 {
 public:
-    Game(IWindow&, IClock&, IStateMachine&);
+    Game(IEngineContext&);
     virtual ~Game(){}
 
     virtual bool isWindowOpen() override {return window.isActive();}
