@@ -1,21 +1,20 @@
 set(MODULE_NAME StatesTests)
 
 set(SOURCES StatesTests.cpp)
-set(HEADERS DummyMock.h)
 
 add_executable(
     ${MODULE_NAME} 
     ${SOURCES}
 )
 
-add_library(StatesMocks ${HEADERS})
-set_target_properties(StatesMocks PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${MODULE_NAME} PUBLIC ../Mocks)
 
 target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
+    Core
+    Mocks
     States
-    StatesMocks
     mainUT
     gtest 
     gmock_main

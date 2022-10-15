@@ -2,6 +2,10 @@
 
 #include <State.h>
 
+namespace States
+{
+class IState;
+}
 
 namespace Core
 {

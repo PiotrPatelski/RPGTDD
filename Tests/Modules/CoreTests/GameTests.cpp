@@ -209,7 +209,7 @@ TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
 
 TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
 {
-    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>(*sut);
     EXPECT_CALL(*activeState, update(_));
     sut->runState(std::move(activeState));
     sut->update(true, 0.f);
@@ -217,7 +217,7 @@ TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
 
 TEST_F(StateMachineTest, stateMachineChecksIfActiveStateIsDoneWhenUpdated)
 {
-    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>(*sut);
     EXPECT_CALL(*activeState, isDone());
     sut->runState(std::move(activeState));
     sut->update(true, 0.f);
@@ -226,7 +226,7 @@ TEST_F(StateMachineTest, stateMachineChecksIfActiveStateIsDoneWhenUpdated)
 
 TEST_F(StateMachineTest, stateMachineChangesStateWhenCurrentStateIsDone)
 {
-    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>(*sut);
     ON_CALL(*activeState, isDone()).WillByDefault(Return(true));
     EXPECT_CALL(*activeState, changeState());
     sut->runState(std::move(activeState));

@@ -15,5 +15,6 @@ target_precompile_headers(${MODULE_NAME} PUBLIC "${PchPath}/stdafx.h")
 target_include_directories(${MODULE_NAME} PUBLIC Headers Source)
 
 target_link_libraries(${MODULE_NAME} 
-PUBLIC 
+PUBLIC
+    Core
     ${SFML_LIBS})

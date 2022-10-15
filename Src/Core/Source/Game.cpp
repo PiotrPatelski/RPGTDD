@@ -15,7 +15,7 @@ Game::Game(IWindow& window, IClock& clock, IStateMachine& stateMachine)
 
 void Game::startStateMachine()
 {
-    stateMachine.runState(std::make_unique<States::State>());
+    stateMachine.runState(std::make_unique<States::MainMenuState>(stateMachine));
 }
 
 void Game::update()

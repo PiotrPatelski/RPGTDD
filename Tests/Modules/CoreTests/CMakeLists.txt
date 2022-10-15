@@ -1,27 +1,20 @@
 set(MODULE_NAME CoreTests)
 
 set(SOURCES GameTests.cpp)
-set(HEADERS
-    GameMock.h
-    WindowMock.h
-    ClockMock.h
-    StateMachineMock.h
-    StateMock.h)
 
 add_executable(
     ${MODULE_NAME} 
     ${SOURCES}
 )
 
-add_library(CoreMocks ${HEADERS})
-set_target_properties(CoreMocks PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${MODULE_NAME} PUBLIC ../Mocks)
 
 target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
+    Mocks
     Core
     States
-    CoreMocks
     mainUT
     gtest 
     gmock_main
