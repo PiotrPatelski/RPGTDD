@@ -3,19 +3,12 @@
 namespace States
 {
 
-State::State(Core::IStateMachine& stateMachine)
-: stateMachine{stateMachine}
+State::State()
 {
 
 }
 
-void State::changeState()
-{
-    stateMachine.runState(std::move(nextState));
-}
-
-MainMenuState::MainMenuState(Core::IStateMachine& stateMachine)
-: State::State(stateMachine)
+MainMenuState::MainMenuState()
 {
 
 }

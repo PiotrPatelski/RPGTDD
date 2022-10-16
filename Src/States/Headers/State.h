@@ -1,11 +1,4 @@
 #pragma once
-
-#include <StateMachine.h>
-
-namespace Core
-{
-class IStateMachine;
-}
 namespace States
 {
 
@@ -14,33 +7,34 @@ class IState
 public:
     IState(){}
     virtual ~IState(){}
+
+    virtual std::unique_ptr<IState> getNextState() = 0;
     
     virtual bool isDone() = 0;
     virtual void markAsDone() = 0;
-    virtual void changeState() = 0;
     virtual void update(float) = 0;
 };
 
 class State : public IState
 {
 public:
-    State(Core::IStateMachine&);
+    State();
     virtual ~State(){}
+
+    virtual std::unique_ptr<IState> getNextState() override {return std::move(nextState);}
 
     virtual bool isDone(){return done;}
     virtual void markAsDone(){done = true;}
-    virtual void changeState();
     virtual void update(float){}
-private:
+protected:
     bool done{false};
-    Core::IStateMachine& stateMachine;
     std::unique_ptr<IState> nextState;
 };
 
 class MainMenuState : public State
 {
 public:
-    MainMenuState(Core::IStateMachine&);
+    MainMenuState();
     virtual ~MainMenuState() = default;
 
 private:

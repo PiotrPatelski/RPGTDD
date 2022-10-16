@@ -13,7 +13,7 @@ Game::Game(IEngineContext& engineContext)
 
 void Game::startStateMachine()
 {
-    stateMachine.runState(std::make_unique<States::MainMenuState>(stateMachine));
+    stateMachine.runState(std::make_unique<States::MainMenuState>());
 }
 
 void Game::update()

@@ -12,7 +12,6 @@ target_include_directories(${MODULE_NAME} PUBLIC ../Mocks)
 target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
-    Core
     Mocks
     States
     mainUT

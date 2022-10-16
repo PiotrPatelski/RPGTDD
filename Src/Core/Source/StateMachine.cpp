@@ -14,7 +14,7 @@ void StateMachine::update(bool isWindowFocused, float deltaTime)
     activeState->update(deltaTime);
     if(activeState->isDone())
     {
-        activeState->changeState();
+        runState(activeState->getNextState());
     }
 }
 
