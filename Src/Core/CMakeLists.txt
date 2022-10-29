@@ -6,6 +6,8 @@ set(SOURCES
     Source/Window.cpp
     Source/Clock.cpp
     Source/StateMachine.cpp
+    Source/GraphicsConfig.cpp
+    Source/IniParser.cpp
     )
 
 set(HEADERS
@@ -15,6 +17,8 @@ set(HEADERS
     Headers/Clock.h
     Headers/StateMachine.h
     Headers/EngineContext.h
+    Headers/GraphicsConfig.h
+    Headers/IniParser.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

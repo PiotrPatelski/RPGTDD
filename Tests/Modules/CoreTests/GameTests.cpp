@@ -8,6 +8,8 @@
 #include "StateMachineMock.h"
 #include "StateMock.h"
 #include "EngineContextMock.h"
+#include "GraphicsConfigMock.h"
+#include "IniParserMock.h"
 
 namespace Core
 {
@@ -71,6 +73,14 @@ TEST_F(GameLoopTest, gameOpensWindowWhenLoopIsRun)
     sut->run();
 }
 
+TEST_F(GameLoopTest, gameAppliesGraphicsSettingsWhenLoopIsRun)
+{
+    InSequence seq;
+    EXPECT_CALL(game, applyGraphicsSettings()).Times(1);
+    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
+    sut->run();
+}
+
 struct GameTest : public testing::Test
 {
     virtual void SetUp()
@@ -78,12 +88,14 @@ struct GameTest : public testing::Test
         ON_CALL(engineContext, getWindow).WillByDefault(ReturnRef(window));
         ON_CALL(engineContext, getClock).WillByDefault(ReturnRef(clock));
         ON_CALL(engineContext, getStateMachine).WillByDefault(ReturnRef(stateMachine));
+        ON_CALL(engineContext, getGraphicsConfig).WillByDefault(ReturnRef(graphicsConfig));
         sut = std::make_unique<Game>(engineContext);
     }
     NiceMock<EngineContextMock> engineContext;
     NiceMock<WindowMock> window;
     NiceMock<ClockMock> clock;
     NiceMock<StateMachineMock> stateMachine;
+    NiceMock<GraphicsConfigMock> graphicsConfig;
     std::unique_ptr<IGame> sut;
 };
 
@@ -254,6 +266,69 @@ TEST_F(StateMachineTest, stateMachineDoesNotReadNextStateWhenCurrentStateIsNotDo
     sut->runState(std::move(activeState));
     sut->update(true, 0.f);
 
+}
+
+struct GraphicsConfigTest : public testing::Test
+{
+    std::unique_ptr<IGraphicsConfig> sut = std::make_unique<GraphicsConfig>();
+    NiceMock<IniParserMock> iniParser;
+    GraphicsData fetchedData{};
+};
+
+TEST_F(GraphicsConfigTest, graphicsConfigSuccessfullyFetchesFile)
+{
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    ASSERT_NO_THROW(sut->fetchSettingsFromFile(iniParser));
+}
+
+TEST_F(GraphicsConfigTest, graphicsConfigFillsResolutionFromFetchedFileContent)
+{
+    fetchedData.width = 480;
+    fetchedData.height = 620;
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_EQ(sut->getResolution().width, 480);
+    ASSERT_EQ(sut->getResolution().height, 620);
+}
+
+TEST_F(GraphicsConfigTest, graphicsConfigFillsFullscreenTrueFromFetchedFileContent)
+{
+    fetchedData.fullscreen = true;
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_TRUE(sut->getFullscreen());
+}
+
+TEST_F(GraphicsConfigTest, graphicsConfigFillsFullscreenFalseFromFetchedFileContent)
+{
+    fetchedData.fullscreen = false;
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_FALSE(sut->getFullscreen());
+}
+
+TEST_F(GraphicsConfigTest, graphicsConfigFillsFrameRateLimitFromFetchedFileContent)
+{
+    fetchedData.frameRateLimit = 30;
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_EQ(sut->getFrameRateLimit(), 30);
+}
+
+TEST_F(GraphicsConfigTest, graphicsConfigFillsVSyncFlagFromFetchedFileContent)
+{
+    fetchedData.verticalSync = true;
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_TRUE(sut->getVerticalSync());
+}
+
+TEST_F(GraphicsConfigTest, graphicsConfigFillsAntialiasingLevelFromFetchedFileContent)
+{
+    fetchedData.antialiasingLevel = 0;
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_EQ(sut->getAntialiasingLevel(), 0);
 }
 
 }

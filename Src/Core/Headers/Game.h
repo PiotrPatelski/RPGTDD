@@ -19,6 +19,7 @@ public:
 
     virtual bool isWindowOpen() = 0;
 
+    virtual void applyGraphicsSettings() = 0;
     virtual void startStateMachine() = 0;
     virtual void openWindow() = 0;
 
@@ -36,6 +37,7 @@ public:
 
     virtual bool isWindowOpen() override {return window.isActive();}
 
+    virtual void applyGraphicsSettings() override {}
     virtual void startStateMachine() override;
     virtual void openWindow() override {window.open();}
 
