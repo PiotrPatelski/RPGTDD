@@ -7,6 +7,7 @@
 #include <Clock.h>
 #include <StateMachine.h>
 #include <EngineContext.h>
+#include <IniParser.h>
 
 namespace Core
 {
@@ -37,7 +38,7 @@ public:
 
     virtual bool isWindowOpen() override {return window.isActive();}
 
-    virtual void applyGraphicsSettings() override {}
+    virtual void applyGraphicsSettings() override;
     virtual void startStateMachine() override;
     virtual void openWindow() override {window.open();}
 
@@ -48,9 +49,9 @@ private:
     IWindow& window;
     IClock& clock;
     IStateMachine& stateMachine;
+    IGraphicsConfig& graphicsConfig;
 
     sf::Event sfmlEvent;
-
 };
 
 

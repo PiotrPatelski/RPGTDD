@@ -8,8 +8,15 @@ Game::Game(IEngineContext& engineContext)
 :   IGame::IGame(),
     window{engineContext.getWindow()},
     clock{engineContext.getClock()},
-    stateMachine{engineContext.getStateMachine()}
+    stateMachine{engineContext.getStateMachine()},
+    graphicsConfig{engineContext.getGraphicsConfig()}
 {}
+
+void Game::applyGraphicsSettings()
+{
+    IniParser parser;
+    graphicsConfig.fetchSettingsFromFile(parser);
+}
 
 void Game::startStateMachine()
 {

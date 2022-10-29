@@ -165,6 +165,12 @@ TEST_F(GameTest, GameShouldNotCloseWindowWhenStateMachineIsNotDone)
     sut->update();
 }
 
+TEST_F(GameTest, GraphicsConfigShouldFetchDataFromFileWhenGameAppliesGraphicsSettings)
+{
+    EXPECT_CALL(graphicsConfig, fetchSettingsFromFile(_));
+    sut->applyGraphicsSettings();
+}
+
 struct ClockTest : public testing::Test
 {
     std::unique_ptr<IClock> sut = std::make_unique<Clock>();
