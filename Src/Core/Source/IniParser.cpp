@@ -5,7 +5,7 @@ namespace Core
 
 GraphicsData IniParser::fetchDataFromGraphicsFile()
 {
-    std::string filePath("Config/graphics.ini");
+    std::string filePath(binaryPath + "/../Config/graphics.ini");
     std::ifstream targetFile(filePath);
 
     if(not targetFile.is_open())
@@ -16,6 +16,7 @@ GraphicsData IniParser::fetchDataFromGraphicsFile()
 
     GraphicsData result;
 
+    targetFile >> result.gameTitle;
     targetFile >> result.width >> result.height;
     targetFile >> result.fullscreen;
     targetFile >> result.frameRateLimit;

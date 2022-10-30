@@ -14,7 +14,7 @@ Game::Game(IEngineContext& engineContext)
 
 void Game::applyGraphicsSettings()
 {
-    IniParser parser;
+    IniParser parser(binaryPath);
     graphicsConfig.fetchSettingsFromFile(parser);
 }
 

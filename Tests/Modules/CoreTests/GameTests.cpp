@@ -11,6 +11,7 @@
 #include "GraphicsConfigMock.h"
 #include "IniParserMock.h"
 
+#define TEST_PATH _TEST_ASSETS_PATH
 namespace Core
 {
 
@@ -83,7 +84,7 @@ TEST_F(GameLoopTest, gameAppliesGraphicsSettingsWhenLoopIsRun)
 
 struct GameTest : public testing::Test
 {
-    virtual void SetUp()
+    GameTest()
     {
         ON_CALL(engineContext, getWindow).WillByDefault(ReturnRef(window));
         ON_CALL(engineContext, getClock).WillByDefault(ReturnRef(clock));
@@ -187,6 +188,15 @@ TEST_F(ClockTest, deltaTimeIsUpdated)
 struct WindowTest : public testing::Test
 {    
     std::unique_ptr<IWindow> sut = std::make_unique<Window>();
+    NiceMock<GraphicsConfigMock> graphicsConfig;
+    WindowTest()
+    {
+        ON_CALL(graphicsConfig, getFullscreen).WillByDefault(Return(false));
+        ON_CALL(graphicsConfig, getVerticalSync).WillByDefault(Return(false));
+        ON_CALL(graphicsConfig, getFrameRateLimit).WillByDefault(Return(30));
+        ON_CALL(graphicsConfig, getContextSettings).WillByDefault(Return(sf::ContextSettings{}));
+        ON_CALL(graphicsConfig, getResolution).WillByDefault(Return(sf::VideoMode(480,480)));
+    }
 };
 
 TEST_F(WindowTest, windowIsNotActiveUponCreation)
@@ -196,13 +206,13 @@ TEST_F(WindowTest, windowIsNotActiveUponCreation)
 
 TEST_F(WindowTest, windowIsActiveWhenLaunched)
 {
-    sut->open();
+    sut->openWithSettings(graphicsConfig);
     ASSERT_TRUE(sut->isActive());
 }
 
 TEST_F(WindowTest, windowRemainsActiveWhenNoClosingEventAppearedDuringUpdate)
 {
-    sut->open();
+    sut->openWithSettings(graphicsConfig);
     sf::Event event;
     sut->handleSfmlEvents(event);
     ASSERT_TRUE(sut->isActive());
@@ -210,7 +220,7 @@ TEST_F(WindowTest, windowRemainsActiveWhenNoClosingEventAppearedDuringUpdate)
 
 TEST_F(WindowTest, windowIsNotActiveWhenClosed)
 {
-    sut->open();
+    sut->openWithSettings(graphicsConfig);
     sut->close();
     ASSERT_FALSE(sut->isActive());
 }
@@ -287,6 +297,14 @@ TEST_F(GraphicsConfigTest, graphicsConfigSuccessfullyFetchesFile)
     ASSERT_NO_THROW(sut->fetchSettingsFromFile(iniParser));
 }
 
+TEST_F(GraphicsConfigTest, graphicsConfigFillsGameWindowTitleFromFetchedFileContent)
+{
+    fetchedData.gameTitle = "TEST";
+    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
+    sut->fetchSettingsFromFile(iniParser);
+    ASSERT_EQ(sut->getGameTitle(), "TEST");
+}
+
 TEST_F(GraphicsConfigTest, graphicsConfigFillsResolutionFromFetchedFileContent)
 {
     fetchedData.width = 480;
@@ -331,10 +349,21 @@ TEST_F(GraphicsConfigTest, graphicsConfigFillsVSyncFlagFromFetchedFileContent)
 
 TEST_F(GraphicsConfigTest, graphicsConfigFillsAntialiasingLevelFromFetchedFileContent)
 {
-    fetchedData.antialiasingLevel = 0;
+    fetchedData.antialiasingLevel = 30;
     EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
     sut->fetchSettingsFromFile(iniParser);
-    ASSERT_EQ(sut->getAntialiasingLevel(), 0);
+    ASSERT_EQ(sut->getContextSettings().antialiasingLevel, 30);
+}
+
+struct IniParserTest : public testing::Test
+{
+    const std::string pathToFile = TEST_PATH;
+    std::unique_ptr<IIniParser> sut = std::make_unique<IniParser>(pathToFile);
+};
+
+TEST_F(IniParserTest, IniParserDoesNotThrowWhenGraphicsFileIsValid)
+{
+    ASSERT_NO_THROW(sut->fetchDataFromGraphicsFile());
 }
 
 }

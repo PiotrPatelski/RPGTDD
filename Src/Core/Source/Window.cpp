@@ -11,10 +11,21 @@ Window::Window()
     
 }
 
-void Window::open()
+void Window::openWithSettings(const IGraphicsConfig& config)
 {
     std::cout << "Opening window..." << std::endl;
-    window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "SFML window");
+
+    auto isFullscreen = (config.getFullscreen()) ?
+        sf::Style::Fullscreen :
+        sf::Style::Titlebar | sf::Style::Close;
+
+    window = std::make_unique<sf::RenderWindow>(
+        config.getResolution(),
+        config.getGameTitle(),
+        isFullscreen,
+        config.getContextSettings());
+    window->setFramerateLimit(config.getFrameRateLimit());
+    window->setVerticalSyncEnabled(config.getVerticalSync());
 }
 
 void Window::handleSfmlEvents(sf::Event event)

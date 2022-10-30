@@ -5,6 +5,7 @@ namespace Core
 
 struct GraphicsData
 {
+    std::string gameTitle;
 	uint width;
     uint height;
     bool fullscreen;
@@ -26,11 +27,13 @@ private:
 class IniParser : public IIniParser
 {
 public:
-    IniParser(){}
+    IniParser(const std::string& binaryPath)
+    : binaryPath{binaryPath}
+    {}
     virtual ~IniParser(){}
     virtual GraphicsData fetchDataFromGraphicsFile() override;
 private:
-
+    const std::string binaryPath;
 };
 
 }

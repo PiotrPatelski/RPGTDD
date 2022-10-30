@@ -20,6 +20,8 @@ public:
 
     virtual bool isWindowOpen() = 0;
 
+    virtual void setBinaryPath(const std::string&) = 0;
+
     virtual void applyGraphicsSettings() = 0;
     virtual void startStateMachine() = 0;
     virtual void openWindow() = 0;
@@ -38,9 +40,11 @@ public:
 
     virtual bool isWindowOpen() override {return window.isActive();}
 
+    virtual void setBinaryPath(const std::string& path) override {binaryPath = path;}
+
     virtual void applyGraphicsSettings() override;
     virtual void startStateMachine() override;
-    virtual void openWindow() override {window.open();}
+    virtual void openWindow() override {window.openWithSettings(graphicsConfig);}
 
     virtual void update() override;
     virtual void updateDeltaTime() override;
@@ -50,6 +54,8 @@ private:
     IClock& clock;
     IStateMachine& stateMachine;
     IGraphicsConfig& graphicsConfig;
+
+    std::string binaryPath;
 
     sf::Event sfmlEvent;
 };

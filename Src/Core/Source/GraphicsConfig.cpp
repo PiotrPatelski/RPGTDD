@@ -6,8 +6,8 @@ namespace Core
 void GraphicsConfig::fetchSettingsFromFile(IIniParser& parser)
 {
     auto graphicsData = parser.fetchDataFromGraphicsFile();
-    resolution.width = graphicsData.width;
-    resolution.height = graphicsData.height;
+    gameTitle = graphicsData.gameTitle;
+    resolution = sf::VideoMode(graphicsData.width, graphicsData.height);
     fullscreen = graphicsData.fullscreen;
     verticalSync = graphicsData.verticalSync;
     frameRateLimit = graphicsData.frameRateLimit;

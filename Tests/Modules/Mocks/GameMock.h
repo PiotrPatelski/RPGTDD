@@ -12,6 +12,7 @@ using ::testing::Test;
 class GameMock : public IGame
 {
 public:
+    MOCK_METHOD(void, setBinaryPath, (const std::string&), (override));
     MOCK_METHOD(bool, isWindowOpen, (), (override));
     MOCK_METHOD(void, applyGraphicsSettings, (), (override));
     MOCK_METHOD(void, startStateMachine, (), (override));
