@@ -60,24 +60,21 @@ TEST_F(GameLoopTest, gameCallsRenderWhenItIsRunning)
 
 TEST_F(GameLoopTest, gameStartsStateMachineWhenLoopIsRun)
 {
-    InSequence seq;
-    EXPECT_CALL(game, startStateMachine()).Times(1);
+    EXPECT_CALL(game, startStateMachine());
     ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
     sut->run();
 }
 
 TEST_F(GameLoopTest, gameOpensWindowWhenLoopIsRun)
 {
-    InSequence seq;
-    EXPECT_CALL(game, openWindow()).Times(1);
+    EXPECT_CALL(game, openWindow());
     ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
     sut->run();
 }
 
 TEST_F(GameLoopTest, gameAppliesGraphicsSettingsWhenLoopIsRun)
 {
-    InSequence seq;
-    EXPECT_CALL(game, applyGraphicsSettings()).Times(1);
+    EXPECT_CALL(game, applyGraphicsSettings());
     ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
     sut->run();
 }
