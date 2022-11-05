@@ -2,7 +2,7 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <GraphicsConfig.h>
+#include <Config.h>
 
 namespace Core
 {
@@ -15,7 +15,7 @@ public:
 
     virtual bool isActive() = 0;
     virtual bool isCurrentlyFocused() = 0;
-    virtual void openWithSettings(const IGraphicsConfig&) = 0;
+    virtual void openWithSettings(const GraphicsConfig&) = 0;
     virtual void clear() = 0;
     virtual void displayWindow() = 0;
     virtual void handleSfmlEvents(sf::Event) = 0;
@@ -30,7 +30,7 @@ public:
 
     virtual bool isActive() override {return window != nullptr and window->isOpen();}
     virtual bool isCurrentlyFocused() override {return window->hasFocus();}
-    virtual void openWithSettings(const IGraphicsConfig&);
+    virtual void openWithSettings(const GraphicsConfig&);
     virtual void clear() override {window->clear();}
     virtual void displayWindow() override {window->display();}
     virtual void handleSfmlEvents(sf::Event) override;

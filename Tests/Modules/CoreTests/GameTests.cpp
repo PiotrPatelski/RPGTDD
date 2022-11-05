@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <SFML/Window.hpp>
 #include <Game.h>
 #include <GameLoop.h>
 #include "GameMock.h"
@@ -8,10 +9,9 @@
 #include "StateMachineMock.h"
 #include "StateMock.h"
 #include "EngineContextMock.h"
-#include "GraphicsConfigMock.h"
 #include "IniParserMock.h"
 
-#define TEST_PATH _TEST_ASSETS_PATH
+#define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 namespace Core
 {
 
@@ -21,10 +21,12 @@ using ::testing::Return;
 using ::testing::InSequence;
 using ::testing::_;
 using ::testing::ReturnRef;
+using ::testing::A;
 
 struct GameLoopTest : public testing::Test
 {
     NiceMock<GameMock> game;
+    NiceMock<IniParserMock> iniParser;
     std::unique_ptr<IGameLoop> sut = std::make_unique<GameLoop>(game);
 };
 
@@ -74,7 +76,21 @@ TEST_F(GameLoopTest, gameOpensWindowWhenLoopIsRun)
 
 TEST_F(GameLoopTest, gameAppliesGraphicsSettingsWhenLoopIsRun)
 {
-    EXPECT_CALL(game, applyGraphicsSettings());
+    EXPECT_CALL(game, fetchGraphicsSettings(_));
+    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
+    sut->run();
+}
+
+TEST_F(GameLoopTest, gameAppliesPlayerInputSettingsWhenLoopIsRun)
+{
+    EXPECT_CALL(game, fetchPlayerInputSettings(_));
+    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
+    sut->run();
+}
+
+TEST_F(GameLoopTest, gameProvidesBuildPathWhenLoopIsRun)
+{
+    EXPECT_CALL(game, getBuildPath());
     ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
     sut->run();
 }
@@ -86,14 +102,17 @@ struct GameTest : public testing::Test
         ON_CALL(engineContext, getWindow).WillByDefault(ReturnRef(window));
         ON_CALL(engineContext, getClock).WillByDefault(ReturnRef(clock));
         ON_CALL(engineContext, getStateMachine).WillByDefault(ReturnRef(stateMachine));
-        ON_CALL(engineContext, getGraphicsConfig).WillByDefault(ReturnRef(graphicsConfig));
+        ON_CALL(engineContext, getGraphicsConfig).WillByDefault(ReturnRef(dummyGraphicsConfig));
+        ON_CALL(engineContext, getKeyboardConfig).WillByDefault(ReturnRef(dummyKeyboardConfig));
         sut = std::make_unique<Game>(engineContext);
     }
     NiceMock<EngineContextMock> engineContext;
     NiceMock<WindowMock> window;
     NiceMock<ClockMock> clock;
     NiceMock<StateMachineMock> stateMachine;
-    NiceMock<GraphicsConfigMock> graphicsConfig;
+    GraphicsConfig dummyGraphicsConfig;
+    KeyboardConfig dummyKeyboardConfig;
+    NiceMock<IniParserMock> iniParser;
     std::unique_ptr<IGame> sut;
 };
 
@@ -117,37 +136,37 @@ TEST_F(GameTest, gameActivatesStateMachineWhenItsRun)
     sut->startStateMachine();
 }
 
-TEST_F(GameTest, WindowClearsWindow)
+TEST_F(GameTest, windowClearsWindow)
 {
     EXPECT_CALL(window, clear());
     sut->render();
 }
 
-TEST_F(GameTest, WindowDisplaysWindow)
+TEST_F(GameTest, windowDisplaysWindow)
 {
     EXPECT_CALL(window, displayWindow());
     sut->render();
 }
 
-TEST_F(GameTest, ClockUpdatesDeltaTime)
+TEST_F(GameTest, clockUpdatesDeltaTime)
 {
     EXPECT_CALL(clock, updateDeltaTime());
     sut->updateDeltaTime();
 }
 
-TEST_F(GameTest, GameShouldProcessSfmlEventsWhenIsUpdated)
+TEST_F(GameTest, gameShouldProcessSfmlEventsWhenIsUpdated)
 {
     EXPECT_CALL(window, handleSfmlEvents(_));
     sut->update();
 }
 
-TEST_F(GameTest, GameShouldUpdateStateMachineUponUpdateCall)
+TEST_F(GameTest, gameShouldUpdateStateMachineUponUpdateCall)
 {
     EXPECT_CALL(stateMachine, update(_, _));
     sut->update();
 }
 
-TEST_F(GameTest, GameShouldCloseWindowWhenStateMachineIsDone)
+TEST_F(GameTest, gameShouldCloseWindowWhenStateMachineIsDone)
 {
     EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(true));
     EXPECT_CALL(stateMachine, update(_, _)).Times(0);
@@ -155,7 +174,7 @@ TEST_F(GameTest, GameShouldCloseWindowWhenStateMachineIsDone)
     sut->update();
 }
 
-TEST_F(GameTest, GameShouldNotCloseWindowWhenStateMachineIsNotDone)
+TEST_F(GameTest, gameShouldNotCloseWindowWhenStateMachineIsNotDone)
 {
     EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(false));
     EXPECT_CALL(stateMachine, update(_, _));
@@ -163,10 +182,22 @@ TEST_F(GameTest, GameShouldNotCloseWindowWhenStateMachineIsNotDone)
     sut->update();
 }
 
-TEST_F(GameTest, GraphicsConfigShouldFetchDataFromFileWhenGameAppliesGraphicsSettings)
+TEST_F(GameTest, setsBuildPathString)
 {
-    EXPECT_CALL(graphicsConfig, fetchSettingsFromFile(_));
-    sut->applyGraphicsSettings();
+    sut->setBuildPath("TEST");
+    ASSERT_EQ(sut->getBuildPath(), "TEST");
+}
+
+TEST_F(GameTest, graphicsConfigShouldFetchDataFromFileWhenGameAppliesIt)
+{
+    EXPECT_CALL(iniParser, parseFileTo(A<GraphicsConfig&>()));
+    sut->fetchGraphicsSettings(iniParser);
+}
+
+TEST_F(GameTest, playerInputConfigShouldFetchDataFromFileWhenGameAppliesIt)
+{
+    EXPECT_CALL(iniParser, parseFileTo(A<KeyboardConfig&>()));
+    sut->fetchPlayerInputSettings(iniParser);
 }
 
 struct ClockTest : public testing::Test
@@ -185,15 +216,7 @@ TEST_F(ClockTest, deltaTimeIsUpdated)
 struct WindowTest : public testing::Test
 {    
     std::unique_ptr<IWindow> sut = std::make_unique<Window>();
-    NiceMock<GraphicsConfigMock> graphicsConfig;
-    WindowTest()
-    {
-        ON_CALL(graphicsConfig, getFullscreen).WillByDefault(Return(false));
-        ON_CALL(graphicsConfig, getVerticalSync).WillByDefault(Return(false));
-        ON_CALL(graphicsConfig, getFrameRateLimit).WillByDefault(Return(30));
-        ON_CALL(graphicsConfig, getContextSettings).WillByDefault(Return(sf::ContextSettings{}));
-        ON_CALL(graphicsConfig, getResolution).WillByDefault(Return(sf::VideoMode(480,480)));
-    }
+    GraphicsConfig graphicsConfig{"TEST", {21,37}, 0, 0, 0, sf::ContextSettings{}};
 };
 
 TEST_F(WindowTest, windowIsNotActiveUponCreation)
@@ -281,86 +304,33 @@ TEST_F(StateMachineTest, stateMachineDoesNotReadNextStateWhenCurrentStateIsNotDo
 
 }
 
-struct GraphicsConfigTest : public testing::Test
-{
-    std::unique_ptr<IGraphicsConfig> sut = std::make_unique<GraphicsConfig>();
-    NiceMock<IniParserMock> iniParser;
-    GraphicsData fetchedData{};
-};
-
-TEST_F(GraphicsConfigTest, graphicsConfigSuccessfullyFetchesFile)
-{
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    ASSERT_NO_THROW(sut->fetchSettingsFromFile(iniParser));
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsGameWindowTitleFromFetchedFileContent)
-{
-    fetchedData.gameTitle = "TEST";
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_EQ(sut->getGameTitle(), "TEST");
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsResolutionFromFetchedFileContent)
-{
-    fetchedData.width = 480;
-    fetchedData.height = 620;
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_EQ(sut->getResolution().width, 480);
-    ASSERT_EQ(sut->getResolution().height, 620);
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsFullscreenTrueFromFetchedFileContent)
-{
-    fetchedData.fullscreen = true;
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_TRUE(sut->getFullscreen());
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsFullscreenFalseFromFetchedFileContent)
-{
-    fetchedData.fullscreen = false;
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_FALSE(sut->getFullscreen());
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsFrameRateLimitFromFetchedFileContent)
-{
-    fetchedData.frameRateLimit = 30;
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_EQ(sut->getFrameRateLimit(), 30);
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsVSyncFlagFromFetchedFileContent)
-{
-    fetchedData.verticalSync = true;
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_TRUE(sut->getVerticalSync());
-}
-
-TEST_F(GraphicsConfigTest, graphicsConfigFillsAntialiasingLevelFromFetchedFileContent)
-{
-    fetchedData.antialiasingLevel = 30;
-    EXPECT_CALL(iniParser, fetchDataFromGraphicsFile()).WillOnce(Return(fetchedData));
-    sut->fetchSettingsFromFile(iniParser);
-    ASSERT_EQ(sut->getContextSettings().antialiasingLevel, 30);
-}
-
 struct IniParserTest : public testing::Test
 {
     const std::string pathToFile = TEST_PATH;
+    GraphicsConfig graphicsConfig;
+    KeyboardConfig keyboardConfig;
     std::unique_ptr<IIniParser> sut = std::make_unique<IniParser>(pathToFile);
 };
 
-TEST_F(IniParserTest, IniParserDoesNotThrowWhenGraphicsFileIsValid)
+TEST_F(IniParserTest, IniParserFillsGraphicsConfigWithDataParsedFromTestConfigFile)
 {
-    ASSERT_NO_THROW(sut->fetchDataFromGraphicsFile());
+    ASSERT_NO_THROW(sut->parseFileTo(graphicsConfig));
+    ASSERT_EQ(graphicsConfig.gameTitle, "TESTCONFIG");
+    ASSERT_EQ(graphicsConfig.resolution.width, 21);
+    ASSERT_EQ(graphicsConfig.resolution.height, 37);
+    ASSERT_TRUE(graphicsConfig.fullscreen);
+    ASSERT_EQ(graphicsConfig.frameRateLimit, 30);
+    ASSERT_TRUE(graphicsConfig.verticalSync);
+    ASSERT_EQ(graphicsConfig.contextSettings.antialiasingLevel, 1);
 }
+
+TEST_F(IniParserTest, IniParserFillsKeyboardConfigWithDataParsedFromTestConfigFile)
+{
+    ASSERT_NO_THROW(sut->parseFileTo(keyboardConfig));
+    ASSERT_EQ(keyboardConfig.supportedKeys.at("Escape"), 36);
+    ASSERT_EQ(keyboardConfig.supportedKeys.at("D"), 3);
+    ASSERT_EQ(keyboardConfig.supportedKeys.at("PageDown"), 62);
+}
+
 
 }

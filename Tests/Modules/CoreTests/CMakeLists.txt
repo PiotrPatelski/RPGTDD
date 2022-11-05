@@ -26,5 +26,5 @@ gtest_discover_tests(${MODULE_NAME})
 add_test(NAME CoreTestsInstance
          COMMAND ${MODULE_NAME})
 
-ADD_DEFINITIONS(-D_TEST_ASSETS_PATH="${CMAKE_SOURCE_DIR}/Src")
-message( ${CMAKE_SOURCE_DIR}/Src )
+ADD_DEFINITIONS(-D_PROJECT_ROOT_FOLDER="${CMAKE_SOURCE_DIR}")
+message( ${CMAKE_SOURCE_DIR}/TestConfig )

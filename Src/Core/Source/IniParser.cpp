@@ -3,9 +3,9 @@
 namespace Core
 {
 
-GraphicsData IniParser::fetchDataFromGraphicsFile()
+void IniParser::parseFileTo(GraphicsConfig& config)
 {
-    std::string filePath(binaryPath + "/../Config/graphics.ini");
+    std::string filePath(buildPath + "/Config/graphics.ini");
     std::ifstream targetFile(filePath);
 
     if(not targetFile.is_open())
@@ -14,17 +14,31 @@ GraphicsData IniParser::fetchDataFromGraphicsFile()
             std::string("ERROR::cannot open graphics INI file from given path: " + filePath));
     }
 
-    GraphicsData result;
-
-    targetFile >> result.gameTitle;
-    targetFile >> result.width >> result.height;
-    targetFile >> result.fullscreen;
-    targetFile >> result.frameRateLimit;
-    targetFile >> result.verticalSync;
-    targetFile >> result.antialiasingLevel;
+    targetFile >> config.gameTitle;
+    targetFile >> config.resolution.width 
+        >> config.resolution.height;
+    targetFile >> config.fullscreen;
+    targetFile >> config.frameRateLimit;
+    targetFile >> config.verticalSync;
+    targetFile >> config.contextSettings.antialiasingLevel;
     targetFile.close();
+}
 
-    return result;
+void IniParser::parseFileTo(KeyboardConfig& config)
+{
+    std::string filePath(buildPath + "/Config/keyboard.ini");
+    std::ifstream targetFile(filePath);
+
+    if(not targetFile.is_open())
+    {
+       throw std::runtime_error(
+            std::string("ERROR::cannot open graphics INI file from given path: " + filePath));
+    }
+    std::string key = "";
+    int keyValue = 0;
+    while (targetFile >> key >> keyValue)
+        config.supportedKeys[key] = keyValue;
+    targetFile.close();
 }
 
 }

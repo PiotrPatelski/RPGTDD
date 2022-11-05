@@ -1,25 +1,18 @@
 #pragma once
 
+#include <Config.h>
+
 namespace Core
 {
 
-struct GraphicsData
-{
-    std::string gameTitle;
-	uint width;
-    uint height;
-    bool fullscreen;
-	uint frameRateLimit;
-	bool verticalSync;
-	uint antialiasingLevel;
-};
 
 class IIniParser
 {
 public:
     IIniParser(){}
     virtual ~IIniParser(){}
-    virtual GraphicsData fetchDataFromGraphicsFile() = 0;
+    virtual void parseFileTo(GraphicsConfig&) = 0;
+    virtual void parseFileTo(KeyboardConfig&) = 0;
 private:
 
 };
@@ -27,13 +20,14 @@ private:
 class IniParser : public IIniParser
 {
 public:
-    IniParser(const std::string& binaryPath)
-    : binaryPath{binaryPath}
+    IniParser(const std::string& buildPath)
+    : buildPath{buildPath}
     {}
     virtual ~IniParser(){}
-    virtual GraphicsData fetchDataFromGraphicsFile() override;
+    virtual void parseFileTo(GraphicsConfig&) override;
+    virtual void parseFileTo(KeyboardConfig&) override;
 private:
-    const std::string binaryPath;
+    const std::string buildPath;
 };
 
 }

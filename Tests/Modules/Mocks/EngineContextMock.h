@@ -15,7 +15,8 @@ public:
     MOCK_METHOD(IWindow&, getWindow, (), (override));
     MOCK_METHOD(IClock&, getClock, (), (override));
     MOCK_METHOD(IStateMachine&, getStateMachine, (), (override));
-    MOCK_METHOD(IGraphicsConfig&, getGraphicsConfig, (), (override));
+    MOCK_METHOD(GraphicsConfig&, getGraphicsConfig, (), (override));
+    MOCK_METHOD(KeyboardConfig&, getKeyboardConfig, (), (override));
 };
 
 }

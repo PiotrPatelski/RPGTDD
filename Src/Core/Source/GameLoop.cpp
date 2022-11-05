@@ -12,7 +12,9 @@ GameLoop::GameLoop(IGame& game)
 void GameLoop::run()
 {
     std::cout << "Starting game instance..." << std::endl;
-    game.applyGraphicsSettings();
+    IniParser parser(game.getBuildPath());
+    game.fetchGraphicsSettings(parser);
+    game.fetchPlayerInputSettings(parser);
     game.startStateMachine();
     game.openWindow();
     try

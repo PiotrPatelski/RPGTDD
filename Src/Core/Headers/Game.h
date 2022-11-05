@@ -20,15 +20,18 @@ public:
 
     virtual bool isWindowOpen() = 0;
 
-    virtual void setBinaryPath(const std::string&) = 0;
+    virtual void setBuildPath(const std::string&) = 0;
 
-    virtual void applyGraphicsSettings() = 0;
+    virtual void fetchGraphicsSettings(IIniParser&) = 0;
+    virtual void fetchPlayerInputSettings(IIniParser&) = 0;
     virtual void startStateMachine() = 0;
     virtual void openWindow() = 0;
 
     virtual void update() = 0;
     virtual void updateDeltaTime() = 0;
     virtual void render() = 0;
+
+    virtual std::string getBuildPath() const = 0;
 private:
 };
 
@@ -40,22 +43,26 @@ public:
 
     virtual bool isWindowOpen() override {return window.isActive();}
 
-    virtual void setBinaryPath(const std::string& path) override {binaryPath = path;}
+    virtual void setBuildPath(const std::string& path) override {buildPath = path;}
 
-    virtual void applyGraphicsSettings() override;
+    virtual void fetchGraphicsSettings(IIniParser&) override;
+    virtual void fetchPlayerInputSettings(IIniParser&) override;
     virtual void startStateMachine() override;
     virtual void openWindow() override {window.openWithSettings(graphicsConfig);}
 
     virtual void update() override;
     virtual void updateDeltaTime() override;
     virtual void render() override;
+
+    virtual std::string getBuildPath() const {return buildPath;}
 private:
     IWindow& window;
     IClock& clock;
     IStateMachine& stateMachine;
-    IGraphicsConfig& graphicsConfig;
+    GraphicsConfig& graphicsConfig;
+    KeyboardConfig& keyboardConfig;
 
-    std::string binaryPath;
+    std::string buildPath;
 
     sf::Event sfmlEvent;
 };

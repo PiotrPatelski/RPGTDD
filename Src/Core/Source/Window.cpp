@@ -7,25 +7,25 @@ namespace Core
 Window::Window()
 : window(nullptr)
 {
-    std::cout << "Opening window..." << std::endl;
+    std::cout << "Creating window..." << std::endl;
     
 }
 
-void Window::openWithSettings(const IGraphicsConfig& config)
+void Window::openWithSettings(const GraphicsConfig& config)
 {
     std::cout << "Opening window..." << std::endl;
 
-    auto isFullscreen = (config.getFullscreen()) ?
+    auto isFullscreen = (config.fullscreen) ?
         sf::Style::Fullscreen :
         sf::Style::Titlebar | sf::Style::Close;
 
     window = std::make_unique<sf::RenderWindow>(
-        config.getResolution(),
-        config.getGameTitle(),
+        config.resolution,
+        config.gameTitle,
         isFullscreen,
-        config.getContextSettings());
-    window->setFramerateLimit(config.getFrameRateLimit());
-    window->setVerticalSyncEnabled(config.getVerticalSync());
+        config.contextSettings);
+    window->setFramerateLimit(config.frameRateLimit);
+    window->setVerticalSyncEnabled(config.verticalSync);
 }
 
 void Window::handleSfmlEvents(sf::Event event)

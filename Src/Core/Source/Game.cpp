@@ -9,13 +9,18 @@ Game::Game(IEngineContext& engineContext)
     window{engineContext.getWindow()},
     clock{engineContext.getClock()},
     stateMachine{engineContext.getStateMachine()},
-    graphicsConfig{engineContext.getGraphicsConfig()}
+    graphicsConfig{engineContext.getGraphicsConfig()},
+    keyboardConfig{engineContext.getKeyboardConfig()}
 {}
 
-void Game::applyGraphicsSettings()
+void Game::fetchGraphicsSettings(IIniParser& parser)
 {
-    IniParser parser(binaryPath);
-    graphicsConfig.fetchSettingsFromFile(parser);
+    parser.parseFileTo(graphicsConfig);
+}
+
+void Game::fetchPlayerInputSettings(IIniParser& parser)
+{
+    parser.parseFileTo(keyboardConfig);
 }
 
 void Game::startStateMachine()
