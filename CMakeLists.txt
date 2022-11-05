@@ -67,6 +67,14 @@ enable_testing()
 
 add_subdirectory(Tests)
 
+add_custom_target(copy_config ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_SOURCE_DIR}/Config
+        ${PROJECT_BINARY_DIR}/Config
+        COMMENT "Copying Config into binary directory")
+
+add_dependencies(${PROJECT_NAME} copy_config)
+
 
 
 
