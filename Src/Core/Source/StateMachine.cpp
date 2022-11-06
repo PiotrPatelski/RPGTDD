@@ -11,10 +11,13 @@ StateMachine::StateMachine()
 
 void StateMachine::update(bool isWindowFocused, float deltaTime)
 {
-    activeState->update(deltaTime);
-    if(activeState->isDone())
+    if(isWindowFocused)
     {
-        runState(activeState->getNextState());
+        activeState->update(deltaTime);
+        if(activeState->isDone())
+        {
+            runState(activeState->getNextState());
+        }
     }
 }
 

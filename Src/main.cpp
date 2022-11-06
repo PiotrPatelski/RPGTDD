@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
     auto buildPath = binaryPath + "/../";
     std::cout<<"Build path: "<< buildPath << std::endl;
 
-    Core::EngineContext engineContext;
-    Core::Game sfmlRpg(engineContext);
+    auto engine = std::make_shared<Core::EngineContext>();
+    Core::Game sfmlRpg(*engine);
     sfmlRpg.setBuildPath(buildPath);
     Core::GameLoop gameInstance(sfmlRpg);
     gameInstance.run();

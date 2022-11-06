@@ -265,6 +265,14 @@ TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
     ASSERT_TRUE(sut->isWorkDone());
 }
 
+TEST_F(StateMachineTest, currentStateIsNotUpdatedWhenWindowIsNotOnFocus)
+{
+    auto activeState = std::make_unique<NiceMock<States::StateMock>>();
+    EXPECT_CALL(*activeState, update(_)).Times(0);
+    sut->runState(std::move(activeState));
+    sut->update(false, 0.f);
+}
+
 TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
 {
     auto activeState = std::make_unique<NiceMock<States::StateMock>>();
@@ -279,7 +287,6 @@ TEST_F(StateMachineTest, stateMachineChecksIfActiveStateIsDoneWhenUpdated)
     EXPECT_CALL(*activeState, isDone());
     sut->runState(std::move(activeState));
     sut->update(true, 0.f);
-
 }
 
 TEST_F(StateMachineTest, stateMachineReadsNextStateWhenCurrentStateIsDone)
@@ -290,7 +297,6 @@ TEST_F(StateMachineTest, stateMachineReadsNextStateWhenCurrentStateIsDone)
     EXPECT_CALL(*activeState, getNextState()).WillOnce(Return(ByMove(std::move(nextState))));
     sut->runState(std::move(activeState));
     sut->update(true, 0.f);
-
 }
 
 TEST_F(StateMachineTest, stateMachineDoesNotReadNextStateWhenCurrentStateIsNotDone)
@@ -301,7 +307,6 @@ TEST_F(StateMachineTest, stateMachineDoesNotReadNextStateWhenCurrentStateIsNotDo
     EXPECT_CALL(*activeState, getNextState()).Times(0);
     sut->runState(std::move(activeState));
     sut->update(true, 0.f);
-
 }
 
 struct IniParserTest : public testing::Test
