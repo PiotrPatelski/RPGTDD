@@ -6,6 +6,7 @@ set(SOURCES
     Source/Window.cpp
     Source/Clock.cpp
     Source/StateMachine.cpp
+    Source/Engine.cpp
     Source/IniParser.cpp
     )
 
@@ -15,7 +16,7 @@ set(HEADERS
     Headers/Window.h
     Headers/Clock.h
     Headers/StateMachine.h
-    Headers/EngineContext.h
+    Headers/Engine.h
     Headers/Config.h
     Headers/IniParser.h
     )

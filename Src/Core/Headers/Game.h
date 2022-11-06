@@ -1,12 +1,6 @@
 #pragma once
 
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <Window.h>
-#include <Clock.h>
-#include <StateMachine.h>
-#include <EngineContext.h>
+#include <Engine.h>
 #include <IniParser.h>
 
 namespace Core
@@ -38,33 +32,26 @@ private:
 class Game : public IGame
 {
 public:
-    Game(IEngineContext&);
+    Game(std::shared_ptr<Engine> engine);
     virtual ~Game(){}
 
-    virtual bool isWindowOpen() override {return window.isActive();}
+    virtual bool isWindowOpen() override {return engine->isWindowOpen();}
 
     virtual void setBuildPath(const std::string& path) override {buildPath = path;}
 
     virtual void fetchGraphicsSettings(IIniParser&) override;
     virtual void fetchPlayerInputSettings(IIniParser&) override;
     virtual void startStateMachine() override;
-    virtual void openWindow() override {window.openWithSettings(graphicsConfig);}
-
+    virtual void openWindow() override;
     virtual void update() override;
     virtual void updateDeltaTime() override;
     virtual void render() override;
 
     virtual std::string getBuildPath() const {return buildPath;}
 private:
-    IWindow& window;
-    IClock& clock;
-    IStateMachine& stateMachine;
-    GraphicsConfig& graphicsConfig;
-    KeyboardConfig& keyboardConfig;
+    std::shared_ptr<Engine> engine;
 
     std::string buildPath;
-
-    sf::Event sfmlEvent;
 };
 
 

@@ -99,14 +99,13 @@ struct GameTest : public testing::Test
 {
     GameTest()
     {
-        ON_CALL(engineContext, getWindow).WillByDefault(ReturnRef(window));
-        ON_CALL(engineContext, getClock).WillByDefault(ReturnRef(clock));
-        ON_CALL(engineContext, getStateMachine).WillByDefault(ReturnRef(stateMachine));
-        ON_CALL(engineContext, getGraphicsConfig).WillByDefault(ReturnRef(dummyGraphicsConfig));
-        ON_CALL(engineContext, getKeyboardConfig).WillByDefault(ReturnRef(dummyKeyboardConfig));
-        sut = std::make_unique<Game>(engineContext);
+        engine = std::make_shared<NiceMock<EngineContextMock>>();
+        ON_CALL(*engine, getClock).WillByDefault(ReturnRef(clock));
+        ON_CALL(*engine, getGraphicsConfig).WillByDefault(ReturnRef(dummyGraphicsConfig));
+        ON_CALL(*engine, getKeyboardConfig).WillByDefault(ReturnRef(dummyKeyboardConfig));
+        sut = std::make_unique<Game>(engine);
     }
-    NiceMock<EngineContextMock> engineContext;
+    std::shared_ptr<NiceMock<EngineContextMock>> engine;
     NiceMock<WindowMock> window;
     NiceMock<ClockMock> clock;
     NiceMock<StateMachineMock> stateMachine;
@@ -116,35 +115,29 @@ struct GameTest : public testing::Test
     std::unique_ptr<IGame> sut;
 };
 
-TEST_F(GameTest, gameChecksIfWindowIsActive)
+TEST_F(GameTest, engineChecksIfWindowIsActive)
 {
-    EXPECT_CALL(window, isActive()).WillOnce(Return(true));
+    EXPECT_CALL(*engine, isWindowOpen()).WillOnce(Return(true));
     bool result = sut->isWindowOpen();
     ASSERT_TRUE(result);
 }
 
-TEST_F(GameTest, gameChecksIfWindowIsNotActive)
+TEST_F(GameTest, engineChecksIfWindowIsNotActive)
 {
-    EXPECT_CALL(window, isActive()).WillOnce(Return(false));
+    EXPECT_CALL(*engine, isWindowOpen()).WillOnce(Return(false));
     bool result = sut->isWindowOpen();
     ASSERT_FALSE(result);
 }
 
-TEST_F(GameTest, gameActivatesStateMachineWhenItsRun)
+TEST_F(GameTest, engineActivatesStateMachineWhenGameItsRun)
 {
-    EXPECT_CALL(stateMachine, runState(_));
+    EXPECT_CALL(*engine, runInitialState());
     sut->startStateMachine();
 }
 
-TEST_F(GameTest, windowClearsWindow)
+TEST_F(GameTest, engineDisplaysRenderedFrame)
 {
-    EXPECT_CALL(window, clear());
-    sut->render();
-}
-
-TEST_F(GameTest, windowDisplaysWindow)
-{
-    EXPECT_CALL(window, displayWindow());
+    EXPECT_CALL(*engine, displayRenderedFrame());
     sut->render();
 }
 
@@ -154,31 +147,17 @@ TEST_F(GameTest, clockUpdatesDeltaTime)
     sut->updateDeltaTime();
 }
 
-TEST_F(GameTest, gameShouldProcessSfmlEventsWhenIsUpdated)
+TEST_F(GameTest, engineShouldNotCloseWindowWhenUpdateIsSuccessful)
 {
-    EXPECT_CALL(window, handleSfmlEvents(_));
+    EXPECT_CALL(*engine, updateState()).WillOnce(Return(true));
+    EXPECT_CALL(*engine, closeWindow()).Times(0);
     sut->update();
 }
 
-TEST_F(GameTest, gameShouldUpdateStateMachineUponUpdateCall)
+TEST_F(GameTest, engineShouldCloseWindowWhenUpdateIsSuccessful)
 {
-    EXPECT_CALL(stateMachine, update(_, _));
-    sut->update();
-}
-
-TEST_F(GameTest, gameShouldCloseWindowWhenStateMachineIsDone)
-{
-    EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(true));
-    EXPECT_CALL(stateMachine, update(_, _)).Times(0);
-    EXPECT_CALL(window, close());
-    sut->update();
-}
-
-TEST_F(GameTest, gameShouldNotCloseWindowWhenStateMachineIsNotDone)
-{
-    EXPECT_CALL(stateMachine, isWorkDone()).WillOnce(Return(false));
-    EXPECT_CALL(stateMachine, update(_, _));
-    EXPECT_CALL(window, close()).Times(0);
+    EXPECT_CALL(*engine, updateState()).WillOnce(Return(false));
+    EXPECT_CALL(*engine, closeWindow());
     sut->update();
 }
 
@@ -317,7 +296,7 @@ struct IniParserTest : public testing::Test
     std::unique_ptr<IIniParser> sut = std::make_unique<IniParser>(pathToFile);
 };
 
-TEST_F(IniParserTest, IniParserFillsGraphicsConfigWithDataParsedFromTestConfigFile)
+TEST_F(IniParserTest, iniParserFillsGraphicsConfigWithDataParsedFromTestConfigFile)
 {
     ASSERT_NO_THROW(sut->parseFileTo(graphicsConfig));
     ASSERT_EQ(graphicsConfig.gameTitle, "TESTCONFIG");
@@ -329,7 +308,7 @@ TEST_F(IniParserTest, IniParserFillsGraphicsConfigWithDataParsedFromTestConfigFi
     ASSERT_EQ(graphicsConfig.contextSettings.antialiasingLevel, 1);
 }
 
-TEST_F(IniParserTest, IniParserFillsKeyboardConfigWithDataParsedFromTestConfigFile)
+TEST_F(IniParserTest, iniParserFillsKeyboardConfigWithDataParsedFromTestConfigFile)
 {
     ASSERT_NO_THROW(sut->parseFileTo(keyboardConfig));
     ASSERT_EQ(keyboardConfig.supportedKeys.at("Escape"), 36);
@@ -337,5 +316,47 @@ TEST_F(IniParserTest, IniParserFillsKeyboardConfigWithDataParsedFromTestConfigFi
     ASSERT_EQ(keyboardConfig.supportedKeys.at("PageDown"), 62);
 }
 
+struct EngineTest : public testing::Test
+{
+    const std::string pathToFile = TEST_PATH;
+    std::unique_ptr<IIniParser> parser = std::make_unique<IniParser>(pathToFile);
+    std::unique_ptr<Engine> sut = std::make_unique<Engine>();
+    EngineTest()
+    {
+        parser->parseFileTo(sut->getKeyboardConfig());
+        parser->parseFileTo(sut->getGraphicsConfig());
+    }
+};
+
+TEST_F(EngineTest, windowIsNotOpenWhenEngineWontRunIt)
+{
+    ASSERT_FALSE(sut->isWindowOpen());
+}
+
+TEST_F(EngineTest, windowIsOpenWhenEngineLaunchesIt)
+{
+    sut->launchWindow();
+    ASSERT_TRUE(sut->isWindowOpen());
+}
+
+TEST_F(EngineTest, windowIsNotOpenAfterEngineClosesIt)
+{
+    sut->launchWindow();
+    sut->closeWindow();
+    ASSERT_FALSE(sut->isWindowOpen());
+}
+
+TEST_F(EngineTest, stateWillNotBeUpdatedIfEngineDidntRunInitialState)
+{
+    sut->launchWindow();
+    ASSERT_FALSE(sut->updateState());
+}
+
+TEST_F(EngineTest, stateIsUpdatedIfEngineRunInitialState)
+{
+    sut->launchWindow();
+    sut->runInitialState();
+    ASSERT_TRUE(sut->updateState());
+}
 
 }
