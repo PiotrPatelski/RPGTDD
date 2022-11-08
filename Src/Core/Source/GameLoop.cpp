@@ -21,7 +21,7 @@ void GameLoop::run()
     {
         while(game.isWindowOpen())
         {
-            game.updateDeltaTime();
+            game.updateClock();
             game.update();
             game.render();
         }

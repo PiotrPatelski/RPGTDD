@@ -20,7 +20,7 @@ public:
     MOCK_METHOD(void, startStateMachine, (), (override));
     MOCK_METHOD(void, openWindow, (), (override));
     MOCK_METHOD(void, update, (), (override));
-    MOCK_METHOD(void, updateDeltaTime, (), (override));
+    MOCK_METHOD(void, updateClock, (), (override));
     MOCK_METHOD(void, render, (), (override));
 };    
 

@@ -22,7 +22,7 @@ public:
     virtual void openWindow() = 0;
 
     virtual void update() = 0;
-    virtual void updateDeltaTime() = 0;
+    virtual void updateClock() = 0;
     virtual void render() = 0;
 
     virtual std::string getBuildPath() const = 0;
@@ -32,7 +32,7 @@ private:
 class Game : public IGame
 {
 public:
-    Game(std::shared_ptr<Engine> engine);
+    Game(std::unique_ptr<IEngine> engine);
     virtual ~Game(){}
 
     virtual bool isWindowOpen() override {return engine->isWindowOpen();}
@@ -44,12 +44,12 @@ public:
     virtual void startStateMachine() override;
     virtual void openWindow() override;
     virtual void update() override;
-    virtual void updateDeltaTime() override;
+    virtual void updateClock() override;
     virtual void render() override;
 
     virtual std::string getBuildPath() const {return buildPath;}
 private:
-    std::shared_ptr<Engine> engine;
+    std::unique_ptr<IEngine> engine;
 
     std::string buildPath;
 };

@@ -9,10 +9,10 @@ namespace Core
 
 using ::testing::Test;
 
-class EngineContextMock : public Engine
+class EngineMock : public IEngine
 {
 public:
-    MOCK_METHOD(IClock&, getClock, (), (override));
+    MOCK_METHOD(void, updateDeltaTime, (), (override));
     MOCK_METHOD(GraphicsConfig&, getGraphicsConfig, (), (override));
     MOCK_METHOD(KeyboardConfig&, getKeyboardConfig, (), (override));
     MOCK_METHOD(bool, updateState, (), (override));

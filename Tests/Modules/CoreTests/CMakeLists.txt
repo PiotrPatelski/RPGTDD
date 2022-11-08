@@ -1,6 +1,14 @@
 set(MODULE_NAME CoreTests)
 
-set(SOURCES GameTests.cpp)
+set(SOURCES
+    GameTests.cpp
+    ClockTests.cpp
+    EngineTests.cpp
+    WindowTests.cpp
+    GameLoopTests.cpp
+    IniParserTests.cpp
+    CoreBuilderTests.cpp
+    StateMachineTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 

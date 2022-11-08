@@ -3,9 +3,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <Window.h>
-#include <Clock.h>
-#include <StateMachine.h>
+#include <CoreBuilder.h>
 #include <Config.h>
 
 namespace Core
@@ -16,7 +14,7 @@ class IEngine
 public:
     IEngine(){}
     virtual ~IEngine(){}
-    virtual IClock& getClock() = 0;
+    virtual void updateDeltaTime() = 0;
     virtual GraphicsConfig& getGraphicsConfig() = 0;
     virtual KeyboardConfig& getKeyboardConfig() = 0;
 
@@ -33,9 +31,9 @@ private:
 class Engine : public IEngine
 {
 public:
-    Engine(){}
+    Engine(const ICoreBuilder&);
     virtual ~Engine(){}
-    virtual IClock& getClock();
+    virtual void updateDeltaTime();
     virtual GraphicsConfig& getGraphicsConfig();
     virtual KeyboardConfig& getKeyboardConfig();
 
@@ -47,9 +45,9 @@ public:
     virtual void runInitialState();
 
 private:
-    Window window;
-    Clock clock;
-    StateMachine stateMachine;
+    std::unique_ptr<IWindow> window;
+    std::unique_ptr<IClock> clock;
+    std::unique_ptr<IStateMachine> stateMachine;
     GraphicsConfig graphicsConfig;
     KeyboardConfig keyboardConfig;
     sf::Event sfmlEvent;

@@ -4,7 +4,7 @@
 namespace Core
 {
 
-Game::Game(std::shared_ptr<Engine> engine)
+Game::Game(std::unique_ptr<IEngine> engine)
 :   IGame::IGame(),
     engine(std::move(engine))
 {}
@@ -35,9 +35,9 @@ void Game::update()
         engine->closeWindow();
 }
 
-void Game::updateDeltaTime()
+void Game::updateClock()
 {
-    engine->getClock().updateDeltaTime();
+    engine->updateDeltaTime();
 }
 
 void Game::render()

@@ -1,6 +1,6 @@
 #include <GameLoop.h>
 #include <Game.h>
-#include <Clock.h>
+#include <CoreBuilder.h>
 #include <StateMachine.h>
 #include <iostream>
 
@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     auto buildPath = binaryPath + "/../";
     std::cout<<"Build path: "<< buildPath << std::endl;
 
-    Core::Game sfmlRpg(std::make_shared<Core::Engine>());
+    Core::Game sfmlRpg(std::make_unique<Core::Engine>(Core::CoreBuilder{}));
     sfmlRpg.setBuildPath(buildPath);
     Core::GameLoop gameInstance(sfmlRpg);
     gameInstance.run();

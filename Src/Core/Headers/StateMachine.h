@@ -11,7 +11,7 @@ public:
     IStateMachine(){}
     virtual ~IStateMachine(){}
 
-    virtual bool isWorkDone() = 0;
+    virtual bool isNoStateActive() = 0;
 
     virtual void runState(std::unique_ptr<States::IState>) = 0;
     virtual void update(bool, float) = 0;
@@ -23,7 +23,7 @@ public:
     StateMachine();
     virtual ~StateMachine(){}
 
-    virtual bool isWorkDone(){return activeState == nullptr;}
+    virtual bool isNoStateActive(){return activeState == nullptr;}
 
     virtual void runState(std::unique_ptr<States::IState>) override;
     virtual void update(bool, float) override;

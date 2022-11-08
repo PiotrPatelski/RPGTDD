@@ -3,9 +3,16 @@
 namespace Core
 {
 
-IClock& Engine::getClock()
+Engine::Engine(const ICoreBuilder& builder)
+: 
+window(builder.createWindow()),
+clock(builder.createClock()),
+stateMachine(builder.createStateMachine())
+{}
+
+void Engine::updateDeltaTime()
 {
-    return clock;
+    clock->updateDeltaTime();
 }
 GraphicsConfig& Engine::getGraphicsConfig()
 {
@@ -18,15 +25,15 @@ KeyboardConfig& Engine::getKeyboardConfig()
 
 bool Engine::isWindowOpen()
 { 
-    return window.isActive();
+    return window->isActive();
 }
 
 bool Engine::updateState()
 {
-    window.handleSfmlEvents(sfmlEvent);
-    if(not stateMachine.isWorkDone())
+    window->handleSfmlEvents(sfmlEvent);
+    if(not stateMachine->isNoStateActive())
     {
-        stateMachine.update(window.isCurrentlyFocused(), clock.getDeltaTime());
+        stateMachine->update(window->isCurrentlyFocused(), clock->getDeltaTime());
         return true;
     }
     return false;
@@ -34,24 +41,24 @@ bool Engine::updateState()
 
 void Engine::closeWindow()
 {
-    window.close();
+    window->close();
 
 }
 
 void Engine::displayRenderedFrame()
 {    
-    window.clear();
-    window.displayWindow();
+    window->clear();
+    window->display();
 }
 
 void Engine::launchWindow()
 {
-    window.openWithSettings(graphicsConfig);
+    window->openWithSettings(graphicsConfig);
 }
 
 void Engine::runInitialState()
 {
-    stateMachine.runState(std::make_unique<States::MainMenuState>());
+    stateMachine->runState(std::make_unique<States::MainMenuState>());
 }
 
 }
