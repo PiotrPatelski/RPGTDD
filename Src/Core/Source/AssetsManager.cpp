@@ -3,6 +3,8 @@
 namespace Core
 {
 
+std::string AssetsManager::buildPath = "";
+
 void MainMenuAssetsManager::fetchTextureFromFile()
 {
     const std::string texturePath = buildPath + "/Assets/Textures/MainMenu/menu.jpg";

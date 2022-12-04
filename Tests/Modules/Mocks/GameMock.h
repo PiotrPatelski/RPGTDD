@@ -12,8 +12,6 @@ using ::testing::Test;
 class GameMock : public IGame
 {
 public:
-    MOCK_METHOD(void, setBuildPath, (const std::string&), (override));
-    MOCK_METHOD(std::string, getBuildPath, (), (const, override));
     MOCK_METHOD(bool, isWindowOpen, (), (override));
     MOCK_METHOD(void, fetchGraphicsSettings, (IIniParser&), (override));
     MOCK_METHOD(void, fetchPlayerInputSettings, (IIniParser&), (override));

@@ -78,11 +78,4 @@ TEST_F(GameLoopTest, gameAppliesPlayerInputSettingsWhenLoopIsRun)
     sut->run();
 }
 
-TEST_F(GameLoopTest, gameProvidesBuildPathWhenLoopIsRun)
-{
-    EXPECT_CALL(game, getBuildPath());
-    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
-    sut->run();
-}
-
 }

@@ -85,13 +85,6 @@ TEST_F(GameTest, engineShouldCloseWindowWhenUpdateIsSuccessful)
     sut->update();
 }
 
-TEST_F(GameTest, setsBuildPathString)
-{
-    sut = std::make_unique<Game>(std::move(engine));
-    sut->setBuildPath("TEST");
-    ASSERT_EQ(sut->getBuildPath(), "TEST");
-}
-
 TEST_F(GameTest, graphicsConfigShouldFetchDataFromFileWhenGameAppliesIt)
 {
     ON_CALL(*engine, getGraphicsConfig).WillByDefault(ReturnRef(dummyGraphicsConfig));
@@ -103,7 +96,7 @@ TEST_F(GameTest, graphicsConfigShouldFetchDataFromFileWhenGameAppliesIt)
 TEST_F(GameTest, playerInputConfigShouldFetchDataFromFileWhenGameAppliesIt)
 {
     ON_CALL(*engine, getKeyboardConfig).WillByDefault(ReturnRef(dummyKeyboardConfig));
-    EXPECT_CALL(iniParser, parseFileTo(A<KeyboardConfig&>()));
+    EXPECT_CALL(iniParser, parseFileTo(A<SupportedKeys&>()));
     sut = std::make_unique<Game>(std::move(engine));
     sut->fetchPlayerInputSettings(iniParser);
 }

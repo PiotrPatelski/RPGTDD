@@ -13,10 +13,15 @@ using ::testing::Return;
 
 struct IniParserTest : public testing::Test
 {
-    const std::string pathToFile = TEST_PATH;
+    IniParserTest()
+    {
+        IniParser::setBuildPath(TEST_PATH);
+        sut = std::make_unique<IniParser>();
+    }
     GraphicsConfig graphicsConfig;
-    KeyboardConfig keyboardConfig;
-    std::unique_ptr<IIniParser> sut = std::make_unique<IniParser>(pathToFile);
+    SupportedKeys supportedKeys;
+    MainMenuKeys mainMenuKeys;
+    std::unique_ptr<IIniParser> sut;
 };
 
 TEST_F(IniParserTest, iniParserFillsGraphicsConfigWithDataParsedFromTestConfigFile)
@@ -33,24 +38,35 @@ TEST_F(IniParserTest, iniParserFillsGraphicsConfigWithDataParsedFromTestConfigFi
 
 TEST_F(IniParserTest, iniParserThrowsWhenGraphicsConfigFilePathIsInvalid)
 {
-    const std::string invalidPath = "invalid";
-    sut.reset(new IniParser(invalidPath));
+    IniParser::setBuildPath("invalidPath");
     ASSERT_THROW(sut->parseFileTo(graphicsConfig), std::runtime_error);
 }
 
-TEST_F(IniParserTest, iniParserFillsKeyboardConfigWithDataParsedFromTestConfigFile)
+TEST_F(IniParserTest, iniParserFillsSupportedKeysConfigWithDataParsedFromTestConfigFile)
 {
-    ASSERT_NO_THROW(sut->parseFileTo(keyboardConfig));
-    ASSERT_EQ(keyboardConfig.supportedKeys.at("Escape"), 36);
-    ASSERT_EQ(keyboardConfig.supportedKeys.at("D"), 3);
-    ASSERT_EQ(keyboardConfig.supportedKeys.at("PageDown"), 62);
+    ASSERT_NO_THROW(sut->parseFileTo(supportedKeys));
+    ASSERT_EQ(supportedKeys.getKeys().at("Escape"), 36);
+    ASSERT_EQ(supportedKeys.getKeys().at("D"), 3);
+    ASSERT_EQ(supportedKeys.getKeys().at("PageDown"), 62);
 }
 
-TEST_F(IniParserTest, iniParserThrowsWhenKeyboardConfigFilePathIsInvalid)
+TEST_F(IniParserTest, iniParserThrowsWhenSupportedKeysConfigFilePathIsInvalid)
 {
-    const std::string invalidPath = "invalid";
-    sut.reset(new IniParser(invalidPath));
-    ASSERT_THROW(sut->parseFileTo(keyboardConfig), std::runtime_error);
+    IniParser::setBuildPath("invalidPath");
+    ASSERT_THROW(sut->parseFileTo(supportedKeys), std::runtime_error);
+}
+
+TEST_F(IniParserTest, iniParserFillsMainMenuKeysWithDataParsedFromTestConfigFile)
+{
+    ASSERT_NO_THROW(sut->parseFileTo(supportedKeys));
+    ASSERT_NO_THROW(sut->parseFileTo(mainMenuKeys, supportedKeys));
+    ASSERT_EQ(mainMenuKeys.getKeys().at("CLOSE"), 36);
+}
+
+TEST_F(IniParserTest, iniParserThrowsWhenMainMenuKeysFilePathIsInvalid)
+{
+    IniParser::setBuildPath("invalidPath");
+    ASSERT_THROW(sut->parseFileTo(mainMenuKeys, supportedKeys), std::runtime_error);
 }
 
 }

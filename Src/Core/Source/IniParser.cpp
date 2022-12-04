@@ -3,6 +3,8 @@
 namespace Core
 {
 
+std::string IniParser::buildPath = "";
+
 std::ifstream IniParser::findAndOpenFile(const std::string& path)
 {
     std::string filePath(buildPath + path);
@@ -30,15 +32,26 @@ void IniParser::parseFileTo(GraphicsConfig& config)
     targetFile.close();
 }
 
-void IniParser::parseFileTo(KeyboardConfig& config)
+void IniParser::parseFileTo(SupportedKeys& target)
 {
-    auto targetFile = std::move(findAndOpenFile("/Config/keyboard.ini"));
+    auto sourceFile = std::move(findAndOpenFile("/Config/keyboard.ini"));
 
     std::string key = "";
     int keyValue = 0;
-    while (targetFile >> key >> keyValue)
-        config.supportedKeys[key] = keyValue;
-    targetFile.close();
+    while (sourceFile >> key >> keyValue)
+        target.setKey(key, keyValue);
+    sourceFile.close();
+}
+
+void IniParser::parseFileTo(MainMenuKeys& target, const SupportedKeys& availableKeys)
+{
+    auto sourceFile = std::move(findAndOpenFile("/Config/mainmenu_keybinds.ini"));
+
+    std::string key = "";
+    std::string supportedKey = "";
+    while (sourceFile >> key >> supportedKey)
+        target.setKey(key, availableKeys.getKeys().at(supportedKey));
+    sourceFile.close();
 }
 
 }

@@ -169,10 +169,10 @@ TEST_F(EngineTest, engineCanGetWritableKeyboardConfig)
 {
     sut = std::make_unique<Engine>(coreBuilder);
 
-    sut->getKeyboardConfig().supportedKeys["Test"] = 2137;
-    ASSERT_EQ(sut->getKeyboardConfig().supportedKeys.at("Test"), 2137);
-    sut->getKeyboardConfig().supportedKeys["Test"] = 7312;
-    ASSERT_EQ(sut->getKeyboardConfig().supportedKeys.at("Test"), 7312);
+    sut->getKeyboardConfig().supportedKeys.setKey("Test", 2137);
+    ASSERT_EQ(sut->getKeyboardConfig().supportedKeys.getKeys().at("Test"), 2137);
+    sut->getKeyboardConfig().supportedKeys.setKey("Test", 7312);
+    ASSERT_EQ(sut->getKeyboardConfig().supportedKeys.getKeys().at("Test"), 7312);
 }
 
 }

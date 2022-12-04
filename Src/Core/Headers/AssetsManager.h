@@ -21,22 +21,18 @@ public:
 class AssetsManager : public IAssetsManager
 {
 public:
-    AssetsManager(const std::string& buildPath)
-    : buildPath{buildPath}
-    {}
+    AssetsManager(){}
     virtual ~AssetsManager(){}
 
-    
+    static void setBuildPath(const std::string& path) {buildPath = path;}
 protected:
-    std::string buildPath;
+    static std::string buildPath;
 };
 
 class MainMenuAssetsManager : public AssetsManager
 {
 public:
-    MainMenuAssetsManager(const std::string& buildPath)
-    : AssetsManager(buildPath)
-    {}
+    MainMenuAssetsManager(){}
     virtual ~MainMenuAssetsManager(){}
 
     virtual void fetchFontFromFile() override;
