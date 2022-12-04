@@ -20,7 +20,7 @@ public:
     MOCK_METHOD(void, closeWindow, (), (override));
     MOCK_METHOD(void, displayRenderedFrame, (), (override));
     MOCK_METHOD(void, launchWindow, (), (override));
-    MOCK_METHOD(void, runInitialState, (), (override));
+    MOCK_METHOD(void, runInitialState, (std::unique_ptr<Core::IAssetsManager>), (override));
 };
 
 }

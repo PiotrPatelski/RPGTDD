@@ -12,7 +12,7 @@ public:
     virtual ~IStateMachine(){}
 
     virtual bool isNoStateActive() = 0;
-
+    virtual States::StateOutput getOutput() = 0;
     virtual void runState(std::unique_ptr<States::IState>) = 0;
     virtual void update(bool, float) = 0;
 };
@@ -23,8 +23,8 @@ public:
     StateMachine();
     virtual ~StateMachine(){}
 
-    virtual bool isNoStateActive(){return activeState == nullptr;}
-
+    virtual bool isNoStateActive() override {return activeState == nullptr;}
+    virtual States::StateOutput getOutput() override {return activeState->generateOutput();}
     virtual void runState(std::unique_ptr<States::IState>) override;
     virtual void update(bool, float) override;
 private:

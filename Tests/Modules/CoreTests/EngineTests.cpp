@@ -6,6 +6,7 @@
 #include "StateMachineMock.h"
 #include "EngineMock.h"
 #include "CoreBuilderMock.h"
+#include "AssetsManagerMock.h"
 
 
 namespace Core
@@ -14,6 +15,7 @@ namespace Core
 using ::testing::NiceMock;
 using ::testing::Test;
 using ::testing::Return;
+using ::testing::ReturnRef;
 using ::testing::_;
 
 struct EngineTest : public testing::Test
@@ -21,6 +23,7 @@ struct EngineTest : public testing::Test
     std::unique_ptr<NiceMock<WindowMock>> window = std::make_unique<NiceMock<WindowMock>>();
     std::unique_ptr<NiceMock<ClockMock>> clock = std::make_unique<NiceMock<ClockMock>>();
     std::unique_ptr<NiceMock<StateMachineMock>> stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
+    std::unique_ptr<NiceMock<MainMenuAssetsManagerMock>> assetsManager = std::make_unique<NiceMock<MainMenuAssetsManagerMock>>();
     NiceMock<CoreBuilderMock> coreBuilder;
     std::unique_ptr<IEngine> sut;
 };
@@ -98,12 +101,32 @@ TEST_F(EngineTest, stateIsUpdatedIfEngineRunInitialState)
     ASSERT_TRUE(sut->updateState());
 }
 
-TEST_F(EngineTest, windowClearsAndDisplaysWhenEngineDisplayesRenderedFrame)
+TEST_F(EngineTest, windowClearsAndDisplaysButDoesNotDrawStateOutputWhenDisplayRenderedFrameWithNoStateActive)
 {
     EXPECT_CALL(*window, clear());
+    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(true));
+    EXPECT_CALL(*window, drawStateOutput(_)).Times(0);
+    EXPECT_CALL(*stateMachine, getOutput()).Times(0);
     EXPECT_CALL(*window, display());
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));
+    ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
+    sut = std::make_unique<Engine>(coreBuilder);
+
+    sut->displayRenderedFrame();
+}
+
+TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFrameWithActiveState)
+{
+    sf::RectangleShape background(sf::Vector2f(480, 480));
+    EXPECT_CALL(*window, clear());
+    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
+    EXPECT_CALL(*stateMachine, getOutput()).WillOnce(Return(States::StateOutput{background}));
+    EXPECT_CALL(*window, drawStateOutput(_));
+    EXPECT_CALL(*window, display());
+
+    ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));
+    ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
     sut = std::make_unique<Engine>(coreBuilder);
 
     sut->displayRenderedFrame();
@@ -122,11 +145,12 @@ TEST_F(EngineTest, engineForwardsUpdateDeltaTimeToClock)
 TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
 {
     EXPECT_CALL(*stateMachine, runState(_));
-
+    sf::Texture mainMenuTexture;
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
+    ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(mainMenuTexture));
     sut = std::make_unique<Engine>(coreBuilder);
 
-    sut->runInitialState();
+    sut->runInitialState(std::move(assetsManager));
 }
 
 TEST_F(EngineTest, engineCanGetWritableGraphicsConfig)

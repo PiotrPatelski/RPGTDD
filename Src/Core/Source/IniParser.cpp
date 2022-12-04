@@ -3,16 +3,22 @@
 namespace Core
 {
 
-void IniParser::parseFileTo(GraphicsConfig& config)
+std::ifstream IniParser::findAndOpenFile(const std::string& path)
 {
-    std::string filePath(buildPath + "/Config/graphics.ini");
+    std::string filePath(buildPath + path);
     std::ifstream targetFile(filePath);
 
     if(not targetFile.is_open())
     {
-       throw std::runtime_error(
+        throw std::runtime_error(
             std::string("ERROR::cannot open graphics INI file from given path: " + filePath));
     }
+    return std::move(targetFile);
+}
+
+void IniParser::parseFileTo(GraphicsConfig& config)
+{
+    auto targetFile = std::move(findAndOpenFile("/Config/graphics.ini"));
 
     targetFile >> config.gameTitle;
     targetFile >> config.resolution.width 
@@ -26,14 +32,8 @@ void IniParser::parseFileTo(GraphicsConfig& config)
 
 void IniParser::parseFileTo(KeyboardConfig& config)
 {
-    std::string filePath(buildPath + "/Config/keyboard.ini");
-    std::ifstream targetFile(filePath);
+    auto targetFile = std::move(findAndOpenFile("/Config/keyboard.ini"));
 
-    if(not targetFile.is_open())
-    {
-       throw std::runtime_error(
-            std::string("ERROR::cannot open graphics INI file from given path: " + filePath));
-    }
     std::string key = "";
     int keyValue = 0;
     while (targetFile >> key >> keyValue)

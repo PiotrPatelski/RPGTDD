@@ -21,7 +21,7 @@ void Game::fetchPlayerInputSettings(IIniParser& parser)
 
 void Game::startStateMachine()
 {
-    engine->runInitialState();
+    engine->runInitialState(std::make_unique<MainMenuAssetsManager>(buildPath));
 }
 
 void Game::openWindow()

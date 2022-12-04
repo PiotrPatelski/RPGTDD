@@ -73,7 +73,14 @@ add_custom_target(copy_config ALL
         ${PROJECT_BINARY_DIR}/Config
         COMMENT "Copying Config into binary directory")
 
+add_custom_target(copy_assets ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_SOURCE_DIR}/Assets
+        ${PROJECT_BINARY_DIR}/Assets
+        COMMENT "Copying Assets into binary directory")
+
 add_dependencies(${PROJECT_NAME} copy_config)
+add_dependencies(${PROJECT_NAME} copy_assets)
 
 
 

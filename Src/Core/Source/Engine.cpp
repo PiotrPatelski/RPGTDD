@@ -48,6 +48,8 @@ void Engine::closeWindow()
 void Engine::displayRenderedFrame()
 {    
     window->clear();
+    if(not stateMachine->isNoStateActive())
+        window->drawStateOutput(stateMachine->getOutput());
     window->display();
 }
 
@@ -56,9 +58,13 @@ void Engine::launchWindow()
     window->openWithSettings(graphicsConfig);
 }
 
-void Engine::runInitialState()
+void Engine::runInitialState(std::unique_ptr<Core::IAssetsManager> assetsManager)
 {
-    stateMachine->runState(std::make_unique<States::MainMenuState>());
+    stateMachine->runState(std::make_unique<States::MainMenuState>(
+        graphicsConfig,
+        keyboardConfig,
+        std::move(assetsManager)
+    ));
 }
 
 }

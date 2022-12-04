@@ -3,6 +3,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <Config.h>
+#include <State.h>
 
 namespace Core
 {
@@ -17,6 +18,7 @@ public:
     virtual bool isCurrentlyFocused() = 0;
     virtual void openWithSettings(const GraphicsConfig&) = 0;
     virtual void clear() = 0;
+    virtual void drawStateOutput(const States::StateOutput&) = 0;
     virtual void display() = 0;
     virtual void handleSfmlEvents(sf::Event) = 0;
     virtual void close() = 0;
@@ -32,6 +34,7 @@ public:
     virtual bool isCurrentlyFocused() override {return window->hasFocus();}
     virtual void openWithSettings(const GraphicsConfig&);
     virtual void clear() override {window->clear();}
+    virtual void drawStateOutput(const States::StateOutput&) override;
     virtual void display() override {window->display();}
     virtual void handleSfmlEvents(sf::Event) override;
     virtual void close() override;

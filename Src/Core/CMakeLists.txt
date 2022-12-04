@@ -8,6 +8,7 @@ set(SOURCES
     Source/StateMachine.cpp
     Source/Engine.cpp
     Source/IniParser.cpp
+    Source/AssetsManager.cpp
     )
 
 set(HEADERS
@@ -19,6 +20,7 @@ set(HEADERS
     Headers/Engine.h
     Headers/Config.h
     Headers/IniParser.h
+    Headers/AssetsManager.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

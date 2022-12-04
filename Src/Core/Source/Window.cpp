@@ -39,6 +39,11 @@ void Window::handleSfmlEvents(sf::Event event)
     }
 }
 
+void Window::drawStateOutput(const States::StateOutput& output)
+{
+    window->draw(output.background);
+}
+
 void Window::close()
 {
     if(window == nullptr)
