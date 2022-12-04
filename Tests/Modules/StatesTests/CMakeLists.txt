@@ -25,3 +25,5 @@ gtest_discover_tests(${MODULE_NAME})
 
 add_test(NAME StatesTestsInstance 
          COMMAND ${MODULE_NAME})
+
+ADD_DEFINITIONS(-D_PROJECT_ROOT_FOLDER="${CMAKE_SOURCE_DIR}")

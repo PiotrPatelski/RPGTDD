@@ -4,6 +4,8 @@
 #include <Config.h>
 #include "AssetsManagerMock.h"
 
+#define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
+
 namespace States
 {
 
@@ -17,8 +19,10 @@ struct MainMenuStateTest : public testing::Test
     {
         assetsManager = std::make_unique<NiceMock<Core::MainMenuAssetsManagerMock>>();
         ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(texture));
+        ON_CALL(*assetsManager, getFont()).WillByDefault(ReturnRef(font));
     }
     sf::Texture texture;
+    sf::Font font;
     Core::GraphicsConfig graphicsConfig;
     Core::KeyboardConfig keyboardConfig;
     std::unique_ptr<NiceMock<Core::MainMenuAssetsManagerMock>> assetsManager;
@@ -53,6 +57,19 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundTextureProperly)
         keyboardConfig,
         std::move(assetsManager));
     ASSERT_NE(sut->getBackground().getTexture(), nullptr);
+}
+
+TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
+{
+    sf::Font font;
+    font.loadFromFile(std::string(TEST_PATH) + "/Assets/Fonts/MainMenu/xbones.ttf");
+    EXPECT_CALL(*assetsManager, fetchFontFromFile());
+    EXPECT_CALL(*assetsManager, getFont()).WillOnce(ReturnRef(font));
+    auto sut = std::make_unique<MainMenuState>(
+        graphicsConfig,
+        keyboardConfig,
+        std::move(assetsManager));
+    ASSERT_EQ(sut->getFont().getInfo().family, "xBONES");
 }
 
 }

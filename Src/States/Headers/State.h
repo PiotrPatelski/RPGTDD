@@ -43,6 +43,8 @@ protected:
     bool done{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<Core::IAssetsManager> assetsManager;
+    Core::GraphicsConfig& gfxConfig;
+    Core::KeyboardConfig& kbrdConfig;
 };
 
 class MainMenuState : public State
@@ -56,8 +58,13 @@ public:
 
     virtual const StateOutput generateOutput() override {return StateOutput{background};}
     const sf::RectangleShape& getBackground() {return background;}
+    const sf::Font& getFont() {return font;}
 private:
+    void initBackground();
+    void initFont();
+
     sf::RectangleShape background;
+    sf::Font font;
 };
 
 }

@@ -144,10 +144,12 @@ TEST_F(EngineTest, engineForwardsUpdateDeltaTimeToClock)
 
 TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
 {
-    EXPECT_CALL(*stateMachine, runState(_));
     sf::Texture mainMenuTexture;
+    sf::Font mainMenuFont;
+    EXPECT_CALL(*stateMachine, runState(_));
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
     ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(mainMenuTexture));
+    ON_CALL(*assetsManager, getFont()).WillByDefault(ReturnRef(mainMenuFont));
     sut = std::make_unique<Engine>(coreBuilder);
 
     sut->runInitialState(std::move(assetsManager));
