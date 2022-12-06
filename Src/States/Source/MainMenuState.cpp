@@ -6,7 +6,7 @@ namespace States
 MainMenuState::MainMenuState(
     Core::GraphicsConfig& gfxConfig,
     Core::KeyboardConfig& kbrdConfig,
-    std::unique_ptr<Core::IAssetsManager> assetsManager)
+    std::unique_ptr<Core::MainMenuAssetsManager> assetsManager)
     : State(gfxConfig, kbrdConfig, std::move(assetsManager))
 {
     initBackground();

@@ -13,7 +13,7 @@ public:
     MainMenuState(
         Core::GraphicsConfig&,
         Core::KeyboardConfig&,
-        std::unique_ptr<Core::IAssetsManager>);
+        std::unique_ptr<Core::MainMenuAssetsManager>);
     virtual ~MainMenuState() = default;
 
     virtual const StateOutput generateOutput() override {return StateOutput{background};}
