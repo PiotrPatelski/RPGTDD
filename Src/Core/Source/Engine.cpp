@@ -58,7 +58,7 @@ void Engine::launchWindow()
     window->openWithSettings(graphicsConfig);
 }
 
-void Engine::runInitialState(std::unique_ptr<Core::IAssetsManager> assetsManager)
+void Engine::runInitialState(std::unique_ptr<MainMenuAssetsManager> assetsManager)
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
         graphicsConfig,

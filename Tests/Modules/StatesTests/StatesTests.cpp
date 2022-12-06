@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <State.h>
+#include <MainMenuState.h>
 #include <Config.h>
 #include "AssetsManagerMock.h"
 

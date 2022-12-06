@@ -2,10 +2,12 @@ set(MODULE_NAME States)
 
 set(SOURCES
     Source/State.cpp
+    Source/MainMenuState.cpp
     )
 
 set(HEADERS
     Headers/State.h
+    Headers/MainMenuState.h
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

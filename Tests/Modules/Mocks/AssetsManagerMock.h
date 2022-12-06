@@ -9,7 +9,7 @@ namespace Core
 
 using ::testing::Test;
 
-class MainMenuAssetsManagerMock : public IAssetsManager
+class MainMenuAssetsManagerMock : public MainMenuAssetsManager
 {
 public:
    MOCK_METHOD(void, fetchTextureFromFile, (), (override));
