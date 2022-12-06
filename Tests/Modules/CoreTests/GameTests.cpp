@@ -50,7 +50,7 @@ TEST_F(GameTest, engineLaunchesWindowWhenCalledByGame)
 
 TEST_F(GameTest, engineActivatesStateMachineWhenGameItsRun)
 {
-    EXPECT_CALL(*engine, runInitialState(testing::_));
+    EXPECT_CALL(*engine, runInitialState());
     sut = std::make_unique<Game>(std::move(engine));
     sut->startStateMachine();
 }

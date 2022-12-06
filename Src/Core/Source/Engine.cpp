@@ -58,12 +58,12 @@ void Engine::launchWindow()
     window->openWithSettings(graphicsConfig);
 }
 
-void Engine::runInitialState(std::unique_ptr<MainMenuAssetsManager> assetsManager)
+void Engine::runInitialState()
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
         graphicsConfig,
         keyboardConfig,
-        std::move(assetsManager)
+        std::make_unique<MainMenuAssetsManager>()
     ));
 }
 

@@ -3,7 +3,7 @@
 namespace Core
 {
 
-std::string IniParser::buildPath = "";
+std::string IniParser::buildPath = std::filesystem::current_path().string() + "/../build/";
 
 std::ifstream IniParser::findAndOpenFile(const std::string& path)
 {

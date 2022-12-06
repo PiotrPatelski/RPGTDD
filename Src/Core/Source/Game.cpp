@@ -4,12 +4,6 @@
 namespace Core
 {
 
-void createPathForFileManagement(const std::string& buildPath)
-{
-    Core::IniParser::setBuildPath(buildPath);
-    Core::AssetsManager::setBuildPath(buildPath);
-}
-
 Game::Game(std::unique_ptr<IEngine> engine)
 :   IGame::IGame(),
     engine(std::move(engine))
@@ -27,7 +21,7 @@ void Game::fetchPlayerInputSettings(IIniParser& parser)
 
 void Game::startStateMachine()
 {
-    engine->runInitialState(std::make_unique<MainMenuAssetsManager>());
+    engine->runInitialState();
 }
 
 void Game::openWindow()

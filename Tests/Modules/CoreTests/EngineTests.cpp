@@ -8,6 +8,7 @@
 #include "CoreBuilderMock.h"
 #include "AssetsManagerMock.h"
 
+#define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
 namespace Core
 {
@@ -144,15 +145,13 @@ TEST_F(EngineTest, engineForwardsUpdateDeltaTimeToClock)
 
 TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
 {
-    sf::Texture mainMenuTexture;
-    sf::Font mainMenuFont;
-    EXPECT_CALL(*stateMachine, runState(_));
+    AssetsManager::setBuildPath(TEST_PATH);
+    EXPECT_CALL(*stateMachine, runState);
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
-    ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(mainMenuTexture));
-    ON_CALL(*assetsManager, getFont()).WillByDefault(ReturnRef(mainMenuFont));
+
     sut = std::make_unique<Engine>(coreBuilder);
 
-    sut->runInitialState(std::move(assetsManager));
+    sut->runInitialState();
 }
 
 TEST_F(EngineTest, engineCanGetWritableGraphicsConfig)

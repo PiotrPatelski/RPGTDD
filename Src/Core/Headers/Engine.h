@@ -22,7 +22,7 @@ public:
     virtual bool updateState() = 0;
     virtual void launchWindow() = 0;
     virtual void closeWindow() = 0;
-    virtual void runInitialState(std::unique_ptr<MainMenuAssetsManager>) = 0;
+    virtual void runInitialState() = 0;
     virtual void displayRenderedFrame() = 0;
 private:
 
@@ -42,7 +42,7 @@ public:
     virtual void closeWindow();
     virtual void displayRenderedFrame();
     virtual void launchWindow();
-    virtual void runInitialState(std::unique_ptr<MainMenuAssetsManager>);
+    virtual void runInitialState();
 
 private:
     std::unique_ptr<IWindow> window;

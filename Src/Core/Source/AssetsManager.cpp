@@ -3,7 +3,7 @@
 namespace Core
 {
 
-std::string AssetsManager::buildPath = "";
+std::string AssetsManager::buildPath = std::filesystem::current_path().string() + "/../build/";
 
 void MainMenuAssetsManager::fetchTextureFromFile()
 {
