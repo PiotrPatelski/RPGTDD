@@ -4,14 +4,8 @@
 namespace Core
 {
 
-void createPathForFileManagement(const std::string& seed)
+void createPathForFileManagement(const std::string& buildPath)
 {
-    std::string argv_str(seed);
-    auto binaryPath = argv_str.substr(0, argv_str.find_last_of("/"));
-    std::cout<<"Binary path: "<< binaryPath << std::endl;
-    auto buildPath = binaryPath + "/../";
-    std::cout<<"Build path: "<< buildPath << std::endl;
-
     Core::IniParser::setBuildPath(buildPath);
     Core::AssetsManager::setBuildPath(buildPath);
 }
