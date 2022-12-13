@@ -51,6 +51,7 @@ void IniParser::parseFileTo(MainMenuKeys& target, const SupportedKeys& available
     std::string supportedKey = "";
     while (sourceFile >> key >> supportedKey)
         target.setKey(key, availableKeys.getKeys().at(supportedKey));
+
     sourceFile.close();
 }
 

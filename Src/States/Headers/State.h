@@ -43,8 +43,8 @@ protected:
     bool done{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<Core::IAssetsManager> assetsManager;
-    Core::GraphicsConfig& gfxConfig;
-    Core::KeyboardConfig& kbrdConfig;
+    Core::GraphicsConfig& graphicsConfig;
+    Core::KeyboardConfig& keyboardConfig;
 };
 
 }

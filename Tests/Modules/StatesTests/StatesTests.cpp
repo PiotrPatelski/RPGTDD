@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include <MainMenuState.h>
 #include <Config.h>
+#include <IniParser.h>
 #include "AssetsManagerMock.h"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
@@ -20,6 +21,8 @@ struct MainMenuStateTest : public testing::Test
         assetsManager = std::make_unique<NiceMock<Core::MainMenuAssetsManagerMock>>();
         ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(texture));
         ON_CALL(*assetsManager, getFont()).WillByDefault(ReturnRef(font));
+        Core::IniParser::setBuildPath(TEST_PATH);
+        Core::IniParser{}.parseFileTo(keyboardConfig.supportedKeys);
     }
     sf::Texture texture;
     sf::Font font;
@@ -70,6 +73,15 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
         keyboardConfig,
         std::move(assetsManager));
     ASSERT_EQ(sut->getFont().getInfo().family, "xBONES");
+}
+
+TEST_F(MainMenuStateTest, mainMenuStateInitializesKeybindsProperly)
+{
+    auto sut = std::make_unique<MainMenuState>(
+        graphicsConfig,
+        keyboardConfig,
+        std::move(assetsManager));
+    ASSERT_EQ(keyboardConfig.mainMenuKeys.getKeys().at("CLOSE"), 36);
 }
 
 }

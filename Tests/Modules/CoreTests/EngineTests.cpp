@@ -1,12 +1,14 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <Engine.h>
+#include <IniParser.h>
 #include "WindowMock.h"
 #include "ClockMock.h"
 #include "StateMachineMock.h"
 #include "EngineMock.h"
 #include "CoreBuilderMock.h"
 #include "AssetsManagerMock.h"
+
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -146,10 +148,12 @@ TEST_F(EngineTest, engineForwardsUpdateDeltaTimeToClock)
 TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
 {
     AssetsManager::setBuildPath(TEST_PATH);
+    IniParser::setBuildPath(TEST_PATH);
     EXPECT_CALL(*stateMachine, runState);
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
 
     sut = std::make_unique<Engine>(coreBuilder);
+    IniParser{}.parseFileTo(sut->getKeyboardConfig().supportedKeys);
 
     sut->runInitialState();
 }

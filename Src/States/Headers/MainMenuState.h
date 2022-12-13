@@ -4,6 +4,7 @@
 #include <State.h>
 #include <Config.h>
 #include <AssetsManager.h>
+
 namespace States
 {
 
@@ -22,6 +23,7 @@ public:
 private:
     void initBackground();
     void initFont();
+    void initKeybinds();
 
     sf::RectangleShape background;
     sf::Font font;

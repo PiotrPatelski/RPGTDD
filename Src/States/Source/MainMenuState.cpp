@@ -1,4 +1,5 @@
 #include <MainMenuState.h>
+#include <IniParser.h>
 
 namespace States
 {
@@ -11,11 +12,12 @@ MainMenuState::MainMenuState(
 {
     initBackground();
     initFont();
+    initKeybinds();
 }
 
 void MainMenuState::initBackground()
 {
-    const auto& videoMode = gfxConfig.resolution;
+    const auto& videoMode = graphicsConfig.resolution;
     background.setSize(sf::Vector2f(
         static_cast<float>(videoMode.width),
         static_cast<float>(videoMode.height)));
@@ -27,6 +29,13 @@ void MainMenuState::initFont()
 {
     State::assetsManager->fetchFontFromFile();
     font = State::assetsManager->getFont();
+}
+
+void MainMenuState::initKeybinds()
+{
+    Core::IniParser{}.parseFileTo(
+        State::keyboardConfig.mainMenuKeys,
+        State::keyboardConfig.supportedKeys);
 }
 
 }
