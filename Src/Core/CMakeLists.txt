@@ -33,3 +33,14 @@ target_link_libraries(${MODULE_NAME}
 PUBLIC 
     States
     ${SFML_LIBS})
+
+set(CORE_EXCLUDES
+    "${COMPONENT_PATHS}")
+list(REMOVE_ITEM CORE_EXCLUDES
+    "${PROJECT_SOURCE_DIR}/Src/Core/*")
+setup_target_for_coverage_gcovr_html(
+    NAME CoreTestsCoverageHtml
+    EXECUTABLE CoreTests
+    DEPENDENCIES CoreTests Core
+    EXCLUDE "${CORE_EXCLUDES}"
+)

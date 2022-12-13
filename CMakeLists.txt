@@ -46,20 +46,10 @@ set(COVERAGE_EXCLUDES
     "${sfml_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/Tests/*")
 
-
-setup_target_for_coverage_gcovr_html(
-    NAME CoreTestsCoverageHtml
-    EXECUTABLE CoreTests
-    DEPENDENCIES CoreTests Core
-    EXCLUDE "${PROJECT_SOURCE_DIR}/Src/States/*"
-)
-
-setup_target_for_coverage_gcovr_html(
-    NAME StatesTestsCoverageHtml
-    EXECUTABLE StatesTests
-    DEPENDENCIES StatesTests States
-    EXCLUDE "${PROJECT_SOURCE_DIR}/Src/Core/*"
-)
+set(COMPONENT_PATHS
+    "${PROJECT_SOURCE_DIR}/Src/Core/*"
+    "${PROJECT_SOURCE_DIR}/Src/States/*"
+    "${PROJECT_SOURCE_DIR}/Src/Gui/*")
 
 add_subdirectory(Src)
 

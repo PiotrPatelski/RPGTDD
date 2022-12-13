@@ -10,12 +10,14 @@ set(SFML_LIBS
 
 add_subdirectory(Core)
 add_subdirectory(States)
+add_subdirectory(Gui)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
 #to use #include <Example.h> instead of relative path
 target_include_directories(${PROJECT_NAME} PUBLIC Core)
 target_include_directories(${PROJECT_NAME} PUBLIC States)
+target_include_directories(${PROJECT_NAME} PUBLIC Gui)
 target_include_directories(${PROJECT_NAME} PUBLIC ${SFML_INCLUDE_DIR})
 message(${SFML_INCLUDE_DIR} " FOUND!! ${SFML_INCLUDE_DIR}")
 
@@ -25,6 +27,7 @@ target_link_libraries(${PROJECT_NAME}
 PRIVATE
     Core
     States
+    Gui
     ${SFML_LIBS}
 )
 
