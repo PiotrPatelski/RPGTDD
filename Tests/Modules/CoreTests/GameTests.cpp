@@ -19,8 +19,7 @@ struct GameTest : public testing::Test
     GameTest()
     {}
     std::unique_ptr<NiceMock<EngineMock>> engine = std::make_unique<NiceMock<EngineMock>>();
-    GraphicsConfig dummyGraphicsConfig;
-    KeyboardConfig dummyKeyboardConfig;
+    Config dummyConfig;
     NiceMock<IniParserMock> iniParser;
     std::unique_ptr<IGame> sut;
 };
@@ -87,7 +86,7 @@ TEST_F(GameTest, engineShouldCloseWindowWhenUpdateIsSuccessful)
 
 TEST_F(GameTest, graphicsConfigShouldFetchDataFromFileWhenGameAppliesIt)
 {
-    ON_CALL(*engine, getGraphicsConfig).WillByDefault(ReturnRef(dummyGraphicsConfig));
+    ON_CALL(*engine, getConfig).WillByDefault(ReturnRef(dummyConfig));
     EXPECT_CALL(iniParser, parseFileTo(A<GraphicsConfig&>()));
     sut = std::make_unique<Game>(std::move(engine));
     sut->fetchGraphicsSettings(iniParser);
@@ -95,7 +94,7 @@ TEST_F(GameTest, graphicsConfigShouldFetchDataFromFileWhenGameAppliesIt)
 
 TEST_F(GameTest, playerInputConfigShouldFetchDataFromFileWhenGameAppliesIt)
 {
-    ON_CALL(*engine, getKeyboardConfig).WillByDefault(ReturnRef(dummyKeyboardConfig));
+    ON_CALL(*engine, getConfig).WillByDefault(ReturnRef(dummyConfig));
     EXPECT_CALL(iniParser, parseFileTo(A<SupportedKeys&>()));
     sut = std::make_unique<Game>(std::move(engine));
     sut->fetchPlayerInputSettings(iniParser);

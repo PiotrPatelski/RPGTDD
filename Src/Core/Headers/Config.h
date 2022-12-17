@@ -46,4 +46,10 @@ struct KeyboardConfig
 	MainMenuKeys mainMenuKeys;
 };
 
+struct Config
+{
+	GraphicsConfig graphics;
+	KeyboardConfig keyboard;
+};
+
 }

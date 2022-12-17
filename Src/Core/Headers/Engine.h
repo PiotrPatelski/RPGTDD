@@ -15,8 +15,7 @@ public:
     IEngine(){}
     virtual ~IEngine(){}
     virtual void updateDeltaTime() = 0;
-    virtual GraphicsConfig& getGraphicsConfig() = 0;
-    virtual KeyboardConfig& getKeyboardConfig() = 0;
+    virtual Config& getConfig() = 0;
 
     virtual bool isWindowOpen() = 0;
     virtual bool updateState() = 0;
@@ -34,8 +33,7 @@ public:
     Engine(const ICoreBuilder&);
     virtual ~Engine(){}
     virtual void updateDeltaTime();
-    virtual GraphicsConfig& getGraphicsConfig();
-    virtual KeyboardConfig& getKeyboardConfig();
+    virtual Config& getConfig();
 
     virtual bool isWindowOpen();
     virtual bool updateState();
@@ -48,8 +46,7 @@ private:
     std::unique_ptr<IWindow> window;
     std::unique_ptr<IClock> clock;
     std::unique_ptr<IStateMachine> stateMachine;
-    GraphicsConfig graphicsConfig;
-    KeyboardConfig keyboardConfig;
+    Config config;
     sf::Event sfmlEvent;
 };
 

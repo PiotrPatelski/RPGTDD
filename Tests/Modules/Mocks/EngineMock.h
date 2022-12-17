@@ -13,8 +13,7 @@ class EngineMock : public IEngine
 {
 public:
     MOCK_METHOD(void, updateDeltaTime, (), (override));
-    MOCK_METHOD(GraphicsConfig&, getGraphicsConfig, (), (override));
-    MOCK_METHOD(KeyboardConfig&, getKeyboardConfig, (), (override));
+    MOCK_METHOD(Config&, getConfig, (), (override));
     MOCK_METHOD(bool, updateState, (), (override));
     MOCK_METHOD(bool, isWindowOpen, (), (override));
     MOCK_METHOD(void, closeWindow, (), (override));

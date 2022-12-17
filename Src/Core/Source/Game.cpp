@@ -11,12 +11,12 @@ Game::Game(std::unique_ptr<IEngine> engine)
 
 void Game::fetchGraphicsSettings(IIniParser& parser)
 {
-    parser.parseFileTo(engine->getGraphicsConfig());
+    parser.parseFileTo(engine->getConfig().graphics);
 }
 
 void Game::fetchPlayerInputSettings(IIniParser& parser)
 {
-    parser.parseFileTo(engine->getKeyboardConfig().supportedKeys);
+    parser.parseFileTo(engine->getConfig().keyboard.supportedKeys);
 }
 
 void Game::startStateMachine()

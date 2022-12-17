@@ -153,7 +153,7 @@ TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
 
     sut = std::make_unique<Engine>(coreBuilder);
-    IniParser{}.parseFileTo(sut->getKeyboardConfig().supportedKeys);
+    IniParser{}.parseFileTo(sut->getConfig().keyboard.supportedKeys);
 
     sut->runInitialState();
 }
@@ -162,20 +162,20 @@ TEST_F(EngineTest, engineCanGetWritableGraphicsConfig)
 {
     sut = std::make_unique<Engine>(coreBuilder);
 
-    sut->getGraphicsConfig().gameTitle = "engineCanGetGraphicsConfigAndWriteToIt";
-    ASSERT_EQ(sut->getGraphicsConfig().gameTitle, "engineCanGetGraphicsConfigAndWriteToIt");
-    sut->getGraphicsConfig().gameTitle = "confirmation";
-    ASSERT_EQ(sut->getGraphicsConfig().gameTitle, "confirmation");
+    sut->getConfig().graphics.gameTitle = "engineCanGetGraphicsConfigAndWriteToIt";
+    ASSERT_EQ(sut->getConfig().graphics.gameTitle, "engineCanGetGraphicsConfigAndWriteToIt");
+    sut->getConfig().graphics.gameTitle = "confirmation";
+    ASSERT_EQ(sut->getConfig().graphics.gameTitle, "confirmation");
 }
 
 TEST_F(EngineTest, engineCanGetWritableKeyboardConfig)
 {
     sut = std::make_unique<Engine>(coreBuilder);
 
-    sut->getKeyboardConfig().supportedKeys.setKey("Test", 2137);
-    ASSERT_EQ(sut->getKeyboardConfig().supportedKeys.getKeys().at("Test"), 2137);
-    sut->getKeyboardConfig().supportedKeys.setKey("Test", 7312);
-    ASSERT_EQ(sut->getKeyboardConfig().supportedKeys.getKeys().at("Test"), 7312);
+    sut->getConfig().keyboard.supportedKeys.setKey("Test", 2137);
+    ASSERT_EQ(sut->getConfig().keyboard.supportedKeys.getKeys().at("Test"), 2137);
+    sut->getConfig().keyboard.supportedKeys.setKey("Test", 7312);
+    ASSERT_EQ(sut->getConfig().keyboard.supportedKeys.getKeys().at("Test"), 7312);
 }
 
 }

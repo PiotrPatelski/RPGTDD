@@ -14,13 +14,10 @@ void Engine::updateDeltaTime()
 {
     clock->updateDeltaTime();
 }
-GraphicsConfig& Engine::getGraphicsConfig()
+
+Config& Engine::getConfig()
 {
-    return graphicsConfig;
-}
-KeyboardConfig& Engine::getKeyboardConfig()
-{
-    return keyboardConfig;
+    return config;
 }
 
 bool Engine::isWindowOpen()
@@ -55,14 +52,14 @@ void Engine::displayRenderedFrame()
 
 void Engine::launchWindow()
 {
-    window->openWithSettings(graphicsConfig);
+    window->openWithSettings(config.graphics);
 }
 
 void Engine::runInitialState()
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
-        graphicsConfig,
-        keyboardConfig,
+        config.graphics,
+        config.keyboard,
         std::make_unique<MainMenuAssetsManager>()
     ));
 }
