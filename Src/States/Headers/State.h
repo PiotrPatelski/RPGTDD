@@ -30,8 +30,7 @@ class State : public IState
 {
 public:
     State(
-        Core::GraphicsConfig&,
-        Core::KeyboardConfig&,
+        Core::Config&,
         std::unique_ptr<Core::IAssetsManager>);
     virtual ~State(){}
 
@@ -44,8 +43,7 @@ protected:
     bool done{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<Core::IAssetsManager> assetsManager;
-    Core::GraphicsConfig& graphicsConfig;
-    Core::KeyboardConfig& keyboardConfig;
+    Core::Config& config;
     std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
 };
 

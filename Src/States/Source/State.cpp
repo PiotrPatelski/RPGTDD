@@ -4,12 +4,10 @@ namespace States
 {
 
 State::State(
-    Core::GraphicsConfig& gfxConfig,
-    Core::KeyboardConfig& kbrdConfig,
+    Core::Config& config,
     std::unique_ptr<Core::IAssetsManager> assetsManager)
     : assetsManager(std::move(assetsManager)),
-      graphicsConfig{gfxConfig},
-      keyboardConfig{kbrdConfig}
+      config{config}
 {
 
 }

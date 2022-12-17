@@ -12,8 +12,7 @@ class MainMenuState : public State
 {
 public:
     MainMenuState(
-        Core::GraphicsConfig&,
-        Core::KeyboardConfig&,
+        Core::Config&,
         std::unique_ptr<Core::MainMenuAssetsManager>);
     virtual ~MainMenuState() = default;
 

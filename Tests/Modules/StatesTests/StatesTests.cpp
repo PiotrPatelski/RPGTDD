@@ -22,20 +22,18 @@ struct MainMenuStateTest : public testing::Test
         ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(texture));
         ON_CALL(*assetsManager, getFont()).WillByDefault(ReturnRef(font));
         Core::IniParser::setBuildPath(TEST_PATH);
-        Core::IniParser{}.parseFileTo(keyboardConfig.supportedKeys);
+        Core::IniParser{}.parseFileTo(config.keyboard.supportedKeys);
     }
     sf::Texture texture;
     sf::Font font;
-    Core::GraphicsConfig graphicsConfig;
-    Core::KeyboardConfig keyboardConfig;
+    Core::Config config;
     std::unique_ptr<NiceMock<Core::MainMenuAssetsManagerMock>> assetsManager;
 };
 
 TEST_F(MainMenuStateTest, stateIsDoneWhenSetAsDone)
 {
     auto sut = std::make_unique<MainMenuState>(
-        graphicsConfig,
-        keyboardConfig,
+        config,
         std::move(assetsManager));
     sut->markAsDone();
     ASSERT_TRUE(sut->isDone());
@@ -43,10 +41,9 @@ TEST_F(MainMenuStateTest, stateIsDoneWhenSetAsDone)
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundSizeProperly)
 {
-    graphicsConfig.resolution = sf::VideoMode{480,480};
+    config.graphics.resolution = sf::VideoMode{480,480};
     auto sut = std::make_unique<MainMenuState>(
-        graphicsConfig,
-        keyboardConfig,
+        config,
         std::move(assetsManager));
     ASSERT_EQ(sut->getBackground().getSize().x, 480);
     ASSERT_EQ(sut->getBackground().getSize().y, 480);
@@ -56,8 +53,7 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundTextureProperly)
 {
     EXPECT_CALL(*assetsManager, fetchTextureFromFile());
     auto sut = std::make_unique<MainMenuState>(
-        graphicsConfig,
-        keyboardConfig,
+        config,
         std::move(assetsManager));
     ASSERT_NE(sut->getBackground().getTexture(), nullptr);
 }
@@ -69,8 +65,7 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
     EXPECT_CALL(*assetsManager, fetchFontFromFile());
     EXPECT_CALL(*assetsManager, getFont()).WillOnce(ReturnRef(font));
     auto sut = std::make_unique<MainMenuState>(
-        graphicsConfig,
-        keyboardConfig,
+        config,
         std::move(assetsManager));
     ASSERT_EQ(sut->getFont().getInfo().family, "xBONES");
 }
@@ -78,10 +73,9 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
 TEST_F(MainMenuStateTest, mainMenuStateInitializesKeybindsProperly)
 {
     auto sut = std::make_unique<MainMenuState>(
-        graphicsConfig,
-        keyboardConfig,
+        config,
         std::move(assetsManager));
-    ASSERT_EQ(keyboardConfig.mainMenuKeys.getKeys().at("CLOSE"), 36);
+    ASSERT_EQ(config.keyboard.mainMenuKeys.getKeys().at("CLOSE"), 36);
 }
 
 }

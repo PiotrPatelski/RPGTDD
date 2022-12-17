@@ -6,10 +6,9 @@ namespace States
 {
 
 MainMenuState::MainMenuState(
-    Core::GraphicsConfig& gfxConfig,
-    Core::KeyboardConfig& kbrdConfig,
+    Core::Config& config,
     std::unique_ptr<Core::MainMenuAssetsManager> assetsManager)
-    : State(gfxConfig, kbrdConfig, std::move(assetsManager))
+    : State(config, std::move(assetsManager))
 {
     initBackground();
     initFont();
@@ -18,7 +17,7 @@ MainMenuState::MainMenuState(
 
 void MainMenuState::initBackground()
 {
-    const auto& videoMode = graphicsConfig.resolution;
+    const auto& videoMode = config.graphics.resolution;
     background.setSize(sf::Vector2f(
         static_cast<float>(videoMode.width),
         static_cast<float>(videoMode.height)));
@@ -35,8 +34,8 @@ void MainMenuState::initFont()
 void MainMenuState::initKeybinds()
 {
     Core::IniParser{}.parseFileTo(
-        State::keyboardConfig.mainMenuKeys,
-        State::keyboardConfig.supportedKeys);
+        State::config.keyboard.mainMenuKeys,
+        State::config.keyboard.supportedKeys);
 }
 
 }

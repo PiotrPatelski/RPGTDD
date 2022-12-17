@@ -58,8 +58,7 @@ void Engine::launchWindow()
 void Engine::runInitialState()
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
-        config.graphics,
-        config.keyboard,
+        config,
         std::make_unique<MainMenuAssetsManager>()
     ));
 }
