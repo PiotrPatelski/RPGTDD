@@ -5,14 +5,18 @@
 namespace Gui
 {
 
-struct ButtonTest : public testing::Test
+struct MainMenuButtonTest : public testing::Test
 {
-    
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
+        sf::Vector2f(0, 0),
+        sf::Vector2f(0, 0),
+        "Test",
+        sf::Font{});
 };
 
-TEST_F(ButtonTest, dummy)
+TEST_F(MainMenuButtonTest, buttonWillReturnItsTextContent)
 {
-
+    ASSERT_EQ(sut->getTextContent(), "Test");
 }
 
 }

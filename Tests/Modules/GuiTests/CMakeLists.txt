@@ -1,7 +1,8 @@
 set(MODULE_NAME GuiTests)
 
 set(SOURCES
-    ButtonTests.cpp)
+    ButtonTests.cpp
+    ButtonBuilderTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 
@@ -25,3 +26,5 @@ gtest_discover_tests(${MODULE_NAME})
 
 add_test(NAME GuiTestsInstance
          COMMAND ${MODULE_NAME})
+
+ADD_DEFINITIONS(-D_PROJECT_ROOT_FOLDER="${CMAKE_SOURCE_DIR}")

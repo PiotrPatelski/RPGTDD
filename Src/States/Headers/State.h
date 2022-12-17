@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <Config.h>
 #include <AssetsManager.h>
+#include <Button.hpp>
 namespace States
 {
 
@@ -45,6 +46,7 @@ protected:
     std::unique_ptr<Core::IAssetsManager> assetsManager;
     Core::GraphicsConfig& graphicsConfig;
     Core::KeyboardConfig& keyboardConfig;
+    std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
 };
 
 }
