@@ -13,12 +13,13 @@ class MainMenuState : public State
 public:
     MainMenuState(
         Core::Config&,
-        std::unique_ptr<Core::MainMenuAssetsManager>);
+        std::unique_ptr<Core::MainMenuAssetsManager>,
+        std::unique_ptr<Gui::MainMenuGuiManager>);
     virtual ~MainMenuState() = default;
 
-    virtual const StateOutput generateOutput() override {return StateOutput{background};}
-    const sf::RectangleShape& getBackground() {return background;}
-    const sf::Font& getFont() {return font;}
+    virtual StateOutput generateOutput() override;
+    const sf::RectangleShape getBackground() {return background;}
+    const sf::Font getFont() {return font;}
 private:
     void initBackground();
     void initFont();
@@ -26,6 +27,7 @@ private:
 
     sf::RectangleShape background;
     sf::Font font;
+    std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
 };
 
 }

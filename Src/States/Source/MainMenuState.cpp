@@ -7,12 +7,17 @@ namespace States
 
 MainMenuState::MainMenuState(
     Core::Config& config,
-    std::unique_ptr<Core::MainMenuAssetsManager> assetsManager)
-    : State(config, std::move(assetsManager))
+    std::unique_ptr<Core::MainMenuAssetsManager> assetsManager,
+    std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
+    : State(
+        config,
+        std::move(assetsManager),
+        std::move(guiManager))
 {
     initBackground();
     initFont();
     initKeybinds();
+    buttons = State::guiManager->createButtons(font);
 }
 
 void MainMenuState::initBackground()
@@ -36,6 +41,19 @@ void MainMenuState::initKeybinds()
     Core::IniParser{}.parseFileTo(
         State::config.keyboard.mainMenuKeys,
         State::config.keyboard.supportedKeys);
+}
+
+StateOutput MainMenuState::generateOutput()
+{
+    std::vector<sf::RectangleShape> buttons;
+    std::vector<sf::Text> buttonTexts;
+
+    for(auto& button : this->buttons)
+    {
+        buttons.push_back(button.second->getBackground());
+        buttonTexts.push_back(button.second->getTextContent());
+    }
+    return StateOutput{background, buttons, buttonTexts};
 }
 
 }

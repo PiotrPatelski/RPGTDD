@@ -3,11 +3,13 @@ set(MODULE_NAME Gui)
 set(SOURCES
     Source/Button.cpp
     Source/ButtonBuilder.cpp
+    Source/GuiManager.cpp
     )
 
 set(HEADERS
     Headers/Button.hpp
     Headers/ButtonBuilder.hpp
+    Headers/GuiManager.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

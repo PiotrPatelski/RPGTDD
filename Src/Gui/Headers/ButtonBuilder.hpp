@@ -5,6 +5,24 @@
 namespace Gui
 {
 
+uint calculateFontSize(const sf::VideoMode&);
+
+class ScreenPercentage
+{
+public:
+    ScreenPercentage(const sf::VideoMode& resolution)
+    : screenWidth(resolution.width),
+      screenHeight(resolution.height)
+    {}
+    ~ScreenPercentage(){}
+
+    float toPixelsOnX(const float percentage){return std::floor(static_cast<float>(screenWidth) * percentage / 100.f);}
+    float toPixelsOnY(const float percentage){return std::floor(static_cast<float>(screenHeight) * percentage / 100.f);}
+private:
+    uint screenWidth;
+    uint screenHeight;
+};
+
 class IButtonBuilder
 {
 public:
@@ -32,10 +50,13 @@ public:
 
 private:
     sf::VideoMode screenResolution;
-    std::string textContent = "";
+    std::string textContent;
     sf::Vector2f position{0.f, 0.f};
     sf::Vector2f size{0.f, 0.f};
     sf::Font font;
+    EventColor textColors;
+    EventColor backgroundColors;
+    EventColor outlineColors;
 };
 
 }

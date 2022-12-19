@@ -1,4 +1,5 @@
 #include <Engine.h>
+#include <GuiManager.hpp>
 
 namespace Core
 {
@@ -59,7 +60,8 @@ void Engine::runInitialState()
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
         config,
-        std::make_unique<MainMenuAssetsManager>()
+        std::make_unique<MainMenuAssetsManager>(),
+        std::make_unique<Gui::MainMenuGuiManager>(config.graphics.resolution)
     ));
 }
 
