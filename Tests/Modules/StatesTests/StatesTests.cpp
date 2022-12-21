@@ -103,7 +103,7 @@ TEST_F(MainMenuStateTest, mainMenuStateOutputsInitializedButtonBackgroundProperl
     const auto buttonToDraw = sut->generateOutput().buttons[0];
     ASSERT_EQ(buttonToDraw.getPosition(), sf::Vector2f(2.f, 1.f));
     ASSERT_EQ(buttonToDraw.getSize(), sf::Vector2f(3.f, 7.f));
-    ASSERT_EQ(buttonToDraw.getFillColor(), sf::Color(70, 70, 70, 0));
+    ASSERT_EQ(buttonToDraw.getFillColor(), sf::Color(70, 70, 70, 50));
     ASSERT_EQ(buttonToDraw.getOutlineColor(), sf::Color::Transparent);
 }
 

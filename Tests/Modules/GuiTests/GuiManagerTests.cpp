@@ -31,10 +31,10 @@ TEST_F(MainMenuGuiManagerTest, guiManagerWillCreateMapOfMainMenuButtonsWithTextC
 TEST_F(MainMenuGuiManagerTest, guiManagerWillCreateMapOfMainMenuButtonsWithBackgroundColorSet)
 {
     auto buttons = sut->createButtons(sf::Font{});
-    ASSERT_EQ(buttons.at("GAME_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 0));
-    ASSERT_EQ(buttons.at("SETTINGS_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 0));
-    ASSERT_EQ(buttons.at("EDITOR_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 0));
-    ASSERT_EQ(buttons.at("EXIT_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 0));
+    ASSERT_EQ(buttons.at("GAME_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 50));
+    ASSERT_EQ(buttons.at("SETTINGS_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 50));
+    ASSERT_EQ(buttons.at("EDITOR_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 50));
+    ASSERT_EQ(buttons.at("EXIT_STATE")->getBackground().getFillColor(), sf::Color(70, 70, 70, 50));
 }
 
 TEST_F(MainMenuGuiManagerTest, guiManagerWillCreateMapOfMainMenuButtonsWithOutlineColorSet)

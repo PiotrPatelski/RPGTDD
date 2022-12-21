@@ -9,9 +9,9 @@ EventColor DEFAULT_TEXT_COLORS = EventColor{
     sf::Color(20, 20, 20, 50)};
 
 EventColor DEFAULT_BACKGROUND_COLORS = EventColor{
-    sf::Color(70, 70, 70, 0),
-    sf::Color(250, 250, 150, 0),
-    sf::Color(20, 20, 20, 0)};
+    sf::Color(70, 70, 70, 50),
+    sf::Color(250, 250, 150, 50),
+    sf::Color(20, 20, 20, 50)};
 
 EventColor TRANSPARENT_EVENT_COLORS = EventColor{
     sf::Color::Transparent,
@@ -20,7 +20,7 @@ EventColor TRANSPARENT_EVENT_COLORS = EventColor{
 
 uint calculateFontSize(const sf::VideoMode& screenResolution)
 {
-    const uint divider = 60;
+    const uint divider = 70;
     return static_cast<unsigned>((screenResolution.width + screenResolution.height) / divider);
 }
 

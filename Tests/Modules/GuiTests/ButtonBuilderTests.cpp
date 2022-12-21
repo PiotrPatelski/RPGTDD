@@ -74,14 +74,14 @@ TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithGivenFont)
 TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithCalculatedCharacterSize)
 {
     auto button = sut->withTextContent("New Game").build();
-    ASSERT_EQ(button->getTextContent().getCharacterSize(), 50);
+    ASSERT_EQ(button->getTextContent().getCharacterSize(), 42);
 }
 
 TEST(ButtonBuilderHelperFunctionTest, calculatesFontSizeFromScreenResolution)
 {
     const uint screenWidth = 1920;
     const uint screenHeight = 1080;
-    const uint result = 50;
+    const uint result = 42;
     ASSERT_EQ(calculateFontSize(sf::VideoMode(screenWidth, screenHeight)), result);
 }
 
