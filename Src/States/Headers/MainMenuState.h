@@ -18,15 +18,15 @@ public:
     virtual ~MainMenuState() = default;
 
     virtual StateOutput generateOutput() override;
-    const sf::RectangleShape getBackground() {return background;}
-    const sf::Font getFont() {return font;}
+    std::shared_ptr<sf::RectangleShape> getBackground() {return background;}
+    std::shared_ptr<sf::Font> getFont() {return font;}
 private:
     void initBackground();
     void initFont();
     void initKeybinds();
 
-    sf::RectangleShape background;
-    sf::Font font;
+    std::shared_ptr<sf::RectangleShape> background;
+    std::shared_ptr<sf::Font> font;
     std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
 };
 

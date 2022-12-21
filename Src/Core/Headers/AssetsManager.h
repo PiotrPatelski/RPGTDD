@@ -11,11 +11,8 @@ public:
     IAssetsManager(){}
     virtual ~IAssetsManager(){}
 
-    virtual void fetchFontFromFile() = 0;
-    virtual void fetchTextureFromFile() = 0;
-
-    virtual const sf::Font& getFont() = 0;
-    virtual const sf::Texture& getTexture() = 0;
+    virtual std::shared_ptr<sf::Font> getFont() = 0;
+    virtual std::shared_ptr<sf::Texture> getTexture() = 0;
 };
 
 class AssetsManager : public IAssetsManager
@@ -32,17 +29,17 @@ protected:
 class MainMenuAssetsManager : public AssetsManager
 {
 public:
-    MainMenuAssetsManager(){}
+    MainMenuAssetsManager();
     virtual ~MainMenuAssetsManager(){}
 
-    virtual void fetchFontFromFile() override;
-    virtual void fetchTextureFromFile() override;
-
-    virtual const sf::Font& getFont() override;
-    virtual const sf::Texture& getTexture() override;
+    virtual std::shared_ptr<sf::Font> getFont() override;
+    virtual std::shared_ptr<sf::Texture> getTexture() override;
 private:
-    sf::Font mainMenuFont;
-    sf::Texture mainMenuTexture;
+    virtual void fetchFontFromFile();
+    virtual void fetchTextureFromFile();
+
+    std::shared_ptr<sf::Font> mainMenuFont;
+    std::shared_ptr<sf::Texture> mainMenuTexture;
 };
 
 }

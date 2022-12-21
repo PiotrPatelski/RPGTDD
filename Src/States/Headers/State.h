@@ -10,7 +10,7 @@ namespace States
 
 struct StateOutput
 {
-    sf::RectangleShape background;
+    std::shared_ptr<sf::RectangleShape> background;
     std::vector<sf::RectangleShape> buttons;
     std::vector<sf::Text> buttonTexts;
 };

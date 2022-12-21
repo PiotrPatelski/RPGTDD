@@ -21,15 +21,18 @@ struct MainMenuStateTest : public testing::Test
 {
     MainMenuStateTest()
     {
+        Core::AssetsManager::setBuildPath(TEST_PATH);
+        Core::IniParser::setBuildPath(TEST_PATH);
+        texture = std::make_shared<sf::Texture>();
+        font = std::make_shared<sf::Font>();
         assetsManager = std::make_unique<NiceMock<Core::MainMenuAssetsManagerMock>>();
         guiManager = std::make_unique<NiceMock<Gui::MainMenuGuiManagerMock>>();
-        ON_CALL(*assetsManager, getTexture()).WillByDefault(ReturnRef(texture));
-        ON_CALL(*assetsManager, getFont()).WillByDefault(ReturnRef(font));
-        Core::IniParser::setBuildPath(TEST_PATH);
+        ON_CALL(*assetsManager, getTexture()).WillByDefault(Return(texture));
+        ON_CALL(*assetsManager, getFont()).WillByDefault(Return(font));
         Core::IniParser{}.parseFileTo(config.keyboard.supportedKeys);
     }
-    sf::Texture texture;
-    sf::Font font;
+    std::shared_ptr<sf::Texture> texture;
+    std::shared_ptr<sf::Font> font;
     Core::Config config;
     std::unique_ptr<NiceMock<Core::MainMenuAssetsManagerMock>> assetsManager;
     std::unique_ptr<NiceMock<Gui::MainMenuGuiManagerMock>> guiManager;
@@ -52,31 +55,29 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundSizeProperly)
         config,
         std::move(assetsManager),
         std::move(guiManager));
-    ASSERT_EQ(sut->getBackground().getSize().x, 480);
-    ASSERT_EQ(sut->getBackground().getSize().y, 480);
+    ASSERT_EQ(sut->getBackground()->getSize().x, 480);
+    ASSERT_EQ(sut->getBackground()->getSize().y, 480);
 }
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundTextureProperly)
 {
-    EXPECT_CALL(*assetsManager, fetchTextureFromFile());
+    EXPECT_CALL(*assetsManager, getTexture()).WillOnce(Return(std::make_shared<sf::Texture>()));
     auto sut = std::make_unique<MainMenuState>(
         config,
         std::move(assetsManager),
         std::move(guiManager));
-    ASSERT_NE(sut->getBackground().getTexture(), nullptr);
+    ASSERT_NE(sut->getBackground()->getTexture(), nullptr);
 }
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
 {
-    sf::Font font;
-    font.loadFromFile(std::string(TEST_PATH) + "/Assets/Fonts/MainMenu/xbones.ttf");
-    EXPECT_CALL(*assetsManager, fetchFontFromFile());
-    EXPECT_CALL(*assetsManager, getFont()).WillOnce(ReturnRef(font));
+    font->loadFromFile(std::string(TEST_PATH) + "/Assets/Fonts/MainMenu/xbones.ttf");
+    EXPECT_CALL(*assetsManager, getFont()).WillOnce(Return(font));
     auto sut = std::make_unique<MainMenuState>(
         config,
         std::move(assetsManager),
         std::move(guiManager));
-    ASSERT_EQ(sut->getFont().getInfo().family, "xBONES");
+    ASSERT_EQ(sut->getFont()->getInfo().family, "xBONES");
 }
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesKeybindsProperly)

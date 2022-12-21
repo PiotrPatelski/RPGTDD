@@ -17,22 +17,21 @@ MainMenuState::MainMenuState(
     initBackground();
     initFont();
     initKeybinds();
-    buttons = State::guiManager->createButtons(font);
+    buttons = State::guiManager->createButtons(*font);
 }
 
 void MainMenuState::initBackground()
 {
     const auto& videoMode = config.graphics.resolution;
-    background.setSize(sf::Vector2f(
-        static_cast<float>(videoMode.width),
-        static_cast<float>(videoMode.height)));
-    State::assetsManager->fetchTextureFromFile();
-    background.setTexture(&(State::assetsManager->getTexture()));
+    background = std::make_shared<sf::RectangleShape>(
+        sf::Vector2f(
+            static_cast<float>(videoMode.width),
+            static_cast<float>(videoMode.height)));
+    background->setTexture(State::assetsManager->getTexture().get());
 }
 
 void MainMenuState::initFont()
 {
-    State::assetsManager->fetchFontFromFile();
     font = State::assetsManager->getFont();
 }
 

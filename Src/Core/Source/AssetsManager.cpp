@@ -5,10 +5,18 @@ namespace Core
 
 std::string AssetsManager::buildPath = std::filesystem::current_path().string() + "/../build/";
 
+MainMenuAssetsManager::MainMenuAssetsManager()
+{
+    mainMenuFont = std::make_shared<sf::Font>();
+    fetchFontFromFile();
+    mainMenuTexture = std::make_shared<sf::Texture>();
+    fetchTextureFromFile();
+}
+
 void MainMenuAssetsManager::fetchTextureFromFile()
 {
     const std::string texturePath = buildPath + "/Assets/Textures/MainMenu/menu.jpg";
-    if(not mainMenuTexture.loadFromFile(texturePath))
+    if(not mainMenuTexture->loadFromFile(texturePath))
     {
         throw std::runtime_error(
             std::string("ERROR::cannot open texture file from given path: " + texturePath));
@@ -16,7 +24,7 @@ void MainMenuAssetsManager::fetchTextureFromFile()
     std::cout << "Initialized MainMenu Textures..." << std::endl;
 }
 
-const sf::Texture& MainMenuAssetsManager::getTexture()
+std::shared_ptr<sf::Texture> MainMenuAssetsManager::getTexture()
 {
     return mainMenuTexture;
 }
@@ -24,7 +32,7 @@ const sf::Texture& MainMenuAssetsManager::getTexture()
 void MainMenuAssetsManager::fetchFontFromFile()
 {
     const std::string fontPath = buildPath + "/Assets/Fonts/MainMenu/xbones.ttf";
-    if(not mainMenuFont.loadFromFile(fontPath))
+    if(not mainMenuFont->loadFromFile(fontPath))
     {
         throw std::runtime_error(
             std::string("ERROR::cannot open texture file from given path: " + fontPath));
@@ -32,7 +40,7 @@ void MainMenuAssetsManager::fetchFontFromFile()
     std::cout << "Initialized MainMenu Fonts..." << std::endl;
 }
 
-const sf::Font& MainMenuAssetsManager::getFont()
+std::shared_ptr<sf::Font> MainMenuAssetsManager::getFont()
 {
     return mainMenuFont;
 }

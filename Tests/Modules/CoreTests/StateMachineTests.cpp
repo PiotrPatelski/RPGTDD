@@ -71,12 +71,12 @@ TEST_F(StateMachineTest, stateMachineDoesNotReadNextStateWhenCurrentStateIsNotDo
 
 TEST_F(StateMachineTest, stateMachineGetsOutputFromState)
 {
-    sf::RectangleShape background(sf::Vector2f(480, 480));
+    auto background = std::make_shared<sf::RectangleShape>(sf::Vector2f(480, 480));
     const sf::Texture texture;
-    background.setTexture(&texture);
+    background->setTexture(&texture);
     EXPECT_CALL(*activeState, generateOutput()).WillOnce(Return(States::StateOutput{background}));
     sut->runState(std::move(activeState));
-    EXPECT_NE(sut->getOutput().background.getTexture(), nullptr);
+    EXPECT_NE(sut->getOutput().background->getTexture(), nullptr);
 }
 
 }

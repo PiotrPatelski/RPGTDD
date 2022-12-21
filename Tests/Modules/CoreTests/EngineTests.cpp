@@ -23,10 +23,19 @@ using ::testing::_;
 
 struct EngineTest : public testing::Test
 {
-    std::unique_ptr<NiceMock<WindowMock>> window = std::make_unique<NiceMock<WindowMock>>();
-    std::unique_ptr<NiceMock<ClockMock>> clock = std::make_unique<NiceMock<ClockMock>>();
-    std::unique_ptr<NiceMock<StateMachineMock>> stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
-    std::unique_ptr<NiceMock<MainMenuAssetsManagerMock>> assetsManager = std::make_unique<NiceMock<MainMenuAssetsManagerMock>>();
+    EngineTest()
+    {
+        AssetsManager::setBuildPath(TEST_PATH);
+        IniParser::setBuildPath(TEST_PATH);
+        window = std::make_unique<NiceMock<WindowMock>>();
+        clock = std::make_unique<NiceMock<ClockMock>>();
+        stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
+        assetsManager = std::make_unique<NiceMock<MainMenuAssetsManagerMock>>();
+    }
+    std::unique_ptr<NiceMock<WindowMock>> window;
+    std::unique_ptr<NiceMock<ClockMock>> clock;
+    std::unique_ptr<NiceMock<StateMachineMock>> stateMachine;
+    std::unique_ptr<NiceMock<MainMenuAssetsManagerMock>> assetsManager;
     NiceMock<CoreBuilderMock> coreBuilder;
     std::unique_ptr<IEngine> sut;
 };
@@ -121,7 +130,7 @@ TEST_F(EngineTest, windowClearsAndDisplaysButDoesNotDrawStateOutputWhenDisplayRe
 
 TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFrameWithActiveState)
 {
-    sf::RectangleShape background(sf::Vector2f(480, 480));
+    auto background = std::make_shared<sf::RectangleShape>(sf::Vector2f(480, 480));
     EXPECT_CALL(*window, clear());
     EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
     EXPECT_CALL(*stateMachine, getOutput()).WillOnce(Return(States::StateOutput{background}));
@@ -147,8 +156,6 @@ TEST_F(EngineTest, engineForwardsUpdateDeltaTimeToClock)
 
 TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
 {
-    AssetsManager::setBuildPath(TEST_PATH);
-    IniParser::setBuildPath(TEST_PATH);
     EXPECT_CALL(*stateMachine, runState);
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
 

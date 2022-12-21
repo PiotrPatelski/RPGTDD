@@ -41,7 +41,7 @@ void Window::handleSfmlEvents(sf::Event event)
 
 void Window::drawStateOutput(const States::StateOutput& output)
 {
-    window->draw(output.background);
+    window->draw(*(output.background));
     for(auto button : output.buttons)
         window->draw(button);
     for(auto text : output.buttonTexts)
