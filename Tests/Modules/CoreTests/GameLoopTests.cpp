@@ -64,18 +64,4 @@ TEST_F(GameLoopTest, gameOpensWindowWhenLoopIsRun)
     sut->run();
 }
 
-TEST_F(GameLoopTest, gameAppliesGraphicsSettingsWhenLoopIsRun)
-{
-    EXPECT_CALL(game, fetchGraphicsSettings(_));
-    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
-    sut->run();
-}
-
-TEST_F(GameLoopTest, gameAppliesPlayerInputSettingsWhenLoopIsRun)
-{
-    EXPECT_CALL(game, fetchPlayerInputSettings(_));
-    ON_CALL(game, isWindowOpen()).WillByDefault(Return(false));
-    sut->run();
-}
-
 }

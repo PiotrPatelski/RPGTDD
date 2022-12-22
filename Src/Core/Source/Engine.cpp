@@ -16,11 +16,6 @@ void Engine::updateDeltaTime()
     clock->updateDeltaTime();
 }
 
-Config& Engine::getConfig()
-{
-    return config;
-}
-
 bool Engine::isWindowOpen()
 { 
     return window->isActive();
@@ -48,20 +43,21 @@ void Engine::displayRenderedFrame()
     window->clear();
     if(not stateMachine->isNoStateActive())
         window->drawStateOutput(stateMachine->getOutput());
+        // stateMachine->getCurrentState().drawOutput(window);
     window->display();
 }
 
-void Engine::launchWindow()
+void Engine::launchWindow(std::shared_ptr<Config> config)
 {
-    window->openWithSettings(config.graphics);
+    window->openWithSettings(config->graphics);
 }
 
-void Engine::runInitialState()
+void Engine::runInitialState(std::shared_ptr<Config> config)
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
-        config,
+        *config,
         std::make_unique<MainMenuAssetsManager>(),
-        std::make_unique<Gui::MainMenuGuiManager>(config.graphics.resolution)
+        std::make_unique<Gui::MainMenuGuiManager>(config->graphics.resolution)
     ));
 }
 

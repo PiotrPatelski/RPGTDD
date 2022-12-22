@@ -5,6 +5,8 @@
 #include "EngineMock.h"
 #include "IniParserMock.h"
 
+#define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
+
 namespace Core
 {
 
@@ -13,13 +15,15 @@ using ::testing::Test;
 using ::testing::Return;
 using ::testing::ReturnRef;
 using ::testing::A;
+using ::testing::_;
 
 struct GameTest : public testing::Test
 {
     GameTest()
-    {}
+    {
+        IniParser::setBuildPath(TEST_PATH);
+    }
     std::unique_ptr<NiceMock<EngineMock>> engine = std::make_unique<NiceMock<EngineMock>>();
-    Config dummyConfig;
     NiceMock<IniParserMock> iniParser;
     std::unique_ptr<IGame> sut;
 };
@@ -42,14 +46,14 @@ TEST_F(GameTest, engineChecksIfWindowIsNotActive)
 
 TEST_F(GameTest, engineLaunchesWindowWhenCalledByGame)
 {
-    EXPECT_CALL(*engine, launchWindow());
+    EXPECT_CALL(*engine, launchWindow(_));
     sut = std::make_unique<Game>(std::move(engine));
     sut->openWindow();
 }
 
 TEST_F(GameTest, engineActivatesStateMachineWhenGameItsRun)
 {
-    EXPECT_CALL(*engine, runInitialState());
+    EXPECT_CALL(*engine, runInitialState(_));
     sut = std::make_unique<Game>(std::move(engine));
     sut->startStateMachine();
 }
@@ -84,20 +88,15 @@ TEST_F(GameTest, engineShouldCloseWindowWhenUpdateIsSuccessful)
     sut->update();
 }
 
-TEST_F(GameTest, graphicsConfigShouldFetchDataFromFileWhenGameAppliesIt)
+TEST_F(GameTest, gameConstructionShouldNotThrowWhenConfigFilePathsAreValid)
 {
-    ON_CALL(*engine, getConfig).WillByDefault(ReturnRef(dummyConfig));
-    EXPECT_CALL(iniParser, parseFileTo(A<GraphicsConfig&>()));
-    sut = std::make_unique<Game>(std::move(engine));
-    sut->fetchGraphicsSettings(iniParser);
+    ASSERT_NO_THROW(std::make_unique<Game>(std::move(engine)));
 }
 
-TEST_F(GameTest, playerInputConfigShouldFetchDataFromFileWhenGameAppliesIt)
+TEST_F(GameTest, gameConstructionShouldThrowWhenConfigFilePathsAreInvalid)
 {
-    ON_CALL(*engine, getConfig).WillByDefault(ReturnRef(dummyConfig));
-    EXPECT_CALL(iniParser, parseFileTo(A<SupportedKeys&>()));
-    sut = std::make_unique<Game>(std::move(engine));
-    sut->fetchPlayerInputSettings(iniParser);
+    IniParser::setBuildPath("Invalid/Test/Path");
+    ASSERT_THROW(std::make_unique<Game>(std::move(engine)), std::runtime_error);
 }
 
 }

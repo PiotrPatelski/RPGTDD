@@ -18,34 +18,41 @@ std::ifstream IniParser::findAndOpenFile(const std::string& path)
     return std::move(targetFile);
 }
 
-void IniParser::parseFileTo(GraphicsConfig& config)
+GraphicsConfig IniParser::parseGraphicsConfig()
 {
-    auto targetFile = std::move(findAndOpenFile("/Config/graphics.ini"));
+    auto sourceFile = std::move(findAndOpenFile("/Config/graphics.ini"));
+    GraphicsConfig config;
 
-    targetFile >> config.gameTitle;
-    targetFile >> config.resolution.width 
+    sourceFile >> config.gameTitle;
+    sourceFile >> config.resolution.width 
         >> config.resolution.height;
-    targetFile >> config.fullscreen;
-    targetFile >> config.frameRateLimit;
-    targetFile >> config.verticalSync;
-    targetFile >> config.contextSettings.antialiasingLevel;
-    targetFile.close();
+    sourceFile >> config.fullscreen;
+    sourceFile >> config.frameRateLimit;
+    sourceFile >> config.verticalSync;
+    sourceFile >> config.contextSettings.antialiasingLevel;
+    sourceFile.close();
+
+    return config;
 }
 
-void IniParser::parseFileTo(SupportedKeys& target)
+SupportedKeys IniParser::parseKeyboardConfig()
 {
     auto sourceFile = std::move(findAndOpenFile("/Config/keyboard.ini"));
+    SupportedKeys target;
 
     std::string key = "";
     int keyValue = 0;
     while (sourceFile >> key >> keyValue)
         target.setKey(key, keyValue);
     sourceFile.close();
+
+    return target;
 }
 
-void IniParser::parseFileTo(MainMenuKeys& target, const SupportedKeys& availableKeys)
+MainMenuKeys IniParser::parseMainMenuKeys(const SupportedKeys& availableKeys)
 {
     auto sourceFile = std::move(findAndOpenFile("/Config/mainmenu_keybinds.ini"));
+    MainMenuKeys target;
 
     std::string key = "";
     std::string supportedKey = "";
@@ -53,6 +60,7 @@ void IniParser::parseFileTo(MainMenuKeys& target, const SupportedKeys& available
         target.setKey(key, availableKeys.getKeys().at(supportedKey));
 
     sourceFile.close();
+    return target;
 }
 
 }

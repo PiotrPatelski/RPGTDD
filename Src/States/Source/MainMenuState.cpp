@@ -37,9 +37,8 @@ void MainMenuState::initFont()
 
 void MainMenuState::initKeybinds()
 {
-    Core::IniParser{}.parseFileTo(
-        State::config.keyboard.mainMenuKeys,
-        State::config.keyboard.supportedKeys);
+    State::config.keyboard.mainMenuKeys = Core::IniParser{}.
+        parseMainMenuKeys(State::config.keyboard.supportedKeys);
 }
 
 StateOutput MainMenuState::generateOutput()

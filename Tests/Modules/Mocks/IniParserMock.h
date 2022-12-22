@@ -13,9 +13,9 @@ class IniParserMock : public IIniParser
 {
 public:
     MOCK_METHOD(std::ifstream, findAndOpenFile, (const std::string&), (override));
-    MOCK_METHOD(void, parseFileTo, (GraphicsConfig&), (override));
-    MOCK_METHOD(void, parseFileTo, (SupportedKeys&), (override));
-    MOCK_METHOD(void, parseFileTo, (MainMenuKeys&, const SupportedKeys&), (override));
+    MOCK_METHOD(GraphicsConfig, parseGraphicsConfig, (), (override));
+    MOCK_METHOD(SupportedKeys, parseKeyboardConfig, (), (override));
+    MOCK_METHOD(MainMenuKeys, parseMainMenuKeys, (const SupportedKeys&), (override));
 };
 
 }

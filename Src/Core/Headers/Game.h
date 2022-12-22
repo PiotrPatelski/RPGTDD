@@ -15,9 +15,6 @@ public:
     virtual ~IGame(){}
 
     virtual bool isWindowOpen() = 0;
-
-    virtual void fetchGraphicsSettings(IIniParser&) = 0;
-    virtual void fetchPlayerInputSettings(IIniParser&) = 0;
     virtual void startStateMachine() = 0;
     virtual void openWindow() = 0;
 
@@ -34,15 +31,16 @@ public:
     virtual ~Game(){}
 
     virtual bool isWindowOpen() override {return engine->isWindowOpen();}
-
-    virtual void fetchGraphicsSettings(IIniParser&) override;
-    virtual void fetchPlayerInputSettings(IIniParser&) override;
     virtual void startStateMachine() override;
     virtual void openWindow() override;
+
     virtual void update() override;
     virtual void updateClock() override;
     virtual void render() override;
 private:
+    void fetchGraphicsSettings(IIniParser&);
+    void fetchPlayerInputSettings(IIniParser&);
+    std::shared_ptr<Config> config;
     std::unique_ptr<IEngine> engine;
 };
 

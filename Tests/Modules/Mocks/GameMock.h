@@ -13,8 +13,6 @@ class GameMock : public IGame
 {
 public:
     MOCK_METHOD(bool, isWindowOpen, (), (override));
-    MOCK_METHOD(void, fetchGraphicsSettings, (IIniParser&), (override));
-    MOCK_METHOD(void, fetchPlayerInputSettings, (IIniParser&), (override));
     MOCK_METHOD(void, startStateMachine, (), (override));
     MOCK_METHOD(void, openWindow, (), (override));
     MOCK_METHOD(void, update, (), (override));
