@@ -2,7 +2,6 @@
 #include <gmock/gmock.h>
 #include <GameLoop.h>
 #include "GameMock.h"
-#include "IniParserMock.h"
 
 namespace Core
 {
@@ -16,7 +15,6 @@ using ::testing::_;
 struct GameLoopTest : public testing::Test
 {
     NiceMock<GameMock> game;
-    NiceMock<IniParserMock> iniParser;
     std::unique_ptr<IGameLoop> sut = std::make_unique<GameLoop>(game);
 };
 

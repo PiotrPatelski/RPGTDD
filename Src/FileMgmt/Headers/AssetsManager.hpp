@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 class IAssetsManager

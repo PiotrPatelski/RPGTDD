@@ -5,7 +5,7 @@ namespace Core
 
 ConfigManager::ConfigManager()
 {
-    IniParser parser;
+    FileMgmt::IniParser parser;
     graphics = parser.parseGraphicsConfig();
     keyboard.supportedKeys = parser.parseKeyboardConfig();
     keyboard.mainMenuKeys = parser.parseMainMenuKeys(keyboard.supportedKeys);

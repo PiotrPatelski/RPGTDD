@@ -4,7 +4,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <CoreBuilder.h>
-#include <Config.h>
+#include <Config.hpp>
 
 namespace Core
 {
@@ -17,7 +17,7 @@ public:
     virtual void updateDeltaTime() = 0;
     virtual bool isWindowOpen() = 0;
     virtual bool updateState() = 0;
-    virtual void launchWindow(const GraphicsConfig&) = 0;
+    virtual void launchWindow(const FileMgmt::GraphicsConfig&) = 0;
     virtual void closeWindow() = 0;
     virtual void runInitialState(std::shared_ptr<ConfigManager>) = 0;
     virtual void displayRenderedFrame() = 0;
@@ -33,7 +33,7 @@ public:
     virtual void updateDeltaTime();
     virtual bool isWindowOpen();
     virtual bool updateState();
-    virtual void launchWindow(const GraphicsConfig&);
+    virtual void launchWindow(const FileMgmt::GraphicsConfig&);
     virtual void closeWindow();
     virtual void runInitialState(std::shared_ptr<ConfigManager>);
     virtual void displayRenderedFrame();

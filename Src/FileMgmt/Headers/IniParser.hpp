@@ -1,7 +1,7 @@
 #pragma once
-#include <Config.h>
+#include <Config.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 class IIniParser

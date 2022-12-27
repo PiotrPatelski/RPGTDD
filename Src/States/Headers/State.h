@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <ConfigManager.hpp>
-#include <AssetsManager.h>
+#include <AssetsManager.hpp>
 #include <GuiManager.hpp>
 #include <Button.hpp>
 namespace States
@@ -34,7 +34,7 @@ class State : public IState
 public:
     State(
         std::shared_ptr<Core::ConfigManager>,
-        std::unique_ptr<Core::IAssetsManager>,
+        std::unique_ptr<FileMgmt::IAssetsManager>,
         std::unique_ptr<Gui::IGuiManager>);
     virtual ~State(){}
 
@@ -46,7 +46,7 @@ public:
 protected:
     bool done{false};
     std::unique_ptr<IState> nextState;
-    std::unique_ptr<Core::IAssetsManager> assetsManager;
+    std::unique_ptr<FileMgmt::IAssetsManager> assetsManager;
     std::unique_ptr<Gui::IGuiManager> guiManager;
     std::shared_ptr<Core::ConfigManager> config;
 };

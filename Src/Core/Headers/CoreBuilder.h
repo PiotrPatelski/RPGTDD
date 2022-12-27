@@ -3,7 +3,7 @@
 #include <Window.h>
 #include <Clock.h>
 #include <StateMachine.h>
-#include <AssetsManager.h>
+#include <AssetsManager.hpp>
 
 namespace Core
 {

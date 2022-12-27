@@ -1,6 +1,6 @@
-#include <IniParser.h>
+#include <IniParser.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 std::string IniParser::buildPath = std::filesystem::current_path().string() + "/../build/";

@@ -1,13 +1,8 @@
-set(MODULE_NAME CoreTests)
+set(MODULE_NAME FileMgmtTests)
 
 set(SOURCES
-    GameTests.cpp
-    ClockTests.cpp
-    EngineTests.cpp
-    WindowTests.cpp
-    GameLoopTests.cpp
-    CoreBuilderTests.cpp
-    StateMachineTests.cpp)
+    IniParserTests.cpp
+    AssetsManagerTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 
@@ -19,9 +14,8 @@ target_include_directories(${MODULE_NAME} PUBLIC ../Mocks)
 target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
+    FileMgmt
     Mocks
-    Core
-    States
     mainUT
     gtest 
     gmock_main
@@ -30,7 +24,7 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(${MODULE_NAME})
 
-add_test(NAME CoreTestsInstance
+add_test(NAME FileMgmtTestsInstance
          COMMAND ${MODULE_NAME})
 
 ADD_DEFINITIONS(-D_PROJECT_ROOT_FOLDER="${CMAKE_SOURCE_DIR}")

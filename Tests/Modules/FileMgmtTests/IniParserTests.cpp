@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <IniParser.h>
+#include <IniParser.hpp>
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
-namespace Core
+namespace FileMgmt
 {
 
 using ::testing::NiceMock;

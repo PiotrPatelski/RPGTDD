@@ -1,6 +1,6 @@
-#include <AssetsManager.h>
+#include <AssetsManager.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 std::string AssetsManager::buildPath = std::filesystem::current_path().string() + "/../build/";
@@ -35,7 +35,7 @@ void MainMenuAssetsManager::fetchFontFromFile()
     if(not mainMenuFont->loadFromFile(fontPath))
     {
         throw std::runtime_error(
-            std::string("ERROR::cannot open texture file from given path: " + fontPath));
+            std::string("ERROR::cannot open font file from given path: " + fontPath));
 	}
     std::cout << "Initialized MainMenu Fonts..." << std::endl;
 }

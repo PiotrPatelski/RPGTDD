@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Config.h>
+#include <Config.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 using ::testing::Test;

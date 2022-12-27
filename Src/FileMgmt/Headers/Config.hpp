@@ -2,7 +2,7 @@
 
 #include <SFML/Window.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 struct GraphicsConfig

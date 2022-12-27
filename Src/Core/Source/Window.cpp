@@ -11,7 +11,7 @@ Window::Window()
     
 }
 
-void Window::openWithSettings(const GraphicsConfig& config)
+void Window::openWithSettings(const FileMgmt::GraphicsConfig& config)
 {
     std::cout << "Opening window..." << std::endl;
 

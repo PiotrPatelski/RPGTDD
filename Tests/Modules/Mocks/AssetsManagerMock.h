@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <AssetsManager.h>
+#include <AssetsManager.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 using ::testing::Test;

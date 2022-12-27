@@ -9,7 +9,7 @@ namespace Core
 struct WindowTest : public testing::Test
 {    
     std::unique_ptr<IWindow> sut = std::make_unique<Window>();
-    GraphicsConfig graphicsConfig{"TEST", {21,37}, 0, 0, 0, sf::ContextSettings{}};
+    FileMgmt::GraphicsConfig graphicsConfig{"TEST", {21,37}, 0, 0, 0, sf::ContextSettings{}};
 };
 
 TEST_F(WindowTest, windowIsNotActiveUponCreation)

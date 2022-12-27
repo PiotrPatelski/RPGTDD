@@ -21,10 +21,10 @@ struct GameTest : public testing::Test
 {
     GameTest()
     {
-        IniParser::setBuildPath(TEST_PATH);
+        FileMgmt::IniParser::setBuildPath(TEST_PATH);
     }
     std::unique_ptr<NiceMock<EngineMock>> engine = std::make_unique<NiceMock<EngineMock>>();
-    NiceMock<IniParserMock> iniParser;
+    NiceMock<FileMgmt::IniParserMock> iniParser;
     std::unique_ptr<IGame> sut;
 };
 
@@ -95,7 +95,7 @@ TEST_F(GameTest, gameConstructionShouldNotThrowWhenConfigFilePathsAreValid)
 
 TEST_F(GameTest, gameConstructionShouldThrowWhenConfigFilePathsAreInvalid)
 {
-    IniParser::setBuildPath("Invalid/Test/Path");
+    FileMgmt::IniParser::setBuildPath("Invalid/Test/Path");
     ASSERT_THROW(std::make_unique<Game>(std::move(engine)), std::runtime_error);
 }
 

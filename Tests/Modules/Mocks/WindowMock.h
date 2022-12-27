@@ -15,7 +15,7 @@ class WindowMock : public IWindow
 public:
     MOCK_METHOD(bool, isActive, (), (override));
     MOCK_METHOD(bool, isCurrentlyFocused, (), (override));
-    MOCK_METHOD(void, openWithSettings, (const GraphicsConfig&), (override));
+    MOCK_METHOD(void, openWithSettings, (const FileMgmt::GraphicsConfig&), (override));
     MOCK_METHOD(void, clear, (), (override));
     MOCK_METHOD(void, drawStateOutput, (const States::StateOutput&), (override));
     MOCK_METHOD(void, display, (), (override));

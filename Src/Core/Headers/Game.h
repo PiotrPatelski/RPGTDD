@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Engine.h>
-#include <IniParser.h>
+#include <IniParser.hpp>
 
 namespace Core
 {

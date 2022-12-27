@@ -1,5 +1,5 @@
 #include <MainMenuState.h>
-#include <IniParser.h>
+#include <IniParser.hpp>
 #include <ButtonBuilder.hpp>
 
 namespace States
@@ -7,7 +7,7 @@ namespace States
 
 MainMenuState::MainMenuState(
     std::shared_ptr<Core::ConfigManager> config,
-    std::unique_ptr<Core::MainMenuAssetsManager> assetsManager,
+    std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
     std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
     : State(
         config,

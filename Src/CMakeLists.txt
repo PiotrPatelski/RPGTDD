@@ -11,6 +11,7 @@ set(SFML_LIBS
 add_subdirectory(Core)
 add_subdirectory(States)
 add_subdirectory(Gui)
+add_subdirectory(FileMgmt)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -18,6 +19,7 @@ add_executable(${PROJECT_NAME} main.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC Core)
 target_include_directories(${PROJECT_NAME} PUBLIC States)
 target_include_directories(${PROJECT_NAME} PUBLIC Gui)
+target_include_directories(${PROJECT_NAME} PUBLIC FileMgmt)
 target_include_directories(${PROJECT_NAME} PUBLIC ${SFML_INCLUDE_DIR})
 message(${SFML_INCLUDE_DIR} " FOUND!! ${SFML_INCLUDE_DIR}")
 
@@ -28,6 +30,7 @@ PRIVATE
     Core
     States
     Gui
+    FileMgmt
     ${SFML_LIBS}
 )
 

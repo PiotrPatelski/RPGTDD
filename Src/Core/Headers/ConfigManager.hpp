@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SFML/Window.hpp>
-#include <IniParser.h>
-#include <Config.h>
+#include <IniParser.hpp>
+#include <Config.hpp>
 
 namespace Core
 {
@@ -13,13 +13,13 @@ public:
 	ConfigManager();
 	virtual ~ConfigManager(){}
 
-	void setGraphics(const GraphicsConfig& newConfig){graphics = newConfig;}
+	void setGraphics(const FileMgmt::GraphicsConfig& newConfig){graphics = newConfig;}
 
-	GraphicsConfig getGraphics(){return graphics;}
-	KeyboardConfig getKeyboard(){return keyboard;}
+	FileMgmt::GraphicsConfig getGraphics(){return graphics;}
+	FileMgmt::KeyboardConfig getKeyboard(){return keyboard;}
 private:
-	GraphicsConfig graphics;
-	KeyboardConfig keyboard;
+	FileMgmt::GraphicsConfig graphics;
+	FileMgmt::KeyboardConfig keyboard;
 };
 
 }

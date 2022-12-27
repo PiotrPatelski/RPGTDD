@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <Engine.h>
-#include <IniParser.h>
+#include <IniParser.hpp>
 #include "WindowMock.h"
 #include "ClockMock.h"
 #include "StateMachineMock.h"
@@ -25,19 +25,19 @@ struct EngineTest : public testing::Test
 {
     EngineTest()
     {
-        AssetsManager::setBuildPath(TEST_PATH);
-        IniParser::setBuildPath(TEST_PATH);
+        FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
+        FileMgmt::IniParser::setBuildPath(TEST_PATH);
         configManager = std::make_shared<ConfigManager>();
         window = std::make_unique<NiceMock<WindowMock>>();
         clock = std::make_unique<NiceMock<ClockMock>>();
         stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
-        assetsManager = std::make_unique<NiceMock<MainMenuAssetsManagerMock>>();
+        assetsManager = std::make_unique<NiceMock<FileMgmt::MainMenuAssetsManagerMock>>();
     }
     std::shared_ptr<ConfigManager> configManager;
     std::unique_ptr<NiceMock<WindowMock>> window;
     std::unique_ptr<NiceMock<ClockMock>> clock;
     std::unique_ptr<NiceMock<StateMachineMock>> stateMachine;
-    std::unique_ptr<NiceMock<MainMenuAssetsManagerMock>> assetsManager;
+    std::unique_ptr<NiceMock<FileMgmt::MainMenuAssetsManagerMock>> assetsManager;
     NiceMock<CoreBuilderMock> coreBuilder;
     std::unique_ptr<IEngine> sut;
 };

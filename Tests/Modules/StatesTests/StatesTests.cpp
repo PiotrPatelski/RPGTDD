@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <MainMenuState.h>
 #include <ConfigManager.hpp>
-#include <IniParser.h>
+#include <IniParser.hpp>
 #include "AssetsManagerMock.h"
 #include "GuiManagerMock.hpp"
 
@@ -21,12 +21,12 @@ struct MainMenuStateTest : public testing::Test
 {
     MainMenuStateTest()
     {
-        Core::AssetsManager::setBuildPath(TEST_PATH);
-        Core::IniParser::setBuildPath(TEST_PATH);
+        FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
+        FileMgmt::IniParser::setBuildPath(TEST_PATH);
         texture = std::make_shared<sf::Texture>();
         font = std::make_shared<sf::Font>();
         configManager = std::make_shared<Core::ConfigManager>();
-        assetsManager = std::make_unique<NiceMock<Core::MainMenuAssetsManagerMock>>();
+        assetsManager = std::make_unique<NiceMock<FileMgmt::MainMenuAssetsManagerMock>>();
         guiManager = std::make_unique<NiceMock<Gui::MainMenuGuiManagerMock>>();
         ON_CALL(*assetsManager, getTexture()).WillByDefault(Return(texture));
         ON_CALL(*assetsManager, getFont()).WillByDefault(Return(font));
@@ -34,7 +34,7 @@ struct MainMenuStateTest : public testing::Test
     std::shared_ptr<sf::Texture> texture;
     std::shared_ptr<sf::Font> font;
     std::shared_ptr<Core::ConfigManager> configManager;
-    std::unique_ptr<NiceMock<Core::MainMenuAssetsManagerMock>> assetsManager;
+    std::unique_ptr<NiceMock<FileMgmt::MainMenuAssetsManagerMock>> assetsManager;
     std::unique_ptr<NiceMock<Gui::MainMenuGuiManagerMock>> guiManager;
 };
 
@@ -50,7 +50,7 @@ TEST_F(MainMenuStateTest, stateIsDoneWhenSetAsDone)
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundSizeProperly)
 {
-    Core::GraphicsConfig gfxConfig;
+    FileMgmt::GraphicsConfig gfxConfig;
     gfxConfig.resolution = sf::VideoMode{480,480};
     configManager->setGraphics(gfxConfig);
 

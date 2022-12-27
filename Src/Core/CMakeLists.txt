@@ -7,8 +7,6 @@ set(SOURCES
     Source/Clock.cpp
     Source/StateMachine.cpp
     Source/Engine.cpp
-    Source/IniParser.cpp
-    Source/AssetsManager.cpp
     Source/ConfigManager.cpp
     )
 
@@ -19,9 +17,6 @@ set(HEADERS
     Headers/Clock.h
     Headers/StateMachine.h
     Headers/Engine.h
-    Headers/Config.h
-    Headers/IniParser.h
-    Headers/AssetsManager.h
     Headers/ConfigManager.hpp
     )
 
@@ -34,6 +29,7 @@ target_include_directories(${MODULE_NAME} PUBLIC Headers Source)
 target_link_libraries(${MODULE_NAME} 
 PUBLIC 
     States
+    FileMgmt
     ${SFML_LIBS})
 
 set(CORE_EXCLUDES
