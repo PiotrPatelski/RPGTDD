@@ -27,13 +27,13 @@ struct EngineTest : public testing::Test
     {
         AssetsManager::setBuildPath(TEST_PATH);
         IniParser::setBuildPath(TEST_PATH);
-        dummyConfig->keyboard.supportedKeys = IniParser{}.parseKeyboardConfig();
+        configManager = std::make_shared<ConfigManager>();
         window = std::make_unique<NiceMock<WindowMock>>();
         clock = std::make_unique<NiceMock<ClockMock>>();
         stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
         assetsManager = std::make_unique<NiceMock<MainMenuAssetsManagerMock>>();
     }
-    std::shared_ptr<Config> dummyConfig = std::make_shared<Config>();
+    std::shared_ptr<ConfigManager> configManager;
     std::unique_ptr<NiceMock<WindowMock>> window;
     std::unique_ptr<NiceMock<ClockMock>> clock;
     std::unique_ptr<NiceMock<StateMachineMock>> stateMachine;
@@ -70,7 +70,7 @@ TEST_F(EngineTest, windowIsOpenWhenEngineLaunchesIt)
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
     sut = std::make_unique<Engine>(coreBuilder);
 
-    sut->launchWindow(dummyConfig);
+    sut->launchWindow(configManager->getGraphics());
 }
 
 TEST_F(EngineTest, windowClosesWhenEngineCallsIt)
@@ -162,7 +162,7 @@ TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
 
     sut = std::make_unique<Engine>(coreBuilder);
-    sut->runInitialState(dummyConfig);
+    sut->runInitialState(configManager);
 }
 
 }

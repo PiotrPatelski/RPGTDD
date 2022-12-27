@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <State.h>
-#include <Config.h>
+#include <ConfigManager.hpp>
 #include <AssetsManager.h>
 
 namespace States
@@ -12,7 +12,7 @@ class MainMenuState : public State
 {
 public:
     MainMenuState(
-        Core::Config&,
+        std::shared_ptr<Core::ConfigManager>,
         std::unique_ptr<Core::MainMenuAssetsManager>,
         std::unique_ptr<Gui::MainMenuGuiManager>);
     virtual ~MainMenuState() = default;
@@ -23,7 +23,6 @@ public:
 private:
     void initBackground();
     void initFont();
-    void initKeybinds();
 
     std::shared_ptr<sf::RectangleShape> background;
     std::shared_ptr<sf::Font> font;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <Config.h>
+#include <ConfigManager.hpp>
 #include <AssetsManager.h>
 #include <GuiManager.hpp>
 #include <Button.hpp>
@@ -33,7 +33,7 @@ class State : public IState
 {
 public:
     State(
-        Core::Config&,
+        std::shared_ptr<Core::ConfigManager>,
         std::unique_ptr<Core::IAssetsManager>,
         std::unique_ptr<Gui::IGuiManager>);
     virtual ~State(){}
@@ -48,7 +48,7 @@ protected:
     std::unique_ptr<IState> nextState;
     std::unique_ptr<Core::IAssetsManager> assetsManager;
     std::unique_ptr<Gui::IGuiManager> guiManager;
-    Core::Config& config;
+    std::shared_ptr<Core::ConfigManager> config;
 };
 
 }

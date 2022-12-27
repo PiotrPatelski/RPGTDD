@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <MainMenuState.h>
-#include <Config.h>
+#include <ConfigManager.hpp>
 #include <IniParser.h>
 #include "AssetsManagerMock.h"
 #include "GuiManagerMock.hpp"
@@ -25,15 +25,15 @@ struct MainMenuStateTest : public testing::Test
         Core::IniParser::setBuildPath(TEST_PATH);
         texture = std::make_shared<sf::Texture>();
         font = std::make_shared<sf::Font>();
+        configManager = std::make_shared<Core::ConfigManager>();
         assetsManager = std::make_unique<NiceMock<Core::MainMenuAssetsManagerMock>>();
         guiManager = std::make_unique<NiceMock<Gui::MainMenuGuiManagerMock>>();
         ON_CALL(*assetsManager, getTexture()).WillByDefault(Return(texture));
         ON_CALL(*assetsManager, getFont()).WillByDefault(Return(font));
-        config->keyboard.supportedKeys = Core::IniParser{}.parseKeyboardConfig();
     }
     std::shared_ptr<sf::Texture> texture;
     std::shared_ptr<sf::Font> font;
-    std::shared_ptr<Core::Config> config = std::make_shared<Core::Config>();
+    std::shared_ptr<Core::ConfigManager> configManager;
     std::unique_ptr<NiceMock<Core::MainMenuAssetsManagerMock>> assetsManager;
     std::unique_ptr<NiceMock<Gui::MainMenuGuiManagerMock>> guiManager;
 };
@@ -41,7 +41,7 @@ struct MainMenuStateTest : public testing::Test
 TEST_F(MainMenuStateTest, stateIsDoneWhenSetAsDone)
 {
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
     sut->markAsDone();
@@ -50,9 +50,12 @@ TEST_F(MainMenuStateTest, stateIsDoneWhenSetAsDone)
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundSizeProperly)
 {
-    config->graphics.resolution = sf::VideoMode{480,480};
+    Core::GraphicsConfig gfxConfig;
+    gfxConfig.resolution = sf::VideoMode{480,480};
+    configManager->setGraphics(gfxConfig);
+
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
     ASSERT_EQ(sut->getBackground()->getSize().x, 480);
@@ -63,7 +66,7 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundTextureProperly)
 {
     EXPECT_CALL(*assetsManager, getTexture()).WillOnce(Return(std::make_shared<sf::Texture>()));
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
     ASSERT_NE(sut->getBackground()->getTexture(), nullptr);
@@ -74,7 +77,7 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
     font->loadFromFile(std::string(TEST_PATH) + "/Assets/Fonts/MainMenu/xbones.ttf");
     EXPECT_CALL(*assetsManager, getFont()).WillOnce(Return(font));
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
     ASSERT_EQ(sut->getFont()->getInfo().family, "xBONES");
@@ -83,10 +86,10 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesFontProperly)
 TEST_F(MainMenuStateTest, mainMenuStateInitializesKeybindsProperly)
 {
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
-    ASSERT_EQ(config->keyboard.mainMenuKeys.getKeys().at("CLOSE"), 36);
+    ASSERT_EQ(configManager->getKeyboard().mainMenuKeys.getKeys().at("CLOSE"), 36);
 }
 
 TEST_F(MainMenuStateTest, mainMenuStateOutputsInitializedButtonBackgroundProperly)
@@ -97,7 +100,7 @@ TEST_F(MainMenuStateTest, mainMenuStateOutputsInitializedButtonBackgroundProperl
 
     EXPECT_CALL(*guiManager, createButtons(_)).WillOnce(Return(ByMove(std::move(buttons))));
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
 
@@ -116,7 +119,7 @@ TEST_F(MainMenuStateTest, mainMenuStateOutputsInitializedButtonTextProperly)
 
     EXPECT_CALL(*guiManager, createButtons(_)).WillOnce(Return(ByMove(std::move(buttons))));
     auto sut = std::make_unique<MainMenuState>(
-        *config,
+        configManager,
         std::move(assetsManager),
         std::move(guiManager));
 

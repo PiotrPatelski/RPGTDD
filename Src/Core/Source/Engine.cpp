@@ -47,17 +47,17 @@ void Engine::displayRenderedFrame()
     window->display();
 }
 
-void Engine::launchWindow(std::shared_ptr<Config> config)
+void Engine::launchWindow(const GraphicsConfig& config)
 {
-    window->openWithSettings(config->graphics);
+    window->openWithSettings(config);
 }
 
-void Engine::runInitialState(std::shared_ptr<Config> config)
+void Engine::runInitialState(std::shared_ptr<ConfigManager> configManager)
 {
     stateMachine->runState(std::make_unique<States::MainMenuState>(
-        *config,
+        configManager,
         std::make_unique<MainMenuAssetsManager>(),
-        std::make_unique<Gui::MainMenuGuiManager>(config->graphics.resolution)
+        std::make_unique<Gui::MainMenuGuiManager>(configManager->getGraphics().resolution)
     ));
 }
 

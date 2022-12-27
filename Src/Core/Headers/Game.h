@@ -6,8 +6,6 @@
 namespace Core
 {
 
-void createPathForFileManagement(const std::string& seed);
-
 class IGame
 {
 public:
@@ -38,9 +36,7 @@ public:
     virtual void updateClock() override;
     virtual void render() override;
 private:
-    void fetchGraphicsSettings(IIniParser&);
-    void fetchPlayerInputSettings(IIniParser&);
-    std::shared_ptr<Config> config;
+    std::shared_ptr<ConfigManager> config;
     std::unique_ptr<IEngine> engine;
 };
 

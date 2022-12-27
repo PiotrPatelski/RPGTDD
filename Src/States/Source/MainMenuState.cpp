@@ -6,7 +6,7 @@ namespace States
 {
 
 MainMenuState::MainMenuState(
-    Core::Config& config,
+    std::shared_ptr<Core::ConfigManager> config,
     std::unique_ptr<Core::MainMenuAssetsManager> assetsManager,
     std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
     : State(
@@ -16,13 +16,12 @@ MainMenuState::MainMenuState(
 {
     initBackground();
     initFont();
-    initKeybinds();
     buttons = State::guiManager->createButtons(*font);
 }
 
 void MainMenuState::initBackground()
 {
-    const auto& videoMode = config.graphics.resolution;
+    const auto& videoMode = config->getGraphics().resolution;
     background = std::make_shared<sf::RectangleShape>(
         sf::Vector2f(
             static_cast<float>(videoMode.width),
@@ -33,12 +32,6 @@ void MainMenuState::initBackground()
 void MainMenuState::initFont()
 {
     font = State::assetsManager->getFont();
-}
-
-void MainMenuState::initKeybinds()
-{
-    State::config.keyboard.mainMenuKeys = Core::IniParser{}.
-        parseMainMenuKeys(State::config.keyboard.supportedKeys);
 }
 
 StateOutput MainMenuState::generateOutput()

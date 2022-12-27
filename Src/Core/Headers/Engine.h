@@ -17,9 +17,9 @@ public:
     virtual void updateDeltaTime() = 0;
     virtual bool isWindowOpen() = 0;
     virtual bool updateState() = 0;
-    virtual void launchWindow(std::shared_ptr<Config>) = 0;
+    virtual void launchWindow(const GraphicsConfig&) = 0;
     virtual void closeWindow() = 0;
-    virtual void runInitialState(std::shared_ptr<Config>) = 0;
+    virtual void runInitialState(std::shared_ptr<ConfigManager>) = 0;
     virtual void displayRenderedFrame() = 0;
 private:
 
@@ -33,9 +33,9 @@ public:
     virtual void updateDeltaTime();
     virtual bool isWindowOpen();
     virtual bool updateState();
-    virtual void launchWindow(std::shared_ptr<Config>);
+    virtual void launchWindow(const GraphicsConfig&);
     virtual void closeWindow();
-    virtual void runInitialState(std::shared_ptr<Config>);
+    virtual void runInitialState(std::shared_ptr<ConfigManager>);
     virtual void displayRenderedFrame();
 private:
     std::unique_ptr<IWindow> window;

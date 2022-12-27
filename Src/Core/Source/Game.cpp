@@ -7,22 +7,8 @@ namespace Core
 Game::Game(std::unique_ptr<IEngine> engine)
 :   IGame::IGame(),
     engine(std::move(engine)),
-    config(std::make_shared<Config>())
-{
-    IniParser parser;
-    fetchGraphicsSettings(parser);
-    fetchPlayerInputSettings(parser);
-}
-
-void Game::fetchGraphicsSettings(IIniParser& parser)
-{
-    config->graphics = parser.parseGraphicsConfig();
-}
-
-void Game::fetchPlayerInputSettings(IIniParser& parser)
-{
-    config->keyboard.supportedKeys = parser.parseKeyboardConfig();
-}
+    config(std::make_shared<ConfigManager>())
+{}
 
 void Game::startStateMachine()
 {
@@ -31,7 +17,7 @@ void Game::startStateMachine()
 
 void Game::openWindow()
 {
-    engine->launchWindow(config);
+    engine->launchWindow(config->getGraphics());
 }
 
 void Game::update()

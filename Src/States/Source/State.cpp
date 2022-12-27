@@ -4,10 +4,10 @@ namespace States
 {
 
 State::State(
-    Core::Config& config,
+    std::shared_ptr<Core::ConfigManager> config,
     std::unique_ptr<Core::IAssetsManager> assetsManager,
     std::unique_ptr<Gui::IGuiManager> guiManager)
-    : config{config},
+    : config(config),
       assetsManager(std::move(assetsManager)),
       guiManager(std::move(guiManager))
 {

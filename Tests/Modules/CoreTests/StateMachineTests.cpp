@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <StateMachine.h>
-#include <Config.h>
 #include "StateMock.h"
 
 
