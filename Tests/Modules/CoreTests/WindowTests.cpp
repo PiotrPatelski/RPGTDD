@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <SFML/Window.hpp>
-#include <Window.h>
+#include <Window.hpp>
 
 namespace Core
 {

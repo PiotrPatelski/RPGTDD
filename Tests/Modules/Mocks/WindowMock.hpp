@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <State.h>
+#include <Window.hpp>
 
 namespace Core
 {
@@ -17,7 +17,7 @@ public:
     MOCK_METHOD(bool, isCurrentlyFocused, (), (override));
     MOCK_METHOD(void, openWithSettings, (const FileMgmt::GraphicsConfig&), (override));
     MOCK_METHOD(void, clear, (), (override));
-    MOCK_METHOD(void, drawStateOutput, (const States::StateOutput&), (override));
+    MOCK_METHOD(void, draw, (const sf::Drawable&), (override));
     MOCK_METHOD(void, display, (), (override));
     MOCK_METHOD(void, handleSfmlEvents, (sf::Event), (override));
     MOCK_METHOD(void, close, (), (override));

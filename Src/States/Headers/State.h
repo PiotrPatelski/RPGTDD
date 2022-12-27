@@ -5,6 +5,7 @@
 #include <AssetsManager.hpp>
 #include <GuiManager.hpp>
 #include <Button.hpp>
+#include <Window.hpp>
 namespace States
 {
 
@@ -22,11 +23,11 @@ public:
     virtual ~IState(){}
 
     virtual std::unique_ptr<IState> getNextState() = 0;
-    virtual StateOutput generateOutput() = 0;
 
     virtual bool isDone() = 0;
     virtual void markAsDone() = 0;
     virtual void update(float) = 0;
+    virtual void drawOutput(Core::IWindow&) = 0;
 };
 
 class State : public IState

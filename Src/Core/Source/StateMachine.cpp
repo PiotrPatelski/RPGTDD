@@ -21,9 +21,9 @@ void StateMachine::update(bool isWindowFocused, float deltaTime)
     }
 }
 
-void StateMachine::runState(std::unique_ptr<States::IState> state)
+void StateMachine::runState(std::shared_ptr<States::IState> state)
 {
-    activeState.reset(state.release());
+    activeState.swap(state);
 }
 
 }

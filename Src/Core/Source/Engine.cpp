@@ -42,8 +42,7 @@ void Engine::displayRenderedFrame()
 {    
     window->clear();
     if(not stateMachine->isNoStateActive())
-        window->drawStateOutput(stateMachine->getOutput());
-        // stateMachine->getCurrentState().drawOutput(window);
+        stateMachine->getCurrentState()->drawOutput(*window);
     window->display();
 }
 

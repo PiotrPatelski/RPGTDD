@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <CoreBuilder.h>
-#include <Window.h>
+#include <Window.hpp>
 #include <Clock.h>
 #include <StateMachine.h>
 

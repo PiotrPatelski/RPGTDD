@@ -1,4 +1,4 @@
-#include <Window.h>
+#include <Window.hpp>
 
 
 namespace Core
@@ -37,15 +37,6 @@ void Window::handleSfmlEvents(sf::Event event)
         if(event.type == sf::Event::Closed)
             window->close();
     }
-}
-
-void Window::drawStateOutput(const States::StateOutput& output)
-{
-    window->draw(*(output.background));
-    for(auto button : output.buttons)
-        window->draw(button);
-    for(auto text : output.buttonTexts)
-        window->draw(text);
 }
 
 void Window::close()

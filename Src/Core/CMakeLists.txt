@@ -13,7 +13,7 @@ set(SOURCES
 set(HEADERS
     Headers/Game.h
     Headers/GameLoop.h
-    Headers/Window.h
+    Headers/Window.hpp
     Headers/Clock.h
     Headers/StateMachine.h
     Headers/Engine.h

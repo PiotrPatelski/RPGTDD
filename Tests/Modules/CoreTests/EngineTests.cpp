@@ -2,12 +2,13 @@
 #include <gmock/gmock.h>
 #include <Engine.h>
 #include <IniParser.hpp>
-#include "WindowMock.h"
+#include "WindowMock.hpp"
 #include "ClockMock.h"
 #include "StateMachineMock.h"
 #include "EngineMock.h"
 #include "CoreBuilderMock.h"
 #include "AssetsManagerMock.h"
+#include "StateMock.h"
 
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
@@ -117,10 +118,11 @@ TEST_F(EngineTest, stateIsUpdatedIfEngineRunInitialState)
 
 TEST_F(EngineTest, windowClearsAndDisplaysButDoesNotDrawStateOutputWhenDisplayRenderedFrameWithNoStateActive)
 {
+    std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
     EXPECT_CALL(*window, clear());
     EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(true));
-    EXPECT_CALL(*window, drawStateOutput(_)).Times(0);
-    EXPECT_CALL(*stateMachine, getOutput()).Times(0);
+    EXPECT_CALL(*stateMachine, getCurrentState()).Times(0);
+    EXPECT_CALL(*activeState, drawOutput(_)).Times(0);
     EXPECT_CALL(*window, display());
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));
@@ -132,11 +134,12 @@ TEST_F(EngineTest, windowClearsAndDisplaysButDoesNotDrawStateOutputWhenDisplayRe
 
 TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFrameWithActiveState)
 {
+    std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
     auto background = std::make_shared<sf::RectangleShape>(sf::Vector2f(480, 480));
     EXPECT_CALL(*window, clear());
     EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
-    EXPECT_CALL(*stateMachine, getOutput()).WillOnce(Return(States::StateOutput{background}));
-    EXPECT_CALL(*window, drawStateOutput(_));
+    EXPECT_CALL(*stateMachine, getCurrentState()).WillOnce(Return(activeState));
+    EXPECT_CALL(*activeState, drawOutput(_));
     EXPECT_CALL(*window, display());
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));

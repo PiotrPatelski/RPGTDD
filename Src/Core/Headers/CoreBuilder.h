@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Window.h>
+#include <Window.hpp>
 #include <Clock.h>
 #include <StateMachine.h>
 #include <AssetsManager.hpp>

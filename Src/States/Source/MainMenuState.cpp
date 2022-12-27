@@ -34,17 +34,14 @@ void MainMenuState::initFont()
     font = State::assetsManager->getFont();
 }
 
-StateOutput MainMenuState::generateOutput()
+void MainMenuState::drawOutput(Core::IWindow& window)
 {
-    std::vector<sf::RectangleShape> buttons;
-    std::vector<sf::Text> buttonTexts;
-
-    for(auto& button : this->buttons)
+    window.draw(*background);
+    for(auto& button : buttons)
     {
-        buttons.push_back(button.second->getBackground());
-        buttonTexts.push_back(button.second->getTextContent());
+        window.draw(button.second->getBackground());
+        window.draw(button.second->getTextContent());
     }
-    return StateOutput{background, buttons, buttonTexts};
 }
 
 }

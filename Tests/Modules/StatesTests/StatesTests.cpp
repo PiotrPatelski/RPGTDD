@@ -5,6 +5,7 @@
 #include <IniParser.hpp>
 #include "AssetsManagerMock.h"
 #include "GuiManagerMock.hpp"
+#include "WindowMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -92,40 +93,22 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesKeybindsProperly)
     ASSERT_EQ(configManager->getKeyboard().mainMenuKeys.getKeys().at("CLOSE"), 36);
 }
 
-TEST_F(MainMenuStateTest, mainMenuStateOutputsInitializedButtonBackgroundProperly)
+TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
 {
+    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
     std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
-    buttons["TEST"] = Gui::MainMenuButtonBuilder(sf::VideoMode(100, 100))
-        .atPosition(2.f, 1.f).withSize(3.f, 7.f).build();
+    buttons["TEST_BUTTON1"] = Gui::MainMenuButtonBuilder(sf::VideoMode(100, 100)).
+        withTextContent("testButton1").build();
+    buttons["TEST_BUTTON2"] = Gui::MainMenuButtonBuilder(sf::VideoMode(100, 100)).
+        withTextContent("testButton2").build();
 
     EXPECT_CALL(*guiManager, createButtons(_)).WillOnce(Return(ByMove(std::move(buttons))));
     auto sut = std::make_unique<MainMenuState>(
         configManager,
         std::move(assetsManager),
         std::move(guiManager));
-
-    const auto buttonToDraw = sut->generateOutput().buttons[0];
-    ASSERT_EQ(buttonToDraw.getPosition(), sf::Vector2f(2.f, 1.f));
-    ASSERT_EQ(buttonToDraw.getSize(), sf::Vector2f(3.f, 7.f));
-    ASSERT_EQ(buttonToDraw.getFillColor(), sf::Color(70, 70, 70, 50));
-    ASSERT_EQ(buttonToDraw.getOutlineColor(), sf::Color::Transparent);
-}
-
-TEST_F(MainMenuStateTest, mainMenuStateOutputsInitializedButtonTextProperly)
-{
-    std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
-    buttons["TEST"] = Gui::MainMenuButtonBuilder(sf::VideoMode(100, 100)).
-        withTextContent("test").build();
-
-    EXPECT_CALL(*guiManager, createButtons(_)).WillOnce(Return(ByMove(std::move(buttons))));
-    auto sut = std::make_unique<MainMenuState>(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager));
-
-    const auto buttonTextToDraw = sut->generateOutput().buttonTexts[0];
-    ASSERT_EQ(buttonTextToDraw.getString(), "test");
-    ASSERT_EQ(buttonTextToDraw.getFillColor(), sf::Color(70, 70, 70, 200));
+    EXPECT_CALL(*window, draw(_)).Times(5);
+    sut->drawOutput(*window);
 }
 
 }
