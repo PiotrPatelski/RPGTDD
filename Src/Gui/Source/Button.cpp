@@ -46,4 +46,18 @@ void MainMenuButton::initBackground()
 	background.setOutlineColor(outlineColors.idle);
 }
 
+void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
+{
+    background.setFillColor(backgroundColors.idle);
+    background.setOutlineColor(outlineColors.idle);
+    textContent.setFillColor(textColors.idle);
+    if(background.getGlobalBounds().contains(
+        static_cast<sf::Vector2f>(mousePosOnWindow)))
+    {
+        background.setFillColor(backgroundColors.hover);
+        background.setOutlineColor(outlineColors.hover);
+        textContent.setFillColor(textColors.hover);
+    }
+}
+
 }

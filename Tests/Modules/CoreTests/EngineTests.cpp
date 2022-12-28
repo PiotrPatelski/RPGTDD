@@ -90,6 +90,7 @@ TEST_F(EngineTest, stateWillNotBeUpdatedIfEngineDidntRunInitialState)
     EXPECT_CALL(*window, handleSfmlEvents(_));
     EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*window, isCurrentlyFocused()).Times(0);
+    EXPECT_CALL(*window, getMousePosition()).Times(0);
     EXPECT_CALL(*clock, getDeltaTime()).Times(0);  
     EXPECT_CALL(*stateMachine, update(_,_)).Times(0);
 
@@ -100,11 +101,28 @@ TEST_F(EngineTest, stateWillNotBeUpdatedIfEngineDidntRunInitialState)
     ASSERT_FALSE(sut->updateState());
 }
 
+TEST_F(EngineTest, stateIsNotUpdatedIfWindowIsNotFocused)
+{
+    EXPECT_CALL(*window, handleSfmlEvents(_));
+    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
+    EXPECT_CALL(*window, isCurrentlyFocused()).WillOnce(Return(false));
+    EXPECT_CALL(*window, getMousePosition()).Times(0);
+    EXPECT_CALL(*clock, getDeltaTime()).Times(0);
+    EXPECT_CALL(*stateMachine, update(_,_)).Times(0);
+
+    ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));
+    ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
+    sut = std::make_unique<Engine>(coreBuilder);
+
+    ASSERT_TRUE(sut->updateState());
+}
+
 TEST_F(EngineTest, stateIsUpdatedIfEngineRunInitialState)
 {
     EXPECT_CALL(*window, handleSfmlEvents(_));
     EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
-    EXPECT_CALL(*window, isCurrentlyFocused());
+    EXPECT_CALL(*window, isCurrentlyFocused()).WillOnce(Return(true));
+    EXPECT_CALL(*window, getMousePosition());
     EXPECT_CALL(*clock, getDeltaTime());
     EXPECT_CALL(*stateMachine, update(_,_));
 

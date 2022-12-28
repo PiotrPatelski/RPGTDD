@@ -6,6 +6,7 @@
 #include "AssetsManagerMock.h"
 #include "GuiManagerMock.hpp"
 #include "WindowMock.hpp"
+#include "ButtonMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -109,6 +110,25 @@ TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
         std::move(guiManager));
     EXPECT_CALL(*window, draw(_)).Times(5);
     sut->drawOutput(*window);
+}
+
+TEST_F(MainMenuStateTest, mainMenuStateUpdatesEveryButtonItHasBeenBuiltWith)
+{
+    auto button1 = std::make_unique<NiceMock<Gui::ButtonMock>>();
+    auto button2 = std::make_unique<NiceMock<Gui::ButtonMock>>();
+    EXPECT_CALL(*(button1), update(_));
+    EXPECT_CALL(*(button2), update(_));
+
+    std::map<std::string, std::unique_ptr<Gui::IButton>> buttons;
+    buttons["TEST_BUTTON1"] = std::move(button1);
+    buttons["TEST_BUTTON2"] = std::move(button2);
+
+    EXPECT_CALL(*guiManager, createButtons(_)).WillOnce(Return(ByMove(std::move(buttons))));
+    auto sut = std::make_unique<MainMenuState>(
+        configManager,
+        std::move(assetsManager),
+        std::move(guiManager));
+    sut->update(sf::Vector2i{0,0}, 0.f);
 }
 
 }

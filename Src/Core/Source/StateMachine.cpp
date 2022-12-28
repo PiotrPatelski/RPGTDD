@@ -9,15 +9,12 @@ StateMachine::StateMachine()
 
 }
 
-void StateMachine::update(bool isWindowFocused, float deltaTime)
+void StateMachine::update(const sf::Vector2i& mousePosOnWindow, const float deltaTime)
 {
-    if(isWindowFocused)
+    activeState->update(mousePosOnWindow, deltaTime);
+    if(activeState->isDone())
     {
-        activeState->update(deltaTime);
-        if(activeState->isDone())
-        {
-            runState(activeState->getNextState());
-        }
+        runState(activeState->getNextState());
     }
 }
 

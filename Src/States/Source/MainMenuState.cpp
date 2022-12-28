@@ -34,13 +34,19 @@ void MainMenuState::initFont()
     font = State::assetsManager->getFont();
 }
 
+void MainMenuState::update(const sf::Vector2i& mousePosOnWindow, const float deltaTime)
+{
+    for(auto& [_, button] : buttons)
+        button->update(mousePosOnWindow);
+}
+
 void MainMenuState::drawOutput(Core::IWindow& window)
 {
     window.draw(*background);
-    for(auto& button : buttons)
+    for(const auto& [_, button] : buttons)
     {
-        window.draw(button.second->getBackground());
-        window.draw(button.second->getTextContent());
+        window.draw(button->getBackground());
+        window.draw(button->getTextContent());
     }
 }
 

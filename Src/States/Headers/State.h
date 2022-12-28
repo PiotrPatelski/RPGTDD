@@ -26,7 +26,7 @@ public:
 
     virtual bool isDone() = 0;
     virtual void markAsDone() = 0;
-    virtual void update(float) = 0;
+    virtual void update(const sf::Vector2i&, const float) = 0;
     virtual void drawOutput(Core::IWindow&) = 0;
 };
 
@@ -43,7 +43,7 @@ public:
 
     virtual bool isDone() override {return done;}
     virtual void markAsDone() override {done = true;}
-    virtual void update(float) override {}
+    virtual void update(const sf::Vector2i&, const float) override {}
 protected:
     bool done{false};
     std::unique_ptr<IState> nextState;

@@ -17,6 +17,7 @@ public:
         std::unique_ptr<Gui::MainMenuGuiManager>);
     virtual ~MainMenuState() = default;
 
+    virtual void update(const sf::Vector2i&, const float) override;
     virtual void drawOutput(Core::IWindow&) override;
     std::shared_ptr<sf::RectangleShape> getBackground() {return background;}
     std::shared_ptr<sf::Font> getFont() {return font;}

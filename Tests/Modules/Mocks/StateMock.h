@@ -15,7 +15,7 @@ class StateMock : public IState
 public:
     MOCK_METHOD(std::unique_ptr<IState>, getNextState, (), (override));
     MOCK_METHOD(void, drawOutput, (Core::IWindow&), (override));
-    MOCK_METHOD(void, update, (float), (override));
+    MOCK_METHOD(void, update, (const sf::Vector2i&, const float), (override));
     MOCK_METHOD(bool, isDone, (), (override));
     MOCK_METHOD(void, markAsDone, (), (override));
 

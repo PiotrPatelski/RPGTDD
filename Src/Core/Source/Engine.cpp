@@ -26,7 +26,10 @@ bool Engine::updateState()
     window->handleSfmlEvents(sfmlEvent);
     if(not stateMachine->isNoStateActive())
     {
-        stateMachine->update(window->isCurrentlyFocused(), clock->getDeltaTime());
+        if(window->isCurrentlyFocused())
+        {
+            stateMachine->update(window->getMousePosition(), clock->getDeltaTime());
+        }
         return true;
     }
     return false;

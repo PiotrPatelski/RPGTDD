@@ -19,6 +19,8 @@ public:
     IButton(){}
     virtual ~IButton(){}
 
+    virtual void update(const sf::Vector2i&) = 0;
+
     virtual sf::Text getTextContent() = 0;
     virtual sf::Vector2f getPosition() = 0;
     virtual sf::Vector2f getSize() = 0;
@@ -39,6 +41,8 @@ public:
         const EventColor&,
         const EventColor&);
     virtual ~MainMenuButton(){}
+
+    virtual void update(const sf::Vector2i&) override;
 
     virtual sf::Text getTextContent() override {return textContent;}
     virtual sf::Vector2f getPosition() override {return position;}

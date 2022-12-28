@@ -43,7 +43,7 @@ std::unique_ptr<IButton> MainMenuButtonBuilder::build()
         backgroundColors,
         outlineColors);
 
-    return std::move(button);
+    return button;
 }
 
 IButtonBuilder& MainMenuButtonBuilder::withTextContent(const std::string& text)
