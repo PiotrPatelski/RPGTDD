@@ -21,11 +21,11 @@ public:
 
     virtual void update(const sf::Vector2i&) = 0;
 
-    virtual sf::Text getTextContent() = 0;
-    virtual sf::Vector2f getPosition() = 0;
-    virtual sf::Vector2f getSize() = 0;
-    virtual sf::Font getFont() =0;
-    virtual sf::RectangleShape getBackground() =0;
+    virtual sf::Text getTextContent() const = 0;
+    virtual sf::Vector2f getPosition() const = 0;
+    virtual sf::Vector2f getSize() const = 0;
+    virtual sf::Font getFont() const = 0;
+    virtual sf::RectangleShape getBackground() const = 0;
 };
 
 class MainMenuButton : public IButton
@@ -44,11 +44,11 @@ public:
 
     virtual void update(const sf::Vector2i&) override;
 
-    virtual sf::Text getTextContent() override {return textContent;}
-    virtual sf::Vector2f getPosition() override {return position;}
-    virtual sf::Vector2f getSize() override {return size;}
-    virtual sf::Font getFont() override {return *textContent.getFont();}
-    virtual sf::RectangleShape getBackground() override {return background;}
+    virtual inline sf::Text getTextContent() const override {return textContent;}
+    virtual inline sf::Vector2f getPosition() const override {return position;}
+    virtual inline sf::Vector2f getSize() const override {return size;}
+    virtual inline sf::Font getFont() const override {return *textContent.getFont();}
+    virtual inline sf::RectangleShape getBackground() const override {return background;}
 private:
     void initText(const uint);
     void initBackground();

@@ -24,7 +24,7 @@ public:
 
     virtual std::unique_ptr<IState> getNextState() = 0;
 
-    virtual bool isDone() = 0;
+    virtual const bool isDone() const = 0;
     virtual void markAsDone() = 0;
     virtual void update(const sf::Vector2i&, const float) = 0;
     virtual void drawOutput(Core::IWindow&) = 0;
@@ -41,7 +41,7 @@ public:
 
     virtual std::unique_ptr<IState> getNextState() override {return std::move(nextState);}
 
-    virtual bool isDone() override {return done;}
+    virtual const bool isDone() const override {return done;}
     virtual void markAsDone() override {done = true;}
     virtual void update(const sf::Vector2i&, const float) override {}
 protected:

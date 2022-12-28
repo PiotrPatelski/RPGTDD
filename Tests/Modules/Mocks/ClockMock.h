@@ -13,7 +13,7 @@ class ClockMock : public IClock
 {
 public:
     MOCK_METHOD(void, updateDeltaTime, (), (override));
-    MOCK_METHOD(float, getDeltaTime, (), (override));
+    MOCK_METHOD(const float, getDeltaTime, (), (const, override));
 };
 
 }

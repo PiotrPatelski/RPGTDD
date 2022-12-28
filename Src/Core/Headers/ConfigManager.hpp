@@ -15,8 +15,8 @@ public:
 
 	void setGraphics(const FileMgmt::GraphicsConfig& newConfig){graphics = newConfig;}
 
-	FileMgmt::GraphicsConfig getGraphics(){return graphics;}
-	FileMgmt::KeyboardConfig getKeyboard(){return keyboard;}
+	inline FileMgmt::GraphicsConfig getGraphics() const {return graphics;}
+	inline FileMgmt::KeyboardConfig getKeyboard() const {return keyboard;}
 private:
 	FileMgmt::GraphicsConfig graphics;
 	FileMgmt::KeyboardConfig keyboard;

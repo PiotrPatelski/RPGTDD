@@ -20,11 +20,11 @@ class CoreBuilder : public ICoreBuilder
 {
 public:
     virtual std::unique_ptr<IWindow> createWindow() const override 
-    {return std::move(std::make_unique<Window>());}
+    {return std::make_unique<Window>();}
     virtual std::unique_ptr<IClock> createClock() const override
-    {return std::move(std::make_unique<Clock>());}
+    {return std::make_unique<Clock>();}
     virtual std::unique_ptr<IStateMachine> createStateMachine() const override
-    {return std::move(std::make_unique<StateMachine>());}
+    {return std::make_unique<StateMachine>();}
 };
 
 }

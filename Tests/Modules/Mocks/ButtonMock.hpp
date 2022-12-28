@@ -9,11 +9,11 @@ namespace Gui
 class ButtonMock : public IButton
 {
 public:
-    MOCK_METHOD(sf::Text, getTextContent, (), (override));
-    MOCK_METHOD(sf::Vector2f, getPosition, (), (override));
-    MOCK_METHOD(sf::Vector2f, getSize, (), (override));
-    MOCK_METHOD(sf::Font, getFont, (), (override));
-    MOCK_METHOD(sf::RectangleShape, getBackground, (), (override));
+    MOCK_METHOD(sf::Text, getTextContent, (), (const, override));
+    MOCK_METHOD(sf::Vector2f, getPosition, (), (const, override));
+    MOCK_METHOD(sf::Vector2f, getSize, (), (const, override));
+    MOCK_METHOD(sf::Font, getFont, (), (const, override));
+    MOCK_METHOD(sf::RectangleShape, getBackground, (), (const, override));
     MOCK_METHOD(void, update, (const sf::Vector2i&), (override));
 };
 

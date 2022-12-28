@@ -12,7 +12,7 @@ public:
     virtual ~IClock(){}
 
     virtual void updateDeltaTime() = 0;
-    virtual float getDeltaTime() = 0;
+    virtual const float getDeltaTime() const = 0;
 };
 
 class Clock : public IClock
@@ -25,7 +25,7 @@ public:
     virtual ~Clock(){}
 
     virtual void updateDeltaTime() override;
-    virtual float getDeltaTime() override {return deltaTime;}
+    virtual inline const float getDeltaTime() const override {return deltaTime;}
 };
     
 }

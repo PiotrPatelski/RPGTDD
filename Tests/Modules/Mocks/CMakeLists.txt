@@ -1,6 +1,6 @@
 set(HEADERS
     GameMock.h
-    WindowMock.h
+    WindowMock.hpp
     ClockMock.h
     StateMachineMock.h
     StateMock.h

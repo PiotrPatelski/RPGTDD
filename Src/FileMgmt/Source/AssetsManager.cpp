@@ -24,7 +24,7 @@ void MainMenuAssetsManager::fetchTextureFromFile()
     std::cout << "Initialized MainMenu Textures..." << std::endl;
 }
 
-std::shared_ptr<sf::Texture> MainMenuAssetsManager::getTexture()
+std::shared_ptr<sf::Texture> MainMenuAssetsManager::getTexture() const
 {
     return mainMenuTexture;
 }
@@ -40,7 +40,7 @@ void MainMenuAssetsManager::fetchFontFromFile()
     std::cout << "Initialized MainMenu Fonts..." << std::endl;
 }
 
-std::shared_ptr<sf::Font> MainMenuAssetsManager::getFont()
+std::shared_ptr<sf::Font> MainMenuAssetsManager::getFont() const
 {
     return mainMenuFont;
 }

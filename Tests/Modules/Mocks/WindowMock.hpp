@@ -13,8 +13,8 @@ using testing::Return;
 class WindowMock : public IWindow
 {
 public:
-    MOCK_METHOD(bool, isActive, (), (override));
-    MOCK_METHOD(bool, isCurrentlyFocused, (), (override));
+    MOCK_METHOD(bool, isActive, (), (const, override));
+    MOCK_METHOD(bool, isCurrentlyFocused, (), (const, override));
     MOCK_METHOD(void, openWithSettings, (const FileMgmt::GraphicsConfig&), (override));
     MOCK_METHOD(sf::Vector2i, getMousePosition, (), (const, override));
     MOCK_METHOD(void, clear, (), (override));
