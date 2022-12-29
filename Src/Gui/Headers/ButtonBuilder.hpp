@@ -54,9 +54,47 @@ private:
     sf::Vector2f position{0.f, 0.f};
     sf::Vector2f size{0.f, 0.f};
     sf::Font font;
-    EventColor textColors;
-    EventColor backgroundColors;
-    EventColor outlineColors;
+    EventColor idleColors;
+    EventColor hoverColors;
+    EventColor activeColors;
+};
+
+class GameButtonBuilder : public IButtonBuilder
+{
+public:
+    GameButtonBuilder(const sf::VideoMode& videoMode){std::cout<<"GameButtonBuilder"<<std::endl;}
+    virtual ~GameButtonBuilder(){}
+
+    virtual IButtonBuilder& withTextContent(const std::string& text) override {}
+    virtual IButtonBuilder& atPosition(const float x, const float y) override {}
+    virtual IButtonBuilder& withSize(const float x, const float y) override {}
+    virtual IButtonBuilder& withFont(const sf::Font&) override {}
+    virtual std::unique_ptr<IButton> build() override {}
+};
+class EditorButtonBuilder : public IButtonBuilder
+{
+public:
+    EditorButtonBuilder(const sf::VideoMode& videoMode){std::cout<<"EditorButtonBuilder"<<std::endl;}
+    virtual ~EditorButtonBuilder(){}
+
+    virtual IButtonBuilder& withTextContent(const std::string& text) override {}
+    virtual IButtonBuilder& atPosition(const float x, const float y) override {}
+    virtual IButtonBuilder& withSize(const float x, const float y) override {}
+    virtual IButtonBuilder& withFont(const sf::Font&) override {}
+    virtual std::unique_ptr<IButton> build() override {}
+};
+
+class SettingsButtonBuilder : public IButtonBuilder
+{
+public:
+    SettingsButtonBuilder(const sf::VideoMode& videoMode){std::cout<<"SettingsButtonBuilder"<<std::endl;}
+    virtual ~SettingsButtonBuilder(){}
+
+    virtual IButtonBuilder& withTextContent(const std::string& text) override {}
+    virtual IButtonBuilder& atPosition(const float x, const float y) override {}
+    virtual IButtonBuilder& withSize(const float x, const float y) override {}
+    virtual IButtonBuilder& withFont(const sf::Font&) override {}
+    virtual std::unique_ptr<IButton> build() override {}
 };
 
 }

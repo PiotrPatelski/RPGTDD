@@ -3,19 +3,19 @@
 namespace Gui
 {
 
-EventColor DEFAULT_TEXT_COLORS = EventColor{
+EventColor DEFAULT_IDLE_COLORS = EventColor{
     sf::Color(70, 70, 70, 200),
-    sf::Color(250, 250, 150, 250),
-    sf::Color(20, 20, 20, 50)};
-
-EventColor DEFAULT_BACKGROUND_COLORS = EventColor{
     sf::Color(70, 70, 70, 50),
-    sf::Color(250, 250, 150, 50),
-    sf::Color(20, 20, 20, 50)};
+    sf::Color::Transparent};
 
-EventColor TRANSPARENT_EVENT_COLORS = EventColor{
-    sf::Color::Transparent,
-    sf::Color::Transparent,
+EventColor DEFAULT_HOVER_COLORS = EventColor{
+    sf::Color(250, 250, 150, 250),
+    sf::Color(250, 250, 150, 50),
+    sf::Color::Transparent};
+
+EventColor DEFAULT_ACTIVE_COLORS = EventColor{
+    sf::Color(20, 20, 20, 50),
+    sf::Color(20, 20, 20, 50),
     sf::Color::Transparent};
 
 uint calculateFontSize(const sf::VideoMode& screenResolution)
@@ -26,9 +26,9 @@ uint calculateFontSize(const sf::VideoMode& screenResolution)
 
 MainMenuButtonBuilder::MainMenuButtonBuilder(const sf::VideoMode& resolution)
 : screenResolution(resolution),
-  textColors(DEFAULT_TEXT_COLORS),
-  backgroundColors(DEFAULT_BACKGROUND_COLORS),
-  outlineColors(TRANSPARENT_EVENT_COLORS)
+  idleColors(DEFAULT_IDLE_COLORS),
+  hoverColors(DEFAULT_HOVER_COLORS),
+  activeColors(DEFAULT_ACTIVE_COLORS)
 {}
 
 std::unique_ptr<IButton> MainMenuButtonBuilder::build()
@@ -39,9 +39,10 @@ std::unique_ptr<IButton> MainMenuButtonBuilder::build()
         textContent,
         font,
         calculateFontSize(screenResolution),
-        textColors,
-        backgroundColors,
-        outlineColors);
+        idleColors,
+        hoverColors,
+        activeColors,
+        std::make_unique<ButtonEventHandler>());
 
     return button;
 }

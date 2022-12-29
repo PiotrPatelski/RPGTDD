@@ -34,7 +34,7 @@ class State : public IState
 {
 public:
     State(
-        std::shared_ptr<Core::ConfigManager>,
+        std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::IAssetsManager>,
         std::unique_ptr<Gui::IGuiManager>);
     virtual ~State(){}
@@ -43,13 +43,12 @@ public:
 
     virtual const bool isDone() const override {return done;}
     virtual void markAsDone() override {done = true;}
-    virtual void update(const sf::Vector2i&, const float) override {}
 protected:
     bool done{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<FileMgmt::IAssetsManager> assetsManager;
     std::unique_ptr<Gui::IGuiManager> guiManager;
-    std::shared_ptr<Core::ConfigManager> config;
+    std::shared_ptr<Core::IConfigManager> config;
 };
 
 }

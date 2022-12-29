@@ -10,6 +10,7 @@ set(HEADERS
     Headers/Button.hpp
     Headers/ButtonBuilder.hpp
     Headers/GuiManager.hpp
+    Headers/ButtonEventHandler.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

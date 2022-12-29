@@ -7,6 +7,7 @@ std::string AssetsManager::buildPath = std::filesystem::current_path().string() 
 
 MainMenuAssetsManager::MainMenuAssetsManager()
 {
+    std::cout<<"MainMenuAssetsManager"<<std::endl;
     mainMenuFont = std::make_shared<sf::Font>();
     fetchFontFromFile();
     mainMenuTexture = std::make_shared<sf::Texture>();

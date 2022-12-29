@@ -1,12 +1,14 @@
-#include <MainMenuState.h>
+#include <MainMenuState.hpp>
+#include <GameState.hpp>
+#include <EditorState.hpp>
+#include <SettingsState.hpp>
 #include <IniParser.hpp>
-#include <ButtonBuilder.hpp>
 
 namespace States
 {
 
 MainMenuState::MainMenuState(
-    std::shared_ptr<Core::ConfigManager> config,
+    std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
     std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
     : State(
@@ -16,7 +18,7 @@ MainMenuState::MainMenuState(
 {
     initBackground();
     initFont();
-    buttons = State::guiManager->createButtons(*font);
+    buttons = this->guiManager->createButtons(*font);
 }
 
 void MainMenuState::initBackground()
@@ -38,6 +40,39 @@ void MainMenuState::update(const sf::Vector2i& mousePosOnWindow, const float del
 {
     for(auto& [_, button] : buttons)
         button->update(mousePosOnWindow);
+    if (buttons.at("GAME_STATE")->isPressed())
+	{
+		nextState = std::make_unique<GameState>(
+            config,
+            std::make_unique<FileMgmt::GameAssetsManager>(),
+            std::make_unique<Gui::GameGuiManager>(config->getGraphics().resolution));
+        markAsDone();
+        return;
+	}
+	if (buttons.at("SETTINGS_STATE")->isPressed())
+	{
+		nextState = std::make_unique<SettingsState>(
+            config,
+            std::make_unique<FileMgmt::SettingsAssetsManager>(),
+            std::make_unique<Gui::SettingsGuiManager>(config->getGraphics().resolution));
+        markAsDone();
+        return;
+	}
+	if (buttons.at("EDITOR_STATE")->isPressed())
+	{
+		nextState = std::make_unique<EditorState>(
+            config,
+            std::make_unique<FileMgmt::EditorAssetsManager>(),
+            std::make_unique<Gui::EditorGuiManager>(config->getGraphics().resolution));
+        markAsDone();
+        return;
+	}
+	if (buttons.at("EXIT_STATE")->isPressed())
+    {
+        nextState.reset();
+        markAsDone();
+        return;
+    }
 }
 
 void MainMenuState::drawOutput(Core::IWindow& window)

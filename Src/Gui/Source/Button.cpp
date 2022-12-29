@@ -16,15 +16,17 @@ MainMenuButton::MainMenuButton(
     const std::string& textContent,
     const sf::Font& font,
     const uint characterSize,
-    const EventColor& textColors,
-    const EventColor& backgroundColors,
-    const EventColor& outlineColors)
+    const EventColor& idleColors,
+    const EventColor& hoverColors,
+    const EventColor& activeColors,
+    std::unique_ptr<IButtonEventHandler> eventHandler)
 : textContent(textContent, font),
   position(position),
   size(size),
-  textColors(textColors),
-  backgroundColors(backgroundColors),
-  outlineColors(outlineColors)
+  idleColors(idleColors),
+  hoverColors(hoverColors),
+  activeColors(activeColors),
+  eventHandler(std::move(eventHandler))
 {
     initBackground();
     initText(characterSize);
@@ -33,7 +35,7 @@ MainMenuButton::MainMenuButton(
 void MainMenuButton::initText(const uint characterSize)
 {
     textContent.setCharacterSize(characterSize);
-	textContent.setFillColor(textColors.idle);
+	textContent.setFillColor(idleColors.text);
 	textContent.setPosition(calculateTextPosOnBackground(background, textContent));
 }
 
@@ -41,23 +43,33 @@ void MainMenuButton::initBackground()
 {
     background.setPosition(position);
 	background.setSize(size);
-	background.setFillColor(backgroundColors.idle);
+	background.setFillColor(idleColors.background);
 	background.setOutlineThickness(1.f);
-	background.setOutlineColor(outlineColors.idle);
+	background.setOutlineColor(idleColors.outline);
+}
+
+void MainMenuButton::setColor(const EventColor& colors)
+{
+    background.setFillColor(colors.background);
+    background.setOutlineColor(colors.outline);
+    textContent.setFillColor(colors.text);
 }
 
 void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
 {
-    background.setFillColor(backgroundColors.idle);
-    background.setOutlineColor(outlineColors.idle);
-    textContent.setFillColor(textColors.idle);
+    active = false;
     if(background.getGlobalBounds().contains(
         static_cast<sf::Vector2f>(mousePosOnWindow)))
     {
-        background.setFillColor(backgroundColors.hover);
-        background.setOutlineColor(outlineColors.hover);
-        textContent.setFillColor(textColors.hover);
+        setColor(hoverColors);
+        if(eventHandler->isPressed())
+        {
+            setColor(activeColors);
+            active = true;
+        }
     }
+    else
+        setColor(idleColors);
 }
 
 }

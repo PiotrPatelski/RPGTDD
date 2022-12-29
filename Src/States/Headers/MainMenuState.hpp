@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <State.h>
+#include <State.hpp>
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
 
@@ -12,7 +12,7 @@ class MainMenuState : public State
 {
 public:
     MainMenuState(
-        std::shared_ptr<Core::ConfigManager>,
+        std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::MainMenuAssetsManager>,
         std::unique_ptr<Gui::MainMenuGuiManager>);
     virtual ~MainMenuState() = default;

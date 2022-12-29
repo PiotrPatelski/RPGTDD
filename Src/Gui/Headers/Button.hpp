@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <ButtonEventHandler.hpp>
 
 namespace Gui
 {
@@ -8,9 +9,9 @@ sf::Vector2f calculateTextPosOnBackground(const sf::Shape&, const sf::Text&);
 
 struct EventColor
 {
-    sf::Color idle;
-    sf::Color hover;
-    sf::Color active;
+    sf::Color text;
+    sf::Color background;
+    sf::Color outline;
 };
 
 class IButton
@@ -19,6 +20,7 @@ public:
     IButton(){}
     virtual ~IButton(){}
 
+    virtual const bool isPressed() const = 0;
     virtual void update(const sf::Vector2i&) = 0;
 
     virtual sf::Text getTextContent() const = 0;
@@ -39,9 +41,11 @@ public:
         const uint characterSize,
         const EventColor&,
         const EventColor&,
-        const EventColor&);
+        const EventColor&,
+        std::unique_ptr<IButtonEventHandler>);
     virtual ~MainMenuButton(){}
 
+    virtual inline const bool isPressed() const override {return active;}
     virtual void update(const sf::Vector2i&) override;
 
     virtual inline sf::Text getTextContent() const override {return textContent;}
@@ -52,13 +56,17 @@ public:
 private:
     void initText(const uint);
     void initBackground();
+    void setColor(const EventColor&);
+
+    bool active{false};
     sf::Text textContent;
     sf::RectangleShape background;
     sf::Vector2f position;
     sf::Vector2f size;
-    EventColor textColors;
-    EventColor backgroundColors;
-    EventColor outlineColors;
+    EventColor idleColors;
+    EventColor hoverColors;
+    EventColor activeColors;
+    std::unique_ptr<IButtonEventHandler> eventHandler;
 };
 
 }

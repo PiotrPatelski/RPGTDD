@@ -3,11 +3,17 @@ set(MODULE_NAME States)
 set(SOURCES
     Source/State.cpp
     Source/MainMenuState.cpp
+    Source/GameState.cpp
+    Source/EditorState.cpp
+    Source/SettingsState.cpp
     )
 
 set(HEADERS
-    Headers/State.h
-    Headers/MainMenuState.h
+    Headers/State.hpp
+    Headers/MainMenuState.hpp
+    Headers/GameState.hpp
+    Headers/EditorState.hpp
+    Headers/SettingsState.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})
