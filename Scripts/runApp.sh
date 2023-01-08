@@ -9,4 +9,3 @@ then
 else
     echo "$exePath has not been found... aborting";
 fi
-
