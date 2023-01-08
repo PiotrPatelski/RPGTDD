@@ -14,11 +14,11 @@ void StateMachine::update(const sf::Vector2i& mousePosOnWindow, const float delt
     activeState->update(mousePosOnWindow, deltaTime);
     if(activeState->isDone())
     {
-        runState(activeState->getNextState());
+        setState(activeState->getNextState());
     }
 }
 
-void StateMachine::runState(std::shared_ptr<States::IState> state)
+void StateMachine::setState(std::shared_ptr<States::IState> state)
 {
     activeState.swap(state);
 }

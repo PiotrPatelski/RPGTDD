@@ -6,6 +6,7 @@ set(HEADERS
     StateMock.h
     EngineMock.h
     CoreBuilderMock.h
+    InputHandlerMock.hpp
     AssetsManagerMock.h
     GuiManagerMock.hpp
     ConfigManagerMock.hpp

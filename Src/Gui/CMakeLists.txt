@@ -10,7 +10,6 @@ set(HEADERS
     Headers/Button.hpp
     Headers/ButtonBuilder.hpp
     Headers/GuiManager.hpp
-    Headers/ButtonEventHandler.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})
@@ -21,6 +20,7 @@ target_include_directories(${MODULE_NAME} PUBLIC Headers Source)
 
 target_link_libraries(${MODULE_NAME} 
 PUBLIC
+    Events
     ${SFML_LIBS})
 
 set(GUI_EXCLUDES

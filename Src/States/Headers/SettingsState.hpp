@@ -14,7 +14,8 @@ public:
     SettingsState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::SettingsAssetsManager>,
-        std::unique_ptr<Gui::SettingsGuiManager>);
+        std::unique_ptr<Gui::SettingsGuiManager>,
+        std::unique_ptr<Events::SettingsInputHandler>);
     virtual ~SettingsState() = default;
 
     virtual void update(const sf::Vector2i&, const float) override {}

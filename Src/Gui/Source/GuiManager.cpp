@@ -1,22 +1,23 @@
 #include <GuiManager.hpp>
+#include <State.hpp>
 
 namespace Gui
 {
 
-std::map<std::string, std::unique_ptr<IButton>> MainMenuGuiManager::createButtons(const sf::Font& font)
+std::vector<std::unique_ptr<IButton>> MainMenuGuiManager::createButtons(const sf::Font& font)
 {
-    buttons["GAME_STATE"] = buttonBuilder.
+    buttons.push_back(buttonBuilder.
         withTextContent("New Game").atPosition(15.6f, 30.f).withSize(13.f, 6.f).withFont(font).
-        build();
-    buttons["SETTINGS_STATE"] = buttonBuilder.
+        withAction(Events::ToGameState()).build());
+    buttons.push_back(buttonBuilder.
         withTextContent("Settings").atPosition(15.6f, 40.f).withSize(13.f, 6.f).withFont(font).
-        build();
-    buttons["EDITOR_STATE"] = buttonBuilder.
+        withAction(Events::ToSettingsState()).build());
+    buttons.push_back(buttonBuilder.
         withTextContent("Editor").atPosition(15.6f, 50.f).withSize(13.f, 6.f).withFont(font).
-        build();
-    buttons["EXIT_STATE"] = buttonBuilder.
+        withAction(Events::ToEditorState()).build());
+    buttons.push_back(buttonBuilder.
         withTextContent("Exit").atPosition(15.6f, 65.5f).withSize(13.f, 6.f).withFont(font).
-        build();
+        withAction(Events::ToExitState()). build());
     return std::move(buttons);
 }
 

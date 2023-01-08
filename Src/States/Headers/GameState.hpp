@@ -14,7 +14,8 @@ public:
     GameState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::GameAssetsManager>,
-        std::unique_ptr<Gui::GameGuiManager>);
+        std::unique_ptr<Gui::GameGuiManager>,
+        std::unique_ptr<Events::GameInputHandler>);
     virtual ~GameState() = default;
 
     virtual void update(const sf::Vector2i&, const float) override {}

@@ -12,6 +12,7 @@ add_subdirectory(Core)
 add_subdirectory(States)
 add_subdirectory(Gui)
 add_subdirectory(FileMgmt)
+add_subdirectory(Events)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -20,6 +21,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC Core)
 target_include_directories(${PROJECT_NAME} PUBLIC States)
 target_include_directories(${PROJECT_NAME} PUBLIC Gui)
 target_include_directories(${PROJECT_NAME} PUBLIC FileMgmt)
+target_include_directories(${PROJECT_NAME} PUBLIC Events)
 target_include_directories(${PROJECT_NAME} PUBLIC ${SFML_INCLUDE_DIR})
 message(${SFML_INCLUDE_DIR} " FOUND!! ${SFML_INCLUDE_DIR}")
 
@@ -31,6 +33,7 @@ PRIVATE
     States
     Gui
     FileMgmt
+    Events
     ${SFML_LIBS}
 )
 

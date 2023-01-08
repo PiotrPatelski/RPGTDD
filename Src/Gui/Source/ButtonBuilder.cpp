@@ -24,8 +24,12 @@ uint calculateFontSize(const sf::VideoMode& screenResolution)
     return static_cast<unsigned>((screenResolution.width + screenResolution.height) / divider);
 }
 
+ButtonBuilder::ButtonBuilder(const sf::VideoMode& resolution)
+: screenResolution(resolution)
+{}
+
 MainMenuButtonBuilder::MainMenuButtonBuilder(const sf::VideoMode& resolution)
-: screenResolution(resolution),
+: ButtonBuilder(resolution),
   idleColors(DEFAULT_IDLE_COLORS),
   hoverColors(DEFAULT_HOVER_COLORS),
   activeColors(DEFAULT_ACTIVE_COLORS)
@@ -42,7 +46,8 @@ std::unique_ptr<IButton> MainMenuButtonBuilder::build()
         idleColors,
         hoverColors,
         activeColors,
-        std::make_unique<ButtonEventHandler>());
+        std::make_unique<Events::ButtonEventHandler>(),
+        action);
 
     return button;
 }
@@ -75,4 +80,27 @@ IButtonBuilder& MainMenuButtonBuilder::withFont(const sf::Font& font)
     return *this;
 }
 
+IButtonBuilder& MainMenuButtonBuilder::withAction(const Events::StateChangeAction& action)
+{
+    this->action = action;
+    return *this;
+}
+
+GameButtonBuilder::GameButtonBuilder(const sf::VideoMode& resolution)
+: ButtonBuilder(resolution)
+{
+    std::cout<<"GameButtonBuilder"<<std::endl;
+}
+
+EditorButtonBuilder::EditorButtonBuilder(const sf::VideoMode& resolution)
+: ButtonBuilder(resolution)
+{
+    std::cout<<"EditorButtonBuilder"<<std::endl;
+}
+
+SettingsButtonBuilder::SettingsButtonBuilder(const sf::VideoMode& resolution)
+: ButtonBuilder(resolution)
+{
+    std::cout<<"SettingsButtonBuilder"<<std::endl;
+}
 }

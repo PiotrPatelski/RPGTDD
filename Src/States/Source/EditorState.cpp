@@ -6,11 +6,13 @@ namespace States
 EditorState::EditorState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::EditorAssetsManager> assetsManager,
-    std::unique_ptr<Gui::EditorGuiManager> guiManager)
+    std::unique_ptr<Gui::EditorGuiManager> guiManager,
+    std::unique_ptr<Events::EditorInputHandler> inputHandler)
     : State(
         config,
         std::move(assetsManager),
-        std::move(guiManager))
+        std::move(guiManager),
+        std::move(inputHandler))
 {}
 
 }

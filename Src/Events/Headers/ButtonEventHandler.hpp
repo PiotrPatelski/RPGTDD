@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-namespace Gui
+namespace Events
 {
 
 class IButtonEventHandler
@@ -19,7 +19,7 @@ public:
     ButtonEventHandler(){}
     virtual ~ButtonEventHandler(){}
 
-    virtual bool isPressed() const {return sf::Mouse::isButtonPressed(sf::Mouse::Left);}
+    virtual bool isPressed() const override {return sf::Mouse::isButtonPressed(sf::Mouse::Left);}
 };
 
 }

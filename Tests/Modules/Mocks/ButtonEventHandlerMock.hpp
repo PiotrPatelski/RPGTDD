@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 #include <ButtonEventHandler.hpp>
 
-namespace Gui
+namespace Events
 {
 
 using ::testing::Test;

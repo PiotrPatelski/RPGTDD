@@ -4,6 +4,7 @@
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
 #include <GuiManager.hpp>
+#include <InputHandler.hpp>
 #include <Button.hpp>
 #include <Window.hpp>
 namespace States
@@ -36,7 +37,8 @@ public:
     State(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::IAssetsManager>,
-        std::unique_ptr<Gui::IGuiManager>);
+        std::unique_ptr<Gui::IGuiManager>,
+        std::unique_ptr<Events::IInputHandler>);
     virtual ~State(){}
 
     virtual std::unique_ptr<IState> getNextState() override {return std::move(nextState);}
@@ -49,6 +51,7 @@ protected:
     std::unique_ptr<FileMgmt::IAssetsManager> assetsManager;
     std::unique_ptr<Gui::IGuiManager> guiManager;
     std::shared_ptr<Core::IConfigManager> config;
+    std::unique_ptr<Events::IInputHandler> inputHandler;
 };
 
 }

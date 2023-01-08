@@ -26,6 +26,7 @@ target_link_libraries(${MODULE_NAME}
 PUBLIC
     Core
     Gui
+    Events
     ${SFML_LIBS})
 
 set(STATES_EXCLUDES

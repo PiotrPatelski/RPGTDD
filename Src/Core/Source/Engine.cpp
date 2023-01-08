@@ -56,11 +56,7 @@ void Engine::launchWindow(const FileMgmt::GraphicsConfig& config)
 
 void Engine::runInitialState(std::shared_ptr<ConfigManager> configManager)
 {
-    stateMachine->runState(std::make_shared<States::MainMenuState>(
-        configManager,
-        std::make_unique<FileMgmt::MainMenuAssetsManager>(),
-        std::make_unique<Gui::MainMenuGuiManager>(configManager->getGraphics().resolution)
-    ));
+    stateMachine->setState(Events::ToMainMenuState()(configManager));
 }
 
 }

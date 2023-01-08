@@ -13,7 +13,7 @@ public:
     IGuiManager(){}
     virtual ~IGuiManager(){}
 
-    virtual std::map<std::string, std::unique_ptr<IButton>> createButtons(const sf::Font&) = 0;
+    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) = 0;
 };
 
 class MainMenuGuiManager : public IGuiManager
@@ -23,10 +23,10 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"MainMenuGuiManager"<<std::endl;}
     virtual ~MainMenuGuiManager(){}
 
-    virtual std::map<std::string, std::unique_ptr<IButton>> createButtons(const sf::Font&) override;
+    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override;
 private:
     MainMenuButtonBuilder buttonBuilder;
-    std::map<std::string, std::unique_ptr<IButton>> buttons;
+    std::vector<std::unique_ptr<IButton>> buttons;
 };
 
 class GameGuiManager : public IGuiManager
@@ -36,7 +36,7 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"GameGuiManager"<<std::endl;}
     virtual ~GameGuiManager(){}
 
-    virtual std::map<std::string, std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
+    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
 private:
     GameButtonBuilder buttonBuilder;
 };
@@ -48,7 +48,7 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"EditorGuiManager"<<std::endl;}
     virtual ~EditorGuiManager(){}
 
-    virtual std::map<std::string, std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
+    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
 private:
     EditorButtonBuilder buttonBuilder;
 };
@@ -60,7 +60,7 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"SettingsGuiManager"<<std::endl;}
     virtual ~SettingsGuiManager(){}
 
-    virtual std::map<std::string, std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
+    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
 private:
     SettingsButtonBuilder buttonBuilder;
 };

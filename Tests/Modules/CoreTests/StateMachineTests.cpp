@@ -27,21 +27,21 @@ TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
 
 TEST_F(StateMachineTest, stateMachineHasNotFinishedItsWorkWhenStateIsActive)
 {
-    sut->runState(activeState);
+    sut->setState(activeState);
     ASSERT_FALSE(sut->isNoStateActive());
 }
 
 TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
 {
     EXPECT_CALL(*activeState, update(_, _));
-    sut->runState(activeState);
+    sut->setState(activeState);
     sut->update(dummyMousePos, 0.f);
 }
 
 TEST_F(StateMachineTest, stateMachineChecksIfActiveStateIsDoneWhenUpdated)
 {
     EXPECT_CALL(*activeState, isDone());
-    sut->runState(activeState);
+    sut->setState(activeState);
     sut->update(dummyMousePos, 0.f);
 }
 
@@ -50,7 +50,7 @@ TEST_F(StateMachineTest, stateMachineReadsNextStateWhenCurrentStateIsDone)
 
     ON_CALL(*activeState, isDone()).WillByDefault(Return(true));
     EXPECT_CALL(*activeState, getNextState()).WillOnce(Return(ByMove(std::move(nextState))));
-    sut->runState(activeState);
+    sut->setState(activeState);
     sut->update(dummyMousePos, 0.f);
 }
 
@@ -58,13 +58,13 @@ TEST_F(StateMachineTest, stateMachineDoesNotReadNextStateWhenCurrentStateIsNotDo
 {
     ON_CALL(*activeState, isDone()).WillByDefault(Return(false));
     EXPECT_CALL(*activeState, getNextState()).Times(0);
-    sut->runState(activeState);
+    sut->setState(activeState);
     sut->update(dummyMousePos, 0.f);
 }
 
 TEST_F(StateMachineTest, stateMachineReturnsValidStateWhenRunsOne)
 {
-    sut->runState(activeState);
+    sut->setState(activeState);
     EXPECT_NE(sut->getCurrentState(), nullptr);
 }
 

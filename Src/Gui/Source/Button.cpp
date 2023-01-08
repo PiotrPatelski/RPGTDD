@@ -19,14 +19,16 @@ MainMenuButton::MainMenuButton(
     const EventColor& idleColors,
     const EventColor& hoverColors,
     const EventColor& activeColors,
-    std::unique_ptr<IButtonEventHandler> eventHandler)
+    std::unique_ptr<Events::IButtonEventHandler> eventHandler,
+    const Events::StateChangeAction& action)
 : textContent(textContent, font),
   position(position),
   size(size),
   idleColors(idleColors),
   hoverColors(hoverColors),
   activeColors(activeColors),
-  eventHandler(std::move(eventHandler))
+  eventHandler(std::move(eventHandler)),
+  action(action)
 {
     initBackground();
     initText(characterSize);

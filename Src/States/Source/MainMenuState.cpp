@@ -10,11 +10,13 @@ namespace States
 MainMenuState::MainMenuState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
-    std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
+    std::unique_ptr<Gui::MainMenuGuiManager> guiManager,
+    std::unique_ptr<Events::MainMenuInputHandler> inputHandler)
     : State(
         config,
         std::move(assetsManager),
-        std::move(guiManager))
+        std::move(guiManager),
+        std::move(inputHandler))
 {
     initBackground();
     initFont();
@@ -38,47 +40,19 @@ void MainMenuState::initFont()
 
 void MainMenuState::update(const sf::Vector2i& mousePosOnWindow, const float deltaTime)
 {
-    for(auto& [_, button] : buttons)
-        button->update(mousePosOnWindow);
-    if (buttons.at("GAME_STATE")->isPressed())
-	{
-		nextState = std::make_unique<GameState>(
-            config,
-            std::make_unique<FileMgmt::GameAssetsManager>(),
-            std::make_unique<Gui::GameGuiManager>(config->getGraphics().resolution));
-        markAsDone();
-        return;
-	}
-	if (buttons.at("SETTINGS_STATE")->isPressed())
-	{
-		nextState = std::make_unique<SettingsState>(
-            config,
-            std::make_unique<FileMgmt::SettingsAssetsManager>(),
-            std::make_unique<Gui::SettingsGuiManager>(config->getGraphics().resolution));
-        markAsDone();
-        return;
-	}
-	if (buttons.at("EDITOR_STATE")->isPressed())
-	{
-		nextState = std::make_unique<EditorState>(
-            config,
-            std::make_unique<FileMgmt::EditorAssetsManager>(),
-            std::make_unique<Gui::EditorGuiManager>(config->getGraphics().resolution));
-        markAsDone();
-        return;
-	}
-	if (buttons.at("EXIT_STATE")->isPressed())
+    for(auto& button : buttons)
     {
-        nextState.reset();
-        markAsDone();
-        return;
+        button->update(mousePosOnWindow);
+        nextState = inputHandler->getNextStateOnActiveButton(*button);
+        if(nextState != nullptr)
+            return;
     }
 }
 
 void MainMenuState::drawOutput(Core::IWindow& window)
 {
     window.draw(*background);
-    for(const auto& [_, button] : buttons)
+    for(const auto& button : buttons)
     {
         window.draw(button->getBackground());
         window.draw(button->getTextContent());

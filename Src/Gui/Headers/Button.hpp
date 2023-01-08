@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <ButtonEventHandler.hpp>
+#include <ButtonActions.hpp>
 
 namespace Gui
 {
@@ -23,6 +24,9 @@ public:
     virtual const bool isPressed() const = 0;
     virtual void update(const sf::Vector2i&) = 0;
 
+    //TODO: MOVE METHOD TO SEPARATE INTERFACE
+    virtual Events::StateChangeAction getAction() const = 0;
+    //
     virtual sf::Text getTextContent() const = 0;
     virtual sf::Vector2f getPosition() const = 0;
     virtual sf::Vector2f getSize() const = 0;
@@ -38,15 +42,18 @@ public:
         const sf::Vector2f&,
         const std::string&,
         const sf::Font&,
-        const uint characterSize,
+        const uint,
         const EventColor&,
         const EventColor&,
         const EventColor&,
-        std::unique_ptr<IButtonEventHandler>);
+        std::unique_ptr<Events::IButtonEventHandler>,
+        const Events::StateChangeAction&);
     virtual ~MainMenuButton(){}
 
     virtual inline const bool isPressed() const override {return active;}
     virtual void update(const sf::Vector2i&) override;
+
+    virtual Events::StateChangeAction getAction() const override {return action;}
 
     virtual inline sf::Text getTextContent() const override {return textContent;}
     virtual inline sf::Vector2f getPosition() const override {return position;}
@@ -66,7 +73,8 @@ private:
     EventColor idleColors;
     EventColor hoverColors;
     EventColor activeColors;
-    std::unique_ptr<IButtonEventHandler> eventHandler;
+    std::unique_ptr<Events::IButtonEventHandler> eventHandler;
+    Events::StateChangeAction action;
 };
 
 }
