@@ -57,4 +57,22 @@ TEST_F(SettingsGuiManagerTest, settingsGuiManagerWillCreateMapOfValidStateChangi
     ASSERT_EQ(buttons[0].object->getTextContent().getString(), "Back");
 }
 
+TEST_F(SettingsGuiManagerTest, settingsGuiManagerWillCreateMapOfSettingsButtonsWithTextColorSet)
+{
+    auto buttons = sut->createButtons(sf::Font{});
+    ASSERT_EQ(buttons[0].object->getTextContent().getFillColor(), sf::Color(70, 70, 70, 200));
+}
+
+TEST_F(SettingsGuiManagerTest, settingsGuiManagerWillCreateMapOfSettingsButtonsWithBackgroundColorSet)
+{
+    auto buttons = sut->createButtons(sf::Font{});
+    ASSERT_EQ(buttons[0].object->getBackground().getFillColor(), sf::Color(70, 70, 70, 50));
+}
+
+TEST_F(SettingsGuiManagerTest, settingsGuiManagerWillCreateMapOfSettingsButtonsWithOutlineColorSet)
+{
+    auto buttons = sut->createButtons(sf::Font{});
+    ASSERT_EQ(buttons[0].object->getBackground().getOutlineColor(), sf::Color::Transparent);
+}
+
 }
