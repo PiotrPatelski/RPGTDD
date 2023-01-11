@@ -18,10 +18,14 @@ public:
         std::unique_ptr<Events::SettingsInputHandler>);
     virtual ~SettingsState() = default;
 
-    virtual void update(const sf::Vector2i&, const float) override {}
-    virtual void drawOutput(Core::IWindow&) override {}
+    virtual void update(const sf::Vector2i&, const float) override;
+    virtual void drawOutput(Core::IWindow&) override;
+    inline std::shared_ptr<sf::RectangleShape> getBackground() const {return background;}
 private:
+    void initBackground();
 
+    std::shared_ptr<sf::RectangleShape> background;
+    std::vector<Gui::StateChangingButton> buttons;
 };
 
 }

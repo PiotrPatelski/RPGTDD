@@ -14,7 +14,7 @@ struct ButtonBuilderTest : public testing::Test
     {
         uint screenWidth = 1920;
         uint screenHeight = 1080;
-        sut = std::make_unique<MainMenuButtonBuilder>(sf::VideoMode(screenWidth, screenHeight));
+        sut = std::make_unique<ButtonBuilder>(sf::VideoMode(screenWidth, screenHeight));
     }
     std::unique_ptr<IButtonBuilder> sut;
 };

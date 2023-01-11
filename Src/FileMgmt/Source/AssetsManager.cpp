@@ -5,19 +5,19 @@ namespace FileMgmt
 
 std::string AssetsManager::buildPath = std::filesystem::current_path().string() + "/../build/";
 
-MainMenuAssetsManager::MainMenuAssetsManager()
+AssetsManager::AssetsManager()
 {
-    std::cout<<"MainMenuAssetsManager"<<std::endl;
-    mainMenuFont = std::make_shared<sf::Font>();
+    std::cout<<"AssetsManager"<<std::endl;
+    buttonFont = std::make_shared<sf::Font>();
     fetchFontFromFile();
-    mainMenuTexture = std::make_shared<sf::Texture>();
+    backgroundTexture = std::make_shared<sf::Texture>();
     fetchTextureFromFile();
 }
 
-void MainMenuAssetsManager::fetchTextureFromFile()
+void AssetsManager::fetchTextureFromFile()
 {
     const std::string texturePath = buildPath + "/Assets/Textures/MainMenu/menu.jpg";
-    if(not mainMenuTexture->loadFromFile(texturePath))
+    if(not backgroundTexture->loadFromFile(texturePath))
     {
         throw std::runtime_error(
             std::string("ERROR::cannot open texture file from given path: " + texturePath));
@@ -25,15 +25,15 @@ void MainMenuAssetsManager::fetchTextureFromFile()
     std::cout << "Initialized MainMenu Textures..." << std::endl;
 }
 
-std::shared_ptr<sf::Texture> MainMenuAssetsManager::getTexture() const
+std::shared_ptr<sf::Texture> AssetsManager::getTexture() const
 {
-    return mainMenuTexture;
+    return backgroundTexture;
 }
 
-void MainMenuAssetsManager::fetchFontFromFile()
+void AssetsManager::fetchFontFromFile()
 {
     const std::string fontPath = buildPath + "/Assets/Fonts/MainMenu/xbones.ttf";
-    if(not mainMenuFont->loadFromFile(fontPath))
+    if(not buttonFont->loadFromFile(fontPath))
     {
         throw std::runtime_error(
             std::string("ERROR::cannot open font file from given path: " + fontPath));
@@ -41,9 +41,9 @@ void MainMenuAssetsManager::fetchFontFromFile()
     std::cout << "Initialized MainMenu Fonts..." << std::endl;
 }
 
-std::shared_ptr<sf::Font> MainMenuAssetsManager::getFont() const
+std::shared_ptr<sf::Font> AssetsManager::getFont() const
 {
-    return mainMenuFont;
+    return buttonFont;
 }
 
 }

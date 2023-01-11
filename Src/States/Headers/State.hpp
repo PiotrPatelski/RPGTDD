@@ -10,13 +10,6 @@
 namespace States
 {
 
-struct StateOutput
-{
-    std::shared_ptr<sf::RectangleShape> background;
-    std::vector<sf::RectangleShape> buttons;
-    std::vector<sf::Text> buttonTexts;
-};
-
 class IState
 {
 public:
@@ -26,7 +19,6 @@ public:
     virtual std::unique_ptr<IState> getNextState() = 0;
 
     virtual const bool isDone() const = 0;
-    virtual void markAsDone() = 0;
     virtual void update(const sf::Vector2i&, const float) = 0;
     virtual void drawOutput(Core::IWindow&) = 0;
 };
@@ -43,10 +35,8 @@ public:
 
     virtual std::unique_ptr<IState> getNextState() override {return std::move(nextState);}
 
-    virtual const bool isDone() const override {return done;}
-    virtual void markAsDone() override {done = true;}
+    virtual const bool isDone() const override {return inputHandler->isStateReadyToChange();}
 protected:
-    bool done{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<FileMgmt::IAssetsManager> assetsManager;
     std::unique_ptr<Gui::IGuiManager> guiManager;

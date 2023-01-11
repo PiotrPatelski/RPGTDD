@@ -15,7 +15,7 @@ class MainMenuGuiManagerMock : public MainMenuGuiManager
 public:
     MainMenuGuiManagerMock()
     : MainMenuGuiManager(sf::VideoMode()){}
-    MOCK_METHOD(std::vector<std::unique_ptr<IButton>>, createButtons, (const sf::Font&), (override));
+    MOCK_METHOD(std::vector<StateChangingButton>, createButtons, (const sf::Font&), (override));
 };
 
 class GameGuiManagerMock : public GameGuiManager
@@ -23,7 +23,7 @@ class GameGuiManagerMock : public GameGuiManager
 public:
     GameGuiManagerMock()
     : GameGuiManager(sf::VideoMode()){}
-    MOCK_METHOD(std::vector<std::unique_ptr<IButton>>, createButtons, (const sf::Font&), (override));
+    MOCK_METHOD(std::vector<StateChangingButton>, createButtons, (const sf::Font&), (override));
 };
 
 class SettingsGuiManagerMock : public SettingsGuiManager
@@ -31,7 +31,7 @@ class SettingsGuiManagerMock : public SettingsGuiManager
 public:
     SettingsGuiManagerMock()
     : SettingsGuiManager(sf::VideoMode()){}
-    MOCK_METHOD(std::vector<std::unique_ptr<IButton>>, createButtons, (const sf::Font&), (override));
+    MOCK_METHOD(std::vector<StateChangingButton>, createButtons, (const sf::Font&), (override));
 };
 
 class EditorGuiManagerMock : public EditorGuiManager
@@ -39,7 +39,7 @@ class EditorGuiManagerMock : public EditorGuiManager
 public:
     EditorGuiManagerMock()
     : EditorGuiManager(sf::VideoMode()){}
-    MOCK_METHOD(std::vector<std::unique_ptr<IButton>>, createButtons, (const sf::Font&), (override));
+    MOCK_METHOD(std::vector<StateChangingButton>, createButtons, (const sf::Font&), (override));
 };
 
 }

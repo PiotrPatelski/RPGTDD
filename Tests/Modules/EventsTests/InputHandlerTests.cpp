@@ -32,16 +32,16 @@ struct MainMenuInputHandlerTest : public testing::Test
 
     std::shared_ptr<Core::IConfigManager> configManager;
     std::unique_ptr<NiceMock<States::StateMock>> state = std::make_unique<NiceMock<States::StateMock>>();
-    NiceMock<Gui::ButtonMock> button;
+    std::unique_ptr<NiceMock<Gui::ButtonMock>> button = std::make_unique<NiceMock<Gui::ButtonMock>>();
 };
 
 TEST_F(MainMenuInputHandlerTest, handlerWillReturnNullptrButIsNotReadyToChangeStateWhenButtonIsNotPressed)
 {
     auto sut = std::make_unique<MainMenuInputHandler>(configManager);
-    EXPECT_CALL(button, isPressed()).WillOnce(Return(false));
-    EXPECT_CALL(button, getAction()).Times(0);
+    EXPECT_CALL(*button, isPressed()).WillOnce(Return(false));
 
-    auto nextState = sut->getNextStateOnActiveButton(button);
+    Gui::StateChangingButton actionButton{std::move(button), Events::ToGameState()};
+    auto nextState = sut->getNextStateOnActiveButton(actionButton);
     ASSERT_FALSE(sut->isStateReadyToChange());
     ASSERT_EQ(nextState, nullptr);
 }
@@ -49,10 +49,10 @@ TEST_F(MainMenuInputHandlerTest, handlerWillReturnNullptrButIsNotReadyToChangeSt
 TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidGameStateAndIsReadyToChangeToItWhenButtonIsPressed)
 {
     auto sut = std::make_unique<MainMenuInputHandler>(configManager);
-    EXPECT_CALL(button, isPressed()).WillOnce(Return(true));
-    EXPECT_CALL(button, getAction()).WillOnce(Return(Events::ToGameState()));
+    EXPECT_CALL(*button, isPressed()).WillOnce(Return(true));
 
-    auto nextState = sut->getNextStateOnActiveButton(button);
+    Gui::StateChangingButton actionButton{std::move(button), Events::ToGameState()};
+    auto nextState = sut->getNextStateOnActiveButton(actionButton);
     ASSERT_TRUE(sut->isStateReadyToChange());
     ASSERT_EQ(typeid(*nextState), typeid(States::GameState));
 }
@@ -60,10 +60,10 @@ TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidGameStateAndIsReadyToChan
 TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidMainMenuStateAndIsReadyToChangeToItWhenButtonIsPressed)
 {
     auto sut = std::make_unique<MainMenuInputHandler>(configManager);
-    EXPECT_CALL(button, isPressed()).WillOnce(Return(true));
-    EXPECT_CALL(button, getAction()).WillOnce(Return(Events::ToMainMenuState()));
+    EXPECT_CALL(*button, isPressed()).WillOnce(Return(true));
 
-    auto nextState = sut->getNextStateOnActiveButton(button);
+    Gui::StateChangingButton actionButton{std::move(button), Events::ToMainMenuState()};
+    auto nextState = sut->getNextStateOnActiveButton(actionButton);
     ASSERT_TRUE(sut->isStateReadyToChange());
     ASSERT_EQ(typeid(*nextState), typeid(States::MainMenuState));
 }
@@ -71,10 +71,10 @@ TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidMainMenuStateAndIsReadyTo
 TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidEditorStateAndIsReadyToChangeToItWhenButtonIsPressed)
 {
     auto sut = std::make_unique<MainMenuInputHandler>(configManager);
-    EXPECT_CALL(button, isPressed()).WillOnce(Return(true));
-    EXPECT_CALL(button, getAction()).WillOnce(Return(Events::ToEditorState()));
+    EXPECT_CALL(*button, isPressed()).WillOnce(Return(true));
 
-    auto nextState = sut->getNextStateOnActiveButton(button);
+    Gui::StateChangingButton actionButton{std::move(button), Events::ToEditorState()};
+    auto nextState = sut->getNextStateOnActiveButton(actionButton);
     ASSERT_TRUE(sut->isStateReadyToChange());
     ASSERT_EQ(typeid(*nextState), typeid(States::EditorState));
 }
@@ -82,10 +82,10 @@ TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidEditorStateAndIsReadyToCh
 TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidSettingsStateAndIsReadyToChangeToItWhenButtonIsPressed)
 {
     auto sut = std::make_unique<MainMenuInputHandler>(configManager);
-    EXPECT_CALL(button, isPressed()).WillOnce(Return(true));
-    EXPECT_CALL(button, getAction()).WillOnce(Return(Events::ToSettingsState()));
+    EXPECT_CALL(*button, isPressed()).WillOnce(Return(true));
 
-    auto nextState = sut->getNextStateOnActiveButton(button);
+    Gui::StateChangingButton actionButton{std::move(button), Events::ToSettingsState()};
+    auto nextState = sut->getNextStateOnActiveButton(actionButton);
     ASSERT_TRUE(sut->isStateReadyToChange());
     ASSERT_EQ(typeid(*nextState), typeid(States::SettingsState));
 }
@@ -93,10 +93,10 @@ TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidSettingsStateAndIsReadyTo
 TEST_F(MainMenuInputHandlerTest, handlerWillReturnValidExitStateAndIsReadyToToExitWhenButtonIsPressed)
 {
     auto sut = std::make_unique<MainMenuInputHandler>(configManager);
-    EXPECT_CALL(button, isPressed()).WillOnce(Return(true));
-    EXPECT_CALL(button, getAction()).WillOnce(Return(Events::ToExitState()));
+    EXPECT_CALL(*button, isPressed()).WillOnce(Return(true));
 
-    auto nextState = sut->getNextStateOnActiveButton(button);
+    Gui::StateChangingButton actionButton{std::move(button), Events::ToExitState()};
+    auto nextState = sut->getNextStateOnActiveButton(actionButton);
     ASSERT_TRUE(sut->isStateReadyToChange());
     ASSERT_EQ(nextState, nullptr);
 }

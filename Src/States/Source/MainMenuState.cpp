@@ -19,8 +19,7 @@ MainMenuState::MainMenuState(
         std::move(inputHandler))
 {
     initBackground();
-    initFont();
-    buttons = this->guiManager->createButtons(*font);
+    buttons = this->guiManager->createButtons(*(State::assetsManager->getFont()));
 }
 
 void MainMenuState::initBackground()
@@ -33,17 +32,12 @@ void MainMenuState::initBackground()
     background->setTexture(State::assetsManager->getTexture().get());
 }
 
-void MainMenuState::initFont()
-{
-    font = State::assetsManager->getFont();
-}
-
 void MainMenuState::update(const sf::Vector2i& mousePosOnWindow, const float deltaTime)
 {
     for(auto& button : buttons)
     {
-        button->update(mousePosOnWindow);
-        nextState = inputHandler->getNextStateOnActiveButton(*button);
+        button.object->update(mousePosOnWindow);
+        nextState = inputHandler->getNextStateOnActiveButton(button);
         if(nextState != nullptr)
             return;
     }
@@ -54,8 +48,8 @@ void MainMenuState::drawOutput(Core::IWindow& window)
     window.draw(*background);
     for(const auto& button : buttons)
     {
-        window.draw(button->getBackground());
-        window.draw(button->getTextContent());
+        window.draw(button.object->getBackground());
+        window.draw(button.object->getTextContent());
     }
 }
 

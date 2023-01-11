@@ -17,8 +17,6 @@ public:
     MOCK_METHOD(void, drawOutput, (Core::IWindow&), (override));
     MOCK_METHOD(void, update, (const sf::Vector2i&, const float), (override));
     MOCK_METHOD(const bool, isDone, (), (const override));
-    MOCK_METHOD(void, markAsDone, (), (override));
-
 };
 
 }

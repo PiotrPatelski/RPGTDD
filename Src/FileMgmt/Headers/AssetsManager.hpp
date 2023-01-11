@@ -18,58 +18,55 @@ public:
 class AssetsManager : public IAssetsManager
 {
 public:
-    AssetsManager(){}
+    AssetsManager();
     virtual ~AssetsManager(){}
 
     static void setBuildPath(const std::string& path) {buildPath = path;}
+    virtual std::shared_ptr<sf::Font> getFont() const override;
+    virtual std::shared_ptr<sf::Texture> getTexture() const override;
 protected:
     static std::string buildPath;
+    std::shared_ptr<sf::Font> buttonFont;
+    std::shared_ptr<sf::Texture> backgroundTexture;
+private:
+    virtual void fetchFontFromFile();
+    virtual void fetchTextureFromFile();
 };
 
 class MainMenuAssetsManager : public AssetsManager
 {
 public:
-    MainMenuAssetsManager();
+    MainMenuAssetsManager()
+    : AssetsManager()
+    {std::cout<<"MainMenuAssetsManager"<<std::endl;}
     virtual ~MainMenuAssetsManager(){}
-
-    virtual std::shared_ptr<sf::Font> getFont() const override;
-    virtual std::shared_ptr<sf::Texture> getTexture() const override;
-private:
-    virtual void fetchFontFromFile();
-    virtual void fetchTextureFromFile();
-
-    std::shared_ptr<sf::Font> mainMenuFont;
-    std::shared_ptr<sf::Texture> mainMenuTexture;
 };
 
 class GameAssetsManager : public AssetsManager
 {
 public:
-    GameAssetsManager(){std::cout<<"GameAssetsManager"<<std::endl;}
+    GameAssetsManager()
+    : AssetsManager()
+    {std::cout<<"GameAssetsManager"<<std::endl;}
     virtual ~GameAssetsManager(){}
-
-    virtual std::shared_ptr<sf::Font> getFont() const override {return std::make_shared<sf::Font>();}
-    virtual std::shared_ptr<sf::Texture> getTexture() const override {return std::make_shared<sf::Texture>();}
 };
 
 class EditorAssetsManager : public AssetsManager
 {
 public:
-    EditorAssetsManager(){std::cout<<"EditorAssetsManager"<<std::endl;}
+    EditorAssetsManager()
+    : AssetsManager()
+    {std::cout<<"EditorAssetsManager"<<std::endl;}
     virtual ~EditorAssetsManager(){}
-
-    virtual std::shared_ptr<sf::Font> getFont() const override {return std::make_shared<sf::Font>();}
-    virtual std::shared_ptr<sf::Texture> getTexture() const override {return std::make_shared<sf::Texture>();}
 };
 
 class SettingsAssetsManager : public AssetsManager
 {
 public:
-    SettingsAssetsManager(){std::cout<<"SettingsAssetsManager"<<std::endl;}
+    SettingsAssetsManager()
+    : AssetsManager()
+    {std::cout<<"SettingsAssetsManager"<<std::endl;}
     virtual ~SettingsAssetsManager(){}
-
-    virtual std::shared_ptr<sf::Font> getFont() const override {return std::make_shared<sf::Font>();}
-    virtual std::shared_ptr<sf::Texture> getTexture() const override {return std::make_shared<sf::Texture>();}
 };
 
 }

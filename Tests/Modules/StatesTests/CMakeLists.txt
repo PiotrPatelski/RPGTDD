@@ -1,6 +1,8 @@
 set(MODULE_NAME StatesTests)
 
-set(SOURCES StatesTests.cpp)
+set(SOURCES
+    MainMenuStateTests.cpp
+    SettingsStateTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 

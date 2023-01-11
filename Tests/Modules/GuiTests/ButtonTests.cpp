@@ -45,8 +45,7 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsTextContent)
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler),
-        dummyAction);
+        std::move(eventHandler));
     ASSERT_EQ(sut->getTextContent().getString(), "Test");
 }
 
@@ -62,8 +61,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersect
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler),
-        dummyAction);
+        std::move(eventHandler));
     sut->update(sf::Vector2i{280, 280});
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_IDLE_COLORS.background);
 }
@@ -81,8 +79,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler),
-        dummyAction);
+        std::move(eventHandler));
     sut->update(sf::Vector2i{55, 55});
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_HOVER_COLORS.background);
 }
@@ -100,8 +97,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWi
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler),
-        dummyAction);
+        std::move(eventHandler));
     sut->update(sf::Vector2i{55, 55});
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_ACTIVE_COLORS.background);
 }

@@ -21,7 +21,7 @@ public:
 	virtual ~IInputHandler(){}
 
     virtual const bool isStateReadyToChange() const = 0;
-	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::IButton&) = 0;
+	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::StateChangingButton&) = 0;
 };
 
 class InputHandler : public IInputHandler
@@ -42,7 +42,7 @@ public:
 	MainMenuInputHandler(std::shared_ptr<Core::IConfigManager>);
 	virtual ~MainMenuInputHandler(){}
 
-	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::IButton&) override;
+	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::StateChangingButton&) override;
 };
 
 class GameInputHandler : public InputHandler
@@ -51,7 +51,7 @@ public:
 	GameInputHandler(std::shared_ptr<Core::IConfigManager>);
 	virtual ~GameInputHandler(){}
 
-	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::IButton&) override;
+	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::StateChangingButton&) override;
 };
 
 class EditorInputHandler : public InputHandler
@@ -60,7 +60,7 @@ public:
 	EditorInputHandler(std::shared_ptr<Core::IConfigManager>);
 	virtual ~EditorInputHandler(){}
 
-	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::IButton&) override;
+	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::StateChangingButton&) override;
 };
 
 class SettingsInputHandler : public InputHandler
@@ -69,7 +69,7 @@ public:
 	SettingsInputHandler(std::shared_ptr<Core::IConfigManager>);
 	virtual ~SettingsInputHandler(){}
 
-	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::IButton&) override;
+	virtual std::unique_ptr<States::IState> getNextStateOnActiveButton(const Gui::StateChangingButton&) override;
 };
 
 }

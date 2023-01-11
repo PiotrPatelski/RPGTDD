@@ -13,7 +13,7 @@ public:
     IGuiManager(){}
     virtual ~IGuiManager(){}
 
-    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) = 0;
+    virtual std::vector<StateChangingButton> createButtons(const sf::Font&) = 0;
 };
 
 class MainMenuGuiManager : public IGuiManager
@@ -23,10 +23,10 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"MainMenuGuiManager"<<std::endl;}
     virtual ~MainMenuGuiManager(){}
 
-    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override;
+    virtual std::vector<StateChangingButton> createButtons(const sf::Font&) override;
 private:
-    MainMenuButtonBuilder buttonBuilder;
-    std::vector<std::unique_ptr<IButton>> buttons;
+    ButtonBuilder buttonBuilder;
+    std::vector<StateChangingButton> buttons;
 };
 
 class GameGuiManager : public IGuiManager
@@ -36,9 +36,9 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"GameGuiManager"<<std::endl;}
     virtual ~GameGuiManager(){}
 
-    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
+    virtual std::vector<StateChangingButton> createButtons(const sf::Font&) override {};
 private:
-    GameButtonBuilder buttonBuilder;
+    ButtonBuilder buttonBuilder;
 };
 
 class EditorGuiManager : public IGuiManager
@@ -48,9 +48,9 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"EditorGuiManager"<<std::endl;}
     virtual ~EditorGuiManager(){}
 
-    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
+    virtual std::vector<StateChangingButton> createButtons(const sf::Font&) override {};
 private:
-    EditorButtonBuilder buttonBuilder;
+    ButtonBuilder buttonBuilder;
 };
 
 class SettingsGuiManager : public IGuiManager
@@ -60,9 +60,10 @@ public:
         : buttonBuilder(screenResolution){std::cout<<"SettingsGuiManager"<<std::endl;}
     virtual ~SettingsGuiManager(){}
 
-    virtual std::vector<std::unique_ptr<IButton>> createButtons(const sf::Font&) override {};
+    virtual std::vector<StateChangingButton> createButtons(const sf::Font&) override;
 private:
-    SettingsButtonBuilder buttonBuilder;
+    ButtonBuilder buttonBuilder;
+    std::vector<StateChangingButton> buttons;
 };
 
 

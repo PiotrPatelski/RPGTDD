@@ -25,17 +25,13 @@ uint calculateFontSize(const sf::VideoMode& screenResolution)
 }
 
 ButtonBuilder::ButtonBuilder(const sf::VideoMode& resolution)
-: screenResolution(resolution)
-{}
-
-MainMenuButtonBuilder::MainMenuButtonBuilder(const sf::VideoMode& resolution)
-: ButtonBuilder(resolution),
+: screenResolution(resolution),
   idleColors(DEFAULT_IDLE_COLORS),
   hoverColors(DEFAULT_HOVER_COLORS),
   activeColors(DEFAULT_ACTIVE_COLORS)
 {}
 
-std::unique_ptr<IButton> MainMenuButtonBuilder::build()
+std::unique_ptr<IButton> ButtonBuilder::build()
 {
     std::unique_ptr<IButton> button = std::make_unique<MainMenuButton>(
         position,
@@ -46,19 +42,19 @@ std::unique_ptr<IButton> MainMenuButtonBuilder::build()
         idleColors,
         hoverColors,
         activeColors,
-        std::make_unique<Events::ButtonEventHandler>(),
-        action);
+        std::make_unique<Events::ButtonEventHandler>());
+        // action);
 
     return button;
 }
 
-IButtonBuilder& MainMenuButtonBuilder::withTextContent(const std::string& text)
+ButtonBuilder& ButtonBuilder::withTextContent(const std::string& text)
 {
     textContent = text;
     return *this;
 }
 
-IButtonBuilder& MainMenuButtonBuilder::atPosition(const float x, const float y)
+ButtonBuilder& ButtonBuilder::atPosition(const float x, const float y)
 {
     const float xPixels = ScreenPercentage(screenResolution).toPixelsOnX(x);
     const float yPixels = ScreenPercentage(screenResolution).toPixelsOnY(y);
@@ -66,7 +62,7 @@ IButtonBuilder& MainMenuButtonBuilder::atPosition(const float x, const float y)
     return *this;
 }
 
-IButtonBuilder& MainMenuButtonBuilder::withSize(const float width, const float height)
+ButtonBuilder& ButtonBuilder::withSize(const float width, const float height)
 {
     const float widthPixels = ScreenPercentage(screenResolution).toPixelsOnX(width);
     const float heightPixels = ScreenPercentage(screenResolution).toPixelsOnY(height);
@@ -74,33 +70,10 @@ IButtonBuilder& MainMenuButtonBuilder::withSize(const float width, const float h
     return *this;
 }
 
-IButtonBuilder& MainMenuButtonBuilder::withFont(const sf::Font& font)
+ButtonBuilder& ButtonBuilder::withFont(const sf::Font& font)
 {
     this->font = font;
     return *this;
 }
 
-IButtonBuilder& MainMenuButtonBuilder::withAction(const Events::StateChangeAction& action)
-{
-    this->action = action;
-    return *this;
-}
-
-GameButtonBuilder::GameButtonBuilder(const sf::VideoMode& resolution)
-: ButtonBuilder(resolution)
-{
-    std::cout<<"GameButtonBuilder"<<std::endl;
-}
-
-EditorButtonBuilder::EditorButtonBuilder(const sf::VideoMode& resolution)
-: ButtonBuilder(resolution)
-{
-    std::cout<<"EditorButtonBuilder"<<std::endl;
-}
-
-SettingsButtonBuilder::SettingsButtonBuilder(const sf::VideoMode& resolution)
-: ButtonBuilder(resolution)
-{
-    std::cout<<"SettingsButtonBuilder"<<std::endl;
-}
 }
