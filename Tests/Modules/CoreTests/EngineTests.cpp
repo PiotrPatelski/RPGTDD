@@ -88,7 +88,7 @@ TEST_F(EngineTest, windowClosesWhenEngineCallsIt)
 TEST_F(EngineTest, stateWillNotBeUpdatedIfEngineDidntRunInitialState)
 {
     EXPECT_CALL(*window, handleSfmlEvents(_));
-    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(true));
+    EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(false));
     EXPECT_CALL(*window, isCurrentlyFocused()).Times(0);
     EXPECT_CALL(*window, getMousePosition()).Times(0);
     EXPECT_CALL(*clock, getDeltaTime()).Times(0);  
@@ -104,7 +104,7 @@ TEST_F(EngineTest, stateWillNotBeUpdatedIfEngineDidntRunInitialState)
 TEST_F(EngineTest, stateIsNotUpdatedIfWindowIsNotFocused)
 {
     EXPECT_CALL(*window, handleSfmlEvents(_));
-    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
+    EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*window, isCurrentlyFocused()).WillOnce(Return(false));
     EXPECT_CALL(*window, getMousePosition()).Times(0);
     EXPECT_CALL(*clock, getDeltaTime()).Times(0);
@@ -120,7 +120,7 @@ TEST_F(EngineTest, stateIsNotUpdatedIfWindowIsNotFocused)
 TEST_F(EngineTest, stateIsUpdatedIfEngineRunInitialState)
 {
     EXPECT_CALL(*window, handleSfmlEvents(_));
-    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
+    EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*window, isCurrentlyFocused()).WillOnce(Return(true));
     EXPECT_CALL(*window, getMousePosition());
     EXPECT_CALL(*clock, getDeltaTime());
@@ -138,7 +138,7 @@ TEST_F(EngineTest, windowClearsAndDisplaysButDoesNotDrawStateOutputWhenDisplayRe
 {
     std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
     EXPECT_CALL(*window, clear());
-    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(true));
+    EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(false));
     EXPECT_CALL(*stateMachine, getCurrentState()).Times(0);
     EXPECT_CALL(*activeState, drawOutput(_)).Times(0);
     EXPECT_CALL(*window, display());
@@ -155,7 +155,7 @@ TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFra
     std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
     auto background = std::make_shared<sf::RectangleShape>(sf::Vector2f(480, 480));
     EXPECT_CALL(*window, clear());
-    EXPECT_CALL(*stateMachine, isNoStateActive()).WillOnce(Return(false));
+    EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*stateMachine, getCurrentState()).WillOnce(Return(activeState));
     EXPECT_CALL(*activeState, drawOutput(_));
     EXPECT_CALL(*window, display());

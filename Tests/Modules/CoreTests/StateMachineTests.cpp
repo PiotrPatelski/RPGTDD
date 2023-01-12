@@ -22,13 +22,13 @@ struct StateMachineTest : public testing::Test
 
 TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
 {
-    ASSERT_TRUE(sut->isNoStateActive());
+    ASSERT_FALSE(sut->isAnyStateActive());
 }
 
 TEST_F(StateMachineTest, stateMachineHasNotFinishedItsWorkWhenStateIsActive)
 {
     sut->setState(activeState);
-    ASSERT_FALSE(sut->isNoStateActive());
+    ASSERT_TRUE(sut->isAnyStateActive());
 }
 
 TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)

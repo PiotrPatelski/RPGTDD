@@ -24,7 +24,7 @@ bool Engine::isWindowOpen()
 bool Engine::updateState()
 {
     window->handleSfmlEvents(sfmlEvent);
-    if(not stateMachine->isNoStateActive())
+    if(stateMachine->isAnyStateActive())
     {
         if(window->isCurrentlyFocused())
         {
@@ -44,7 +44,7 @@ void Engine::closeWindow()
 void Engine::displayRenderedFrame()
 {    
     window->clear();
-    if(not stateMachine->isNoStateActive())
+    if(stateMachine->isAnyStateActive())
         stateMachine->getCurrentState()->drawOutput(*window);
     window->display();
 }
