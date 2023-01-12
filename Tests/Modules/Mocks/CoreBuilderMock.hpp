@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <CoreBuilder.h>
+#include <CoreBuilder.hpp>
 
 namespace Core
 {

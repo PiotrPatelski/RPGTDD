@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Window.hpp>
-#include <Clock.h>
-#include <StateMachine.h>
+#include <Clock.hpp>
+#include <StateMachine.hpp>
 #include <AssetsManager.hpp>
 
 namespace Core

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Clock.h>
+#include <Clock.hpp>
 
 namespace Core
 {

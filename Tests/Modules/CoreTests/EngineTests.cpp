@@ -1,14 +1,14 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Engine.h>
+#include <Engine.hpp>
 #include <IniParser.hpp>
 #include "WindowMock.hpp"
-#include "ClockMock.h"
-#include "StateMachineMock.h"
-#include "EngineMock.h"
-#include "CoreBuilderMock.h"
-#include "AssetsManagerMock.h"
-#include "StateMock.h"
+#include "ClockMock.hpp"
+#include "StateMachineMock.hpp"
+#include "EngineMock.hpp"
+#include "CoreBuilderMock.hpp"
+#include "AssetsManagerMock.hpp"
+#include "StateMock.hpp"
 
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"

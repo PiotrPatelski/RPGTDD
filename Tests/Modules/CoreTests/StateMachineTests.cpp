@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <StateMachine.h>
-#include "StateMock.h"
+#include <StateMachine.hpp>
+#include "StateMock.hpp"
 
 
 namespace Core

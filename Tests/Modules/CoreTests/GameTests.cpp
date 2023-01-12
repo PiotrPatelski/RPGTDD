@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Game.h>
-#include "ClockMock.h"
-#include "EngineMock.h"
-#include "IniParserMock.h"
+#include <Game.hpp>
+#include "ClockMock.hpp"
+#include "EngineMock.hpp"
+#include "IniParserMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 

@@ -7,7 +7,7 @@
 #include <EditorState.hpp>
 #include <ConfigManagerMock.hpp>
 #include <ButtonMock.hpp>
-#include <StateMock.h>
+#include <StateMock.hpp>
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 

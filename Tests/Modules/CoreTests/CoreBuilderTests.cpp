@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <CoreBuilder.h>
+#include <CoreBuilder.hpp>
 #include <Window.hpp>
-#include <Clock.h>
-#include <StateMachine.h>
+#include <Clock.hpp>
+#include <StateMachine.hpp>
 
 namespace Core
 {

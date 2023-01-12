@@ -1,4 +1,4 @@
-#include <GameLoop.h>
+#include <GameLoop.hpp>
 
 namespace Core
 {

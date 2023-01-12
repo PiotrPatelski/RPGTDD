@@ -3,7 +3,7 @@
 #include <SettingsState.hpp>
 #include <ConfigManagerMock.hpp>
 #include <IniParser.hpp>
-#include "AssetsManagerMock.h"
+#include "AssetsManagerMock.hpp"
 #include "GuiManagerMock.hpp"
 #include "WindowMock.hpp"
 #include "ButtonMock.hpp"

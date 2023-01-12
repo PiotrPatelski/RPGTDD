@@ -1,7 +1,7 @@
-#include <GameLoop.h>
-#include <Game.h>
-#include <CoreBuilder.h>
-#include <StateMachine.h>
+#include <GameLoop.hpp>
+#include <Game.hpp>
+#include <CoreBuilder.hpp>
+#include <StateMachine.hpp>
 #include <iostream>
 
 int main(int argc, char* argv[])

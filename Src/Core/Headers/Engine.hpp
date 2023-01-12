@@ -3,7 +3,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <CoreBuilder.h>
+#include <CoreBuilder.hpp>
 #include <Config.hpp>
 
 namespace Core
