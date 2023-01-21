@@ -28,7 +28,7 @@ bool Engine::updateState()
     {
         if(window->isCurrentlyFocused())
         {
-            stateMachine->update(window->getMousePosition(), clock->getDeltaTime());
+            stateMachine->update(*window, clock->getDeltaTime());
         }
         return true;
     }
@@ -56,7 +56,13 @@ void Engine::launchWindow(const FileMgmt::GraphicsConfig& config)
 
 void Engine::runInitialState(std::shared_ptr<ConfigManager> configManager)
 {
-    stateMachine->setState(Events::ToMainMenuState()(configManager));
+    stateMachine->setState(
+        std::make_shared<States::MainMenuState>(
+            configManager,
+            std::make_unique<FileMgmt::MainMenuAssetsManager>(),
+            std::make_unique<Gui::MainMenuGuiManager>(
+                std::make_unique<Gui::ButtonBuilder>(configManager->getGraphics().resolution)
+            )));
 }
 
 }

@@ -6,45 +6,58 @@
 namespace Events
 {
 
-std::unique_ptr<States::IState> ToMainMenuState::operator()(std::shared_ptr<Core::IConfigManager> configManager)
+void ToMainMenuState::operator()(States::SettingsState& state)
 {
-    return std::make_unique<States::MainMenuState>(
-    configManager,
-    std::make_unique<FileMgmt::MainMenuAssetsManager>(),
-    std::make_unique<Gui::MainMenuGuiManager>(configManager->getGraphics().resolution),
-    std::make_unique<MainMenuInputHandler>(configManager));
+    auto config = state.getConfig();
+    state.setNextState(std::make_unique<States::MainMenuState>(
+        config,
+        std::make_unique<FileMgmt::MainMenuAssetsManager>(),
+        std::make_unique<Gui::MainMenuGuiManager>(
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
+        )));
+    state.finishState();
 }
 
-std::unique_ptr<States::IState> ToGameState::operator()(std::shared_ptr<Core::IConfigManager> configManager)
+void ToGameState::operator()(States::MainMenuState& state)
 {
-    return std::make_unique<States::GameState>(
-    configManager,
-    std::make_unique<FileMgmt::GameAssetsManager>(),
-    std::make_unique<Gui::GameGuiManager>(configManager->getGraphics().resolution),
-    std::make_unique<GameInputHandler>(configManager));
+    auto config = state.getConfig();
+    state.setNextState(std::make_unique<States::GameState>(
+        config,
+        std::make_unique<FileMgmt::GameAssetsManager>(),
+        std::make_unique<Gui::GameGuiManager>(
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
+        )));
+    state.finishState();
 }
 
-std::unique_ptr<States::IState> ToSettingsState::operator()(std::shared_ptr<Core::IConfigManager> configManager)
+void ToSettingsState::operator()(States::MainMenuState& state)
 {
-    return std::make_unique<States::SettingsState>(
-    configManager,
-    std::make_unique<FileMgmt::SettingsAssetsManager>(),
-    std::make_unique<Gui::SettingsGuiManager>(configManager->getGraphics().resolution),
-    std::make_unique<SettingsInputHandler>(configManager));
+    auto config = state.getConfig();
+    state.setNextState(std::make_unique<States::SettingsState>(
+        config,
+        std::make_unique<FileMgmt::SettingsAssetsManager>(),
+        std::make_unique<Gui::SettingsGuiManager>(
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
+        )));
+    state.finishState();
 }
 
-std::unique_ptr<States::IState> ToEditorState::operator()(std::shared_ptr<Core::IConfigManager> configManager)
+void ToEditorState::operator()(States::MainMenuState& state)
 {
-    return std::make_unique<States::EditorState>(
-    configManager,
-    std::make_unique<FileMgmt::EditorAssetsManager>(),
-    std::make_unique<Gui::EditorGuiManager>(configManager->getGraphics().resolution),
-    std::make_unique<EditorInputHandler>(configManager));
+    auto config = state.getConfig();
+    state.setNextState(std::make_unique<States::EditorState>(
+        config,
+        std::make_unique<FileMgmt::EditorAssetsManager>(),
+        std::make_unique<Gui::EditorGuiManager>(
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
+        )));
+    state.finishState();
 }
 
-std::unique_ptr<States::IState> ToExitState::operator()(std::shared_ptr<Core::IConfigManager> configManager)
+void ToExitState::operator()(States::MainMenuState& state)
 {
-    return nullptr;
+    state.setNextState(nullptr);
+    state.finishState();
 }
 
 }

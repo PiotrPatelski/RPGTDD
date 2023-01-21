@@ -1,13 +1,13 @@
 set(HEADERS
-    GameMock.h
+    GameMock.hpp
     WindowMock.hpp
-    ClockMock.h
-    StateMachineMock.h
-    StateMock.h
-    EngineMock.h
-    CoreBuilderMock.h
-    InputHandlerMock.hpp
-    AssetsManagerMock.h
+    ClockMock.hpp
+    StateMachineMock.hpp
+    StateMock.hpp
+    EngineMock.hpp
+    CoreBuilderMock.hpp
+    ButtonBuilderMock.hpp
+    AssetsManagerMock.hpp
     GuiManagerMock.hpp
     ConfigManagerMock.hpp
     ButtonEventHandlerMock.hpp)

@@ -14,14 +14,13 @@ public:
     EditorState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::EditorAssetsManager>,
-        std::unique_ptr<Gui::EditorGuiManager>,
-        std::unique_ptr<Events::EditorInputHandler>);
+        std::unique_ptr<Gui::EditorGuiManager>);
     virtual ~EditorState() = default;
 
-    virtual void update(const sf::Vector2i&, const float) override {}
+    virtual void update(const Core::IWindow& window, const float) override {}
     virtual void drawOutput(Core::IWindow&) override {}
 private:
-
+    std::unique_ptr<Gui::UserInterface> gui;
 };
 
 }

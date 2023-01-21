@@ -6,16 +6,13 @@ namespace States
 SettingsState::SettingsState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::SettingsAssetsManager> assetsManager,
-    std::unique_ptr<Gui::SettingsGuiManager> guiManager,
-    std::unique_ptr<Events::SettingsInputHandler> inputHandler)
+    std::unique_ptr<Gui::SettingsGuiManager> guiManager)
     : State(
         config,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputHandler))
+        std::move(assetsManager))
 {
     initBackground();
-    buttons = this->guiManager->createButtons(*(State::assetsManager->getFont()));
+    gui = guiManager->createGui(State::assetsManager->getFont());
 }
 
 void SettingsState::initBackground()
@@ -28,17 +25,13 @@ void SettingsState::initBackground()
     background->setTexture(State::assetsManager->getTexture().get());
 }
 
-void SettingsState::update(const sf::Vector2i&, const float)
+void SettingsState::update(const Core::IWindow&, const float)
 {}
 
 void SettingsState::drawOutput(Core::IWindow& window)
 {
     window.draw(*background);
-    for(const auto& button : buttons)
-    {
-        window.draw(button.object->getBackground());
-        window.draw(button.object->getTextContent());
-    }
+    gui->drawTo(window);
 }
 
 }

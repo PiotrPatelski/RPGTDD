@@ -65,9 +65,11 @@ TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithPixelSizeGivenInScreenPe
 
 TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithGivenFont)
 {
-    sf::Font font;
-    font.loadFromFile(std::string(TEST_PATH) + "/Assets/Fonts/MainMenu/xbones.ttf");
+    auto font = std::make_shared<sf::Font>();
+    font->loadFromFile(std::string(TEST_PATH) + "/Assets/Fonts/MainMenu/xbones.ttf");
     auto button = sut->withFont(font).build();
+    sut.reset();
+    font.reset();
     ASSERT_EQ(button->getFont().getInfo().family, "xBONES");
 }
 

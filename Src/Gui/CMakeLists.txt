@@ -4,12 +4,14 @@ set(SOURCES
     Source/Button.cpp
     Source/ButtonBuilder.cpp
     Source/GuiManager.cpp
+    Source/UserInterface.cpp
     )
 
 set(HEADERS
     Headers/Button.hpp
     Headers/ButtonBuilder.hpp
     Headers/GuiManager.hpp
+    Headers/UserInterface.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

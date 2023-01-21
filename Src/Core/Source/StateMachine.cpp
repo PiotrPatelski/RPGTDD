@@ -9,10 +9,10 @@ StateMachine::StateMachine()
 
 }
 
-void StateMachine::update(const sf::Vector2i& mousePosOnWindow, const float deltaTime)
+void StateMachine::update(const IWindow& window, const float deltaTime)
 {
-    activeState->update(mousePosOnWindow, deltaTime);
-    if(activeState->isDone())
+    activeState->update(window, deltaTime);
+    if(activeState->isReadyToChange())
     {
         setState(activeState->getNextState());
     }

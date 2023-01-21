@@ -10,12 +10,7 @@
 namespace Core
 {
 
-using ::testing::NiceMock;
-using ::testing::Test;
-using ::testing::Return;
-using ::testing::ReturnRef;
-using ::testing::A;
-using ::testing::_;
+using namespace ::testing;
 
 struct GameTest : public testing::Test
 {
@@ -46,14 +41,14 @@ TEST_F(GameTest, engineChecksIfWindowIsNotActive)
 
 TEST_F(GameTest, engineLaunchesWindowWhenCalledByGame)
 {
-    EXPECT_CALL(*engine, launchWindow(_));
+    EXPECT_CALL(*engine, launchWindow(A<const FileMgmt::GraphicsConfig&>()));
     sut = std::make_unique<Game>(std::move(engine));
     sut->openWindow();
 }
 
 TEST_F(GameTest, engineActivatesStateMachineWhenGameItsRun)
 {
-    EXPECT_CALL(*engine, runInitialState(_));
+    EXPECT_CALL(*engine, runInitialState(A<std::shared_ptr<ConfigManager>>()));
     sut = std::make_unique<Game>(std::move(engine));
     sut->startStateMachine();
 }

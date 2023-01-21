@@ -3,7 +3,7 @@ set(MODULE_NAME GuiTests)
 set(SOURCES
     ButtonTests.cpp
     ButtonBuilderTests.cpp
-    GuiManagerTests.cpp)
+    UserInterfaceTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 

@@ -28,12 +28,13 @@ ButtonBuilder::ButtonBuilder(const sf::VideoMode& resolution)
 : screenResolution(resolution),
   idleColors(DEFAULT_IDLE_COLORS),
   hoverColors(DEFAULT_HOVER_COLORS),
-  activeColors(DEFAULT_ACTIVE_COLORS)
+  activeColors(DEFAULT_ACTIVE_COLORS),
+  font(std::make_shared<sf::Font>())
 {}
 
-std::unique_ptr<IButton> ButtonBuilder::build()
+std::shared_ptr<IButton> ButtonBuilder::build()
 {
-    std::unique_ptr<IButton> button = std::make_unique<MainMenuButton>(
+    return std::make_shared<MainMenuButton>(
         position,
         size,
         textContent,
@@ -43,9 +44,6 @@ std::unique_ptr<IButton> ButtonBuilder::build()
         hoverColors,
         activeColors,
         std::make_unique<Events::ButtonEventHandler>());
-        // action);
-
-    return button;
 }
 
 ButtonBuilder& ButtonBuilder::withTextContent(const std::string& text)
@@ -70,7 +68,7 @@ ButtonBuilder& ButtonBuilder::withSize(const float width, const float height)
     return *this;
 }
 
-ButtonBuilder& ButtonBuilder::withFont(const sf::Font& font)
+ButtonBuilder& ButtonBuilder::withFont(const std::shared_ptr<sf::Font> font)
 {
     this->font = font;
     return *this;

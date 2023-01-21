@@ -16,11 +16,7 @@
 namespace Core
 {
 
-using ::testing::NiceMock;
-using ::testing::Test;
-using ::testing::Return;
-using ::testing::ReturnRef;
-using ::testing::_;
+using namespace ::testing;
 
 struct EngineTest : public testing::Test
 {
@@ -65,7 +61,7 @@ TEST_F(EngineTest, engineWindowIsOpenWhenIsActiveIsTrue)
 
 TEST_F(EngineTest, windowIsOpenWhenEngineLaunchesIt)
 {
-    EXPECT_CALL(*window, openWithSettings(_));
+    EXPECT_CALL(*window, openWithSettings(A<const FileMgmt::GraphicsConfig&>()));
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
@@ -122,7 +118,6 @@ TEST_F(EngineTest, stateIsUpdatedIfEngineRunInitialState)
     EXPECT_CALL(*window, handleSfmlEvents(_));
     EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*window, isCurrentlyFocused()).WillOnce(Return(true));
-    EXPECT_CALL(*window, getMousePosition());
     EXPECT_CALL(*clock, getDeltaTime());
     EXPECT_CALL(*stateMachine, update(_,_));
 
@@ -157,7 +152,7 @@ TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFra
     EXPECT_CALL(*window, clear());
     EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*stateMachine, getCurrentState()).WillOnce(Return(activeState));
-    EXPECT_CALL(*activeState, drawOutput(_));
+    EXPECT_CALL(*activeState, drawOutput(A<IWindow&>()));
     EXPECT_CALL(*window, display());
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));

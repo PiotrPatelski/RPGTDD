@@ -1,12 +1,10 @@
 set(MODULE_NAME Events)
 
 set(SOURCES
-    Source/InputHandler.cpp
     Source/ButtonActions.cpp
     )
 
 set(HEADERS
-    Headers/InputHandler.hpp
     Headers/ButtonEventHandler.hpp
     Headers/ButtonActions.hpp
     )

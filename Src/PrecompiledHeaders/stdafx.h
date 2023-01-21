@@ -24,5 +24,6 @@
 #include <functional>
 #include <stdexcept>
 #include <filesystem>
+#include <variant>
 
 #endif

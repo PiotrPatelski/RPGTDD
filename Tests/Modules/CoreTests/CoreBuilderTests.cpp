@@ -8,7 +8,6 @@
 namespace Core
 {
 
-
 struct CoreBuilderTest : public testing::Test
 {
     std::unique_ptr<ICoreBuilder> sut = std::make_unique<CoreBuilder>();

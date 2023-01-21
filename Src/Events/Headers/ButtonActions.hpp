@@ -3,40 +3,48 @@
 namespace States
 {
 class IState;
+class MainMenuState;
+class GameState;
+class SettingsState;
+class EditorState;
 }
-namespace Core
-{
-class IConfigManager;
-}
+
 namespace Events
 {
+using MainMenuAction = std::function<void(States::MainMenuState&)>;
+using GameStateAction = std::function<void(States::GameState&)>;
+using SettingsAction = std::function<void(States::SettingsState&)>;
+using EditorAction = std::function<void(States::EditorState&)>;
 
-class GameInputHandler;
-using StateChangeAction = std::function<std::unique_ptr<States::IState>(std::shared_ptr<Core::IConfigManager> configManager)>;
+using StateAction = std::variant<
+    MainMenuAction,
+    GameStateAction,
+    SettingsAction,
+    EditorAction>;
 
 struct ToMainMenuState
 {
-    std::unique_ptr<States::IState> operator()(std::shared_ptr<Core::IConfigManager> configManager);
+    void operator()(States::SettingsState&);
 };
 
 struct ToGameState
 {
-    std::unique_ptr<States::IState> operator()(std::shared_ptr<Core::IConfigManager> configManager);
+    void operator()(States::MainMenuState&);
 };
 
 struct ToSettingsState
 {
-    std::unique_ptr<States::IState> operator()(std::shared_ptr<Core::IConfigManager> configManager);
+    void operator()(States::MainMenuState&);
 };
 
 struct ToEditorState
 {
-    std::unique_ptr<States::IState> operator()(std::shared_ptr<Core::IConfigManager> configManager);
+    void operator()(States::MainMenuState&);
 };
 
 struct ToExitState
 {
-    std::unique_ptr<States::IState> operator()(std::shared_ptr<Core::IConfigManager> configManager);
+    void operator()(States::MainMenuState&);
 };
 
 }

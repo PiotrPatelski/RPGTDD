@@ -3,6 +3,7 @@
 #include <EditorState.hpp>
 #include <SettingsState.hpp>
 #include <IniParser.hpp>
+#include <Window.hpp>
 
 namespace States
 {
@@ -10,16 +11,13 @@ namespace States
 MainMenuState::MainMenuState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
-    std::unique_ptr<Gui::MainMenuGuiManager> guiManager,
-    std::unique_ptr<Events::MainMenuInputHandler> inputHandler)
+    std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
     : State(
         config,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputHandler))
+        std::move(assetsManager))
 {
     initBackground();
-    buttons = this->guiManager->createButtons(*(State::assetsManager->getFont()));
+    gui = guiManager->createGui(State::assetsManager->getFont());
 }
 
 void MainMenuState::initBackground()
@@ -32,25 +30,18 @@ void MainMenuState::initBackground()
     background->setTexture(State::assetsManager->getTexture().get());
 }
 
-void MainMenuState::update(const sf::Vector2i& mousePosOnWindow, const float deltaTime)
+void MainMenuState::update(const Core::IWindow& window, const float deltaTime)
 {
-    for(auto& button : buttons)
-    {
-        button.object->update(mousePosOnWindow);
-        nextState = inputHandler->getNextStateOnActiveButton(button);
-        if(nextState != nullptr)
-            return;
-    }
+    gui->update(window);
+    auto action = gui->getActiveAction();
+    if(action.has_value())
+        get<Events::MainMenuAction>(action.value())(*this);
 }
 
 void MainMenuState::drawOutput(Core::IWindow& window)
 {
     window.draw(*background);
-    for(const auto& button : buttons)
-    {
-        window.draw(button.object->getBackground());
-        window.draw(button.object->getTextContent());
-    }
+    gui->drawTo(window);
 }
 
 }

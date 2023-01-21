@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <ButtonEventHandler.hpp>
-#include <ButtonActions.hpp>
 
 namespace Gui
 {
@@ -38,12 +37,12 @@ public:
         const sf::Vector2f&,
         const sf::Vector2f&,
         const std::string&,
-        const sf::Font&,
+        const std::shared_ptr<sf::Font>,
         const uint,
         const EventColor&,
         const EventColor&,
         const EventColor&,
-        std::unique_ptr<Events::IButtonEventHandler>);// ,const Events::StateChangeAction&);
+        std::unique_ptr<Events::IButtonEventHandler>);
 
     virtual ~MainMenuButton(){}
 
@@ -61,26 +60,16 @@ private:
     void setColor(const EventColor&);
 
     bool active{false};
-    sf::Text textContent;
+
     sf::RectangleShape background;
     sf::Vector2f position;
     sf::Vector2f size;
+    std::shared_ptr<sf::Font> font;
+    sf::Text textContent;
     EventColor idleColors;
     EventColor hoverColors;
     EventColor activeColors;
     std::unique_ptr<Events::IButtonEventHandler> eventHandler;
 };
-
-struct StateChangingButton
-{
-    std::unique_ptr<Gui::IButton> object;
-    Events::StateChangeAction action;
-};
-//TODO:
-// struct InternalActionButton
-// {
-//     std::unique_ptr<Gui::IButton> button;
-//     Events::InternalAction action;
-// };
 
 }

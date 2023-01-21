@@ -11,12 +11,12 @@ set(SOURCES
     )
 
 set(HEADERS
-    Headers/Game.h
-    Headers/GameLoop.h
+    Headers/Game.hpp
+    Headers/GameLoop.hpp
     Headers/Window.hpp
-    Headers/Clock.h
-    Headers/StateMachine.h
-    Headers/Engine.h
+    Headers/Clock.hpp
+    Headers/StateMachine.hpp
+    Headers/Engine.hpp
     Headers/ConfigManager.hpp
     )
 
