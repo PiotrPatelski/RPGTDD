@@ -4,7 +4,7 @@
 namespace Gui
 {
 
-std::unique_ptr<Gui::UserInterface> MainMenuGuiManager::createGui(const std::shared_ptr<sf::Font> font)
+std::unique_ptr<Gui::IUserInterface> MainMenuGuiManager::createGui(const std::shared_ptr<sf::Font> font)
 {
     auto gui = std::make_unique<Gui::UserInterface>();
     std::cout<<"MainMenuGuiManager::createGui"<<std::endl;
@@ -32,15 +32,15 @@ std::unique_ptr<Gui::UserInterface> MainMenuGuiManager::createGui(const std::sha
     return std::move(gui);
 }
 
-std::unique_ptr<Gui::UserInterface> SettingsGuiManager::createGui(const std::shared_ptr<sf::Font> font)
+std::unique_ptr<Gui::IUserInterface> SettingsGuiManager::createGui(const std::shared_ptr<sf::Font> font)
 {
     auto gui = std::make_unique<Gui::UserInterface>();
     std::cout<<"SettingsGuiManager::createGui"<<std::endl;
     gui->addButton(buttonBuilder->
-            withTextContent("Back").withFont(font).
+            withTextContent("Apply").withFont(font).
             atPosition(72.f, 81.f).withSize(13.f, 6.f).
             build(),
-        Events::ToMainMenuState());
+        Events::ApplySettings());
 
     gui->addButton(buttonBuilder->
             withTextContent("Back").withFont(font).

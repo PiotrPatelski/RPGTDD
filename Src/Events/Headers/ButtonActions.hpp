@@ -47,4 +47,9 @@ struct ToExitState
     void operator()(States::MainMenuState&);
 };
 
+struct ApplySettings
+{
+    void operator()(States::SettingsState&);
+};
+
 }

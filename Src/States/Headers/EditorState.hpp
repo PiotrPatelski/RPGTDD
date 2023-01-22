@@ -20,7 +20,7 @@ public:
     virtual void update(const Core::IWindow& window, const float) override {}
     virtual void drawOutput(Core::IWindow&) override {}
 private:
-    std::unique_ptr<Gui::UserInterface> gui;
+    std::unique_ptr<Gui::IUserInterface> gui;
 };
 
 }

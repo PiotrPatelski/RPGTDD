@@ -16,7 +16,7 @@ using namespace ::testing;
 
 struct UserInterfaceTest : public testing::Test
 {
-    std::unique_ptr<UserInterface> sut;
+    std::unique_ptr<IUserInterface> sut;
     NiceMock<Core::WindowMock> window;
 };
 

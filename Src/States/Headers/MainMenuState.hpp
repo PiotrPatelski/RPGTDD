@@ -22,7 +22,7 @@ private:
     void initBackground();
 
     std::shared_ptr<sf::RectangleShape> background;
-    std::unique_ptr<Gui::UserInterface> gui;
+    std::unique_ptr<Gui::IUserInterface> gui;
 };
 
 }

@@ -91,7 +91,7 @@ TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
 {
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
-    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     auto callback = [](States::MainMenuState&){};
     gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
             withTextContent("testButton1").build(), callback);
@@ -117,7 +117,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsGameStateWhenGameStateButtonIsPres
     EXPECT_CALL(*(gameButton), update(_));
     EXPECT_CALL(*(gameButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(gameButton), Events::ToGameState());
 
     auto gameAssetsManager = std::make_unique<NiceMock<FileMgmt::GameAssetsManagerMock>>();
@@ -141,7 +141,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsSettingsStateWhenSettingsStateButt
     EXPECT_CALL(*(settingsButton), update(_));
     EXPECT_CALL(*(settingsButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(settingsButton), Events::ToSettingsState());
 
     auto settingsAssetsManager = std::make_unique<NiceMock<FileMgmt::SettingsAssetsManagerMock>>();
@@ -165,7 +165,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsEditorStateWhenEditorStateButtonIs
     EXPECT_CALL(*(editorButton), update(_));
     EXPECT_CALL(*(editorButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(editorButton), Events::ToEditorState());
 
     auto editorAssetsManager = std::make_unique<NiceMock<FileMgmt::EditorAssetsManagerMock>>();
@@ -189,7 +189,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsNullptrWhenExitStateButtonIsPresse
     EXPECT_CALL(*(exitButton), update(_));
     EXPECT_CALL(*(exitButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(exitButton), Events::ToExitState());
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));

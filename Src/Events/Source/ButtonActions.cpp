@@ -60,4 +60,16 @@ void ToExitState::operator()(States::MainMenuState& state)
     state.finishState();
 }
 
+void ApplySettings::operator()(States::SettingsState& state)
+{
+    auto config = state.getConfig();
+    state.setNextState(std::make_unique<States::SettingsState>(
+        config,
+        std::make_unique<FileMgmt::SettingsAssetsManager>(),
+        std::make_unique<Gui::SettingsGuiManager>(
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
+        )));
+    state.finishState();
+}
+
 }

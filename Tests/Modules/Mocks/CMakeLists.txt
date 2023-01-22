@@ -10,6 +10,7 @@ set(HEADERS
     AssetsManagerMock.hpp
     GuiManagerMock.hpp
     ConfigManagerMock.hpp
+    UserInterfaceMock.hpp
     ButtonEventHandlerMock.hpp)
 
 add_library(Mocks ${HEADERS})

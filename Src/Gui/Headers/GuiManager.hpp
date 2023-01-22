@@ -14,7 +14,7 @@ public:
     IGuiManager(){}
     virtual ~IGuiManager(){}
     
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) = 0;
+    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) = 0;
 };
 
 class MainMenuGuiManager : public IGuiManager
@@ -24,7 +24,7 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"MainMenuGuiManager"<<std::endl;}
     virtual ~MainMenuGuiManager(){}
 
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override;
+    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override;
 private:
     std::unique_ptr<IButtonBuilder> buttonBuilder;
 };
@@ -36,7 +36,7 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"GameGuiManager"<<std::endl;}
     virtual ~GameGuiManager(){}
 
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::UserInterface>();}
+    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::UserInterface>();}
 private:
     std::unique_ptr<IButtonBuilder> buttonBuilder;
 };
@@ -48,7 +48,7 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"EditorGuiManager"<<std::endl;}
     virtual ~EditorGuiManager(){}
 
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::UserInterface>();}
+    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::UserInterface>();}
 private:
     std::unique_ptr<IButtonBuilder> buttonBuilder;
 };
@@ -60,7 +60,7 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"SettingsGuiManager"<<std::endl;}
     virtual ~SettingsGuiManager(){}
 
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override;
+    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override;
 private:
     std::unique_ptr<IButtonBuilder> buttonBuilder;
 };

@@ -18,16 +18,28 @@ struct ActionButton
     Events::StateAction action;
 };
 
-class UserInterface
+class IUserInterface
+{
+public:
+    IUserInterface(){}
+    virtual ~IUserInterface(){}
+
+    virtual void addButton(std::shared_ptr<IButton>, Events::StateAction) = 0;
+    virtual std::optional<Events::StateAction> getActiveAction() = 0;
+    virtual void drawTo(Core::IWindow&) = 0;
+    virtual void update(const Core::IWindow&) = 0;
+};
+
+class UserInterface : public IUserInterface
 {
 public:
     UserInterface(){}
     virtual ~UserInterface(){}
 
-    virtual void addButton(std::shared_ptr<IButton> button, Events::StateAction action);
-    virtual std::optional<Events::StateAction> getActiveAction();
-    virtual void drawTo(Core::IWindow&);
-    virtual void update(const Core::IWindow&);
+    virtual void addButton(std::shared_ptr<IButton>, Events::StateAction) override;
+    virtual std::optional<Events::StateAction> getActiveAction() override;
+    virtual void drawTo(Core::IWindow&) override;
+    virtual void update(const Core::IWindow&) override;
 private:
     std::vector<ActionButton> buttons;
 };

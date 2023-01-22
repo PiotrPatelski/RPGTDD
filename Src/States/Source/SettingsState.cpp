@@ -25,8 +25,13 @@ void SettingsState::initBackground()
     background->setTexture(State::assetsManager->getTexture().get());
 }
 
-void SettingsState::update(const Core::IWindow&, const float)
-{}
+void SettingsState::update(const Core::IWindow& window, const float deltaTime)
+{
+    gui->update(window);
+    auto action = gui->getActiveAction();
+    if(action.has_value())
+        get<Events::SettingsAction>(action.value())(*this);
+}
 
 void SettingsState::drawOutput(Core::IWindow& window)
 {

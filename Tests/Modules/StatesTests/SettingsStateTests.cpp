@@ -7,6 +7,7 @@
 #include "GuiManagerMock.hpp"
 #include "WindowMock.hpp"
 #include "ButtonMock.hpp"
+#include "UserInterfaceMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -86,7 +87,7 @@ TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
 {
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
-    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
         withTextContent("testButton1").build()), Events::ToMainMenuState());
 
@@ -97,6 +98,61 @@ TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
         std::move(settingsGuiManager));
     EXPECT_CALL(*window, draw(A<const sf::Drawable&>())).Times(3);
     sut->drawOutput(*window);
+}
+
+TEST_F(SettingsStateTest, settingsStateUpdatesGuiProperly)
+{
+    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+
+    auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
+    EXPECT_CALL(*gui, update(A<const Core::IWindow&>()));
+    EXPECT_CALL(*gui, getActiveAction()).WillOnce(Return(
+        std::make_optional<Events::StateAction>([](States::SettingsState&){})));
+
+    EXPECT_CALL(*settingsGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
+    auto sut = std::make_unique<SettingsState>(
+        configManager,
+        std::move(settingsAssetsManager),
+        std::move(settingsGuiManager));
+    sut->update(*window, 0.f);
+}
+
+TEST_F(SettingsStateTest, settingsStateCallsActionReturnedByGui)
+{
+    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+
+    MockFunction<void(States::SettingsState&)> callback;
+    auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
+    EXPECT_CALL(*gui, update(A<const Core::IWindow&>()));
+    EXPECT_CALL(*gui, getActiveAction()).WillOnce(Return(
+        std::make_optional<Events::StateAction>(callback.AsStdFunction())));
+
+    EXPECT_CALL(*settingsGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
+    auto sut = std::make_unique<SettingsState>(
+        configManager,
+        std::move(settingsAssetsManager),
+        std::move(settingsGuiManager));
+    EXPECT_CALL(callback, Call(A<States::SettingsState&>()));
+    sut->update(*window, 0.f);
+}
+
+TEST_F(SettingsStateTest, settingsStateWontChangeStateIfNulloptIsReturnedByGui)
+{
+    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+
+    auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
+    EXPECT_CALL(*gui, update(A<const Core::IWindow&>()));
+    EXPECT_CALL(*gui, getActiveAction()).WillOnce(Return(
+        std::nullopt));
+
+    EXPECT_CALL(*settingsGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
+    auto sut = std::make_unique<SettingsState>(
+        configManager,
+        std::move(settingsAssetsManager),
+        std::move(settingsGuiManager));
+    sut->update(*window, 0.f);
+    ASSERT_EQ(sut->getNextState(), nullptr);
+    ASSERT_FALSE(sut->isReadyToChange());
 }
 
 }
