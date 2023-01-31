@@ -2,6 +2,7 @@
 
 #include <SFML/Window.hpp>
 #include <ButtonBuilder.hpp>
+#include <DropDownListBuilder.hpp>
 #include <UserInterface.hpp>
 
 
@@ -14,7 +15,7 @@ public:
     IGuiManager(){}
     virtual ~IGuiManager(){}
     
-    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) = 0;
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) = 0;
 };
 
 class MainMenuGuiManager : public IGuiManager
@@ -24,9 +25,14 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"MainMenuGuiManager"<<std::endl;}
     virtual ~MainMenuGuiManager(){}
 
-    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override;
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override;
 private:
+    void addToGameButton(const std::shared_ptr<sf::Font>);
+    void addToSettingsButton(const std::shared_ptr<sf::Font>);
+    void addToEditorButton(const std::shared_ptr<sf::Font>);
+    void addExitButton(const std::shared_ptr<sf::Font>);
     std::unique_ptr<IButtonBuilder> buttonBuilder;
+    std::unique_ptr<Gui::UserInterface> gui;
 };
 
 class GameGuiManager : public IGuiManager
@@ -36,7 +42,7 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"GameGuiManager"<<std::endl;}
     virtual ~GameGuiManager(){}
 
-    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::UserInterface>();}
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::MenuGui>();}
 private:
     std::unique_ptr<IButtonBuilder> buttonBuilder;
 };
@@ -48,7 +54,7 @@ public:
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"EditorGuiManager"<<std::endl;}
     virtual ~EditorGuiManager(){}
 
-    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::UserInterface>();}
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override {return std::make_unique<Gui::MenuGui>();}
 private:
     std::unique_ptr<IButtonBuilder> buttonBuilder;
 };
@@ -56,15 +62,24 @@ private:
 class SettingsGuiManager : public IGuiManager
 {
 public:
-    SettingsGuiManager(std::unique_ptr<IButtonBuilder> buttonBuilder)
-        : buttonBuilder(std::move(buttonBuilder)){std::cout<<"SettingsGuiManager"<<std::endl;}
+    SettingsGuiManager(
+        std::unique_ptr<IButtonBuilder> buttonBuilder,
+        std::unique_ptr<DropDownListBuilder> dropDownListBuilder)
+        : buttonBuilder(std::move(buttonBuilder)),
+          dropDownListBuilder(std::move(dropDownListBuilder))
+        {std::cout<<"SettingsGuiManager"<<std::endl;}
     virtual ~SettingsGuiManager(){}
 
-    virtual std::unique_ptr<Gui::IUserInterface> createGui(const std::shared_ptr<sf::Font>) override;
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override;
 private:
+    void addApplyButton(const std::shared_ptr<sf::Font>);
+    void addBackButton(const std::shared_ptr<sf::Font>);
+    void addResolutionList(const std::shared_ptr<sf::Font>);
+    void fillListWithResolutionModes(DropDownList&);
     std::unique_ptr<IButtonBuilder> buttonBuilder;
+    std::unique_ptr<DropDownListBuilder> dropDownListBuilder;
+    std::unique_ptr<Gui::UserInterface> gui;
 };
-
 
 
 }

@@ -38,7 +38,8 @@ void ToSettingsState::operator()(States::MenuState& state)
         config,
         std::make_unique<FileMgmt::SettingsAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
-            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)),
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution),
+            std::make_unique<Gui::MenuDropDownListBuilder>()),
         std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
     state.finishState();
 }
@@ -64,13 +65,29 @@ void ToExitState::operator()(States::MenuState& state)
 void ApplySettings::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
+    config->applyDiff();
     state.setNextState(std::make_unique<States::SettingsState>(
         config,
         std::make_unique<FileMgmt::SettingsAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
-            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)),
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution),
+            std::make_unique<Gui::MenuDropDownListBuilder>()),
         std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
     state.finishState();
+}
+
+SetResolutionTo::SetResolutionTo(const sf::VideoMode& mode)
+: value(mode)
+{}
+
+void SetResolutionTo::operator()(States::MenuState& state)
+{
+    auto targetResolution = value;
+    state.getConfig()->queueGraphicsRequest(
+        [targetResolution](FileMgmt::GraphicsConfig& diff)
+        {
+            diff.resolution = targetResolution;
+        });
 }
 
 }

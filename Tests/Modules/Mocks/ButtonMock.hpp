@@ -16,6 +16,7 @@ public:
     MOCK_METHOD(sf::Font, getFont, (), (const, override));
     MOCK_METHOD(sf::RectangleShape, getBackground, (), (const, override));
     MOCK_METHOD(void, update, (const sf::Vector2i&), (override));
+    MOCK_METHOD(std::unique_ptr<IButton>, clone, (const std::string&, const sf::Vector2f&), (override));
 };
 
 }

@@ -6,7 +6,7 @@ namespace States
 SettingsState::SettingsState(
     std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::SettingsAssetsManager> assetsManager,
-    std::unique_ptr<Gui::SettingsGuiManager> guiManager,
+    std::unique_ptr<Gui::IGuiManager> guiManager,
     std::unique_ptr<Events::IInputListener> inputListener)
     : MenuState(
         configManager,
@@ -29,7 +29,7 @@ void SettingsState::initBackground()
 
 void SettingsState::update(const Core::IWindow& window, const float deltaTime)
 {
-    gui->update(window);
+    gui->update(window.getMousePosition());
     auto action = gui->getActiveAction();
     if(action.has_value())
         get<Events::MenuAction>(action.value())(*this);

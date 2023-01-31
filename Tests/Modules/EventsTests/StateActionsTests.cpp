@@ -78,12 +78,22 @@ TEST_F(StateActionsTest, toExitStateActionWillFinishCurrentStateAndCreateExitSta
 TEST_F(StateActionsTest, applySettingsActionWillFinishCurrentStateAndCreateSettingsStateAsNextState)
 {
     auto state = NiceMock<States::MenuStateMock>();
-    EXPECT_CALL(*configManager, getGraphics()).WillRepeatedly(ReturnRef(graphicsConfig));
-    EXPECT_CALL(*configManager, getKeyboard()).WillOnce(ReturnRef(keyboardConfig));
+    ON_CALL(*configManager, getGraphics()).WillByDefault(ReturnRef(graphicsConfig));
+    ON_CALL(*configManager, getKeyboard()).WillByDefault(ReturnRef(keyboardConfig));
+    EXPECT_CALL(*configManager, applyDiff());
     EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
     EXPECT_CALL(state, setNextState(NotNull()));
     EXPECT_CALL(state, finishState());
     ASSERT_NO_THROW(Events::ApplySettings()(state));
+}
+
+TEST_F(StateActionsTest, setResolutionToActionWillQueueConfigsRequest)
+{
+    auto resolution = sf::VideoMode(480, 480);
+    auto state = NiceMock<States::MenuStateMock>();
+    EXPECT_CALL(*configManager, queueGraphicsRequest(A<std::function<void(FileMgmt::GraphicsConfig&)>>()));
+    EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
+    ASSERT_NO_THROW(Events::SetResolutionTo{resolution}(state));
 }
 
 }

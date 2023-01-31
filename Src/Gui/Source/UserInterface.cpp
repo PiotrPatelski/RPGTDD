@@ -5,35 +5,67 @@
 namespace Gui
 {
 
-void UserInterface::addButton(std::unique_ptr<IButton> button, Events::StateAction action)
+void MenuGui::addButton(std::unique_ptr<IButton> button, Events::StateAction action)
 {
     buttons.push_back(ActionButton{std::move(button), action});
 }
 
-std::optional<Events::StateAction> UserInterface::getActiveAction()
+void MenuGui::addDropDownList(std::unique_ptr<DropDownList> list)
 {
-    auto activeButton = std::find_if(begin(buttons), end(buttons), 
-        [](const Gui::ActionButton& button){return button.object->isPressed();});
-    if(activeButton != std::end(buttons))
-        return std::make_optional<Events::StateAction>(activeButton->action);
-    return std::nullopt;
+    dropDownLists.push_back(std::move(list));
 }
 
-void UserInterface::drawTo(Core::IWindow& window)
+std::optional<Events::StateAction> MenuGui::getActiveAction()
+{
+    auto action = pollActionFromButtons();
+    if(action == std::nullopt)
+        action = pollActionFromDropDownLists();
+    return action;
+}
+
+void MenuGui::drawTo(Core::IWindow& window)
 {
     for(const auto& button : buttons)
     {
         window.draw(button.object->getBackground());
         window.draw(button.object->getTextContent());
     }
+    for(auto& list : dropDownLists)
+    {
+        list->drawTo(window);
+    }
 }
 
-void UserInterface::update(const Core::IWindow& window)//TODO: we might need input from gameObj like player hp items etc. BUT i dont think we will need whole window. Mouse position should be enough
+void MenuGui::update(const sf::Vector2i& currentMousePos)
 {
     for (auto& button : buttons)
     {
-        button.object->update(window.getMousePosition());
+        button.object->update(currentMousePos);
     }
+    for (auto& list : dropDownLists)
+    {
+        list->update(currentMousePos);
+    }
+}
+
+std::optional<Events::StateAction> MenuGui::pollActionFromButtons()
+{
+    auto activeButton = std::find_if(begin(buttons), end(buttons),
+        [](const Gui::ActionButton& button){return button.object->isPressed();});
+    if(activeButton != std::end(buttons))
+        return std::make_optional<Events::StateAction>(activeButton->action);
+    return std::nullopt;
+}
+
+std::optional<Events::StateAction> MenuGui::pollActionFromDropDownLists()
+{
+    for (auto& list : dropDownLists)
+    {
+        auto action = list->getActiveAction();
+        if(action != std::nullopt)
+            return action;
+    }
+    return std::nullopt;
 }
 
 }

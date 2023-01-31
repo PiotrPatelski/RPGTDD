@@ -14,7 +14,7 @@ public:
     MainMenuState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::MainMenuAssetsManager>,
-        std::unique_ptr<Gui::MainMenuGuiManager>);
+        std::unique_ptr<Gui::IGuiManager>);
     virtual ~MainMenuState() = default;
 
     virtual void update(const Core::IWindow& window, const float) override;
@@ -24,7 +24,7 @@ private:
     void initBackground();
 
     std::shared_ptr<sf::RectangleShape> background;
-    std::unique_ptr<Gui::IUserInterface> gui;
+    std::unique_ptr<Gui::UserInterface> gui;
 };
 
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Window.hpp>
 
 namespace States
 {
@@ -13,10 +14,8 @@ using MenuAction = std::function<void(States::MenuState&)>;
 // using EditorAction = std::function<void(States::EditorState&)>;
 
 using StateAction = std::variant<
+    std::monostate,
     MenuAction>;
-    // GameStateAction,
-    // SettingsAction,
-    // EditorAction>;
 
 struct ToMainMenuState
 {
@@ -46,6 +45,14 @@ struct ToExitState
 struct ApplySettings
 {
     void operator()(States::MenuState&);
+};
+
+struct SetResolutionTo
+{
+    SetResolutionTo(const sf::VideoMode&);
+    void operator()(States::MenuState&);
+private:
+    sf::VideoMode value;
 };
 
 }

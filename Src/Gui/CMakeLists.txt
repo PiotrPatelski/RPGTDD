@@ -5,6 +5,8 @@ set(SOURCES
     Source/ButtonBuilder.cpp
     Source/GuiManager.cpp
     Source/UserInterface.cpp
+    Source/DropDownList.cpp
+    Source/DropDownListBuilder.cpp
     )
 
 set(HEADERS
@@ -12,6 +14,8 @@ set(HEADERS
     Headers/ButtonBuilder.hpp
     Headers/GuiManager.hpp
     Headers/UserInterface.hpp
+    Headers/DropDownList.hpp
+    Headers/DropDownListBuilder.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

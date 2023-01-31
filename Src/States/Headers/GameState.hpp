@@ -16,13 +16,13 @@ public:
     GameState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::GameAssetsManager>,
-        std::unique_ptr<Gui::GameGuiManager>);
+        std::unique_ptr<Gui::IGuiManager>);
     virtual ~GameState() = default;
 
     virtual void update(const Core::IWindow& window, const float) override {}
     virtual void drawOutput(Core::IWindow&) override {}
 private:
-    std::unique_ptr<Gui::IUserInterface> gui;
+    std::unique_ptr<Gui::UserInterface> gui;
 };
 
 }

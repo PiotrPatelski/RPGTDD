@@ -13,7 +13,8 @@ public:
 	IConfigManager(){}
 	virtual ~IConfigManager(){}
 
-	virtual void setGraphics(const FileMgmt::GraphicsConfig&) = 0;
+	virtual void queueGraphicsRequest(std::function<void(FileMgmt::GraphicsConfig&)>) = 0;
+	virtual void applyDiff() = 0;
 
 	virtual const FileMgmt::GraphicsConfig& getGraphics() const = 0;
 	virtual const FileMgmt::KeyboardConfig& getKeyboard() const = 0;
@@ -25,12 +26,14 @@ public:
 	ConfigManager();
 	virtual ~ConfigManager(){}
 
-	virtual inline void setGraphics(const FileMgmt::GraphicsConfig& newConfig) override {graphics = newConfig;}
+	virtual inline void queueGraphicsRequest(std::function<void(FileMgmt::GraphicsConfig&)> request) override {request(diff);}
+	virtual void applyDiff() override {graphics = diff;}//TODO OVERWRITE CONFIG FILE WITH MOST RECENT CHANGE
 
 	virtual inline const FileMgmt::GraphicsConfig& getGraphics() const override {return graphics;}
 	virtual inline const FileMgmt::KeyboardConfig& getKeyboard() const override {return keyboard;}
 private:
 	FileMgmt::GraphicsConfig graphics;
+	FileMgmt::GraphicsConfig diff;
 	FileMgmt::KeyboardConfig keyboard;
 };
 

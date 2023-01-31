@@ -27,7 +27,7 @@ struct SettingsStateTest : public testing::Test
         font = std::make_shared<sf::Font>();;
         configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
         settingsAssetsManager = std::make_unique<NiceMock<FileMgmt::SettingsAssetsManagerMock>>();
-        settingsGuiManager = std::make_unique<NiceMock<Gui::SettingsGuiManagerMock>>();
+        settingsGuiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
         ON_CALL(*settingsAssetsManager, getTexture()).WillByDefault(Return(texture));
         ON_CALL(*settingsAssetsManager, getFont()).WillByDefault(Return(font));
         dummyConfig.resolution = sf::VideoMode(480, 480);
@@ -37,7 +37,7 @@ struct SettingsStateTest : public testing::Test
     std::shared_ptr<sf::Font> font;
     std::shared_ptr<Core::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::SettingsAssetsManagerMock>> settingsAssetsManager;
-    std::unique_ptr<NiceMock<Gui::SettingsGuiManagerMock>> settingsGuiManager;
+    std::unique_ptr<NiceMock<Gui::GuiManagerMock>> settingsGuiManager;
     FileMgmt::GraphicsConfig dummyConfig;
 };
 
@@ -64,9 +64,11 @@ TEST_F(SettingsStateTest, stateIsNotDoneWhenIsNotReadyToChange)
 
 TEST_F(SettingsStateTest, settingsStateInitializesBackgroundSizeProperly)
 {
-    FileMgmt::GraphicsConfig gfxConfig;
-    gfxConfig.resolution = sf::VideoMode{480,480};
-    configManager->setGraphics(gfxConfig);
+    configManager->queueGraphicsRequest(
+        [](FileMgmt::GraphicsConfig& gfxConfig)
+        {
+            gfxConfig.resolution = sf::VideoMode{480,480};
+        });
 
     auto sut = std::make_unique<SettingsState>(
         configManager,
@@ -92,7 +94,7 @@ TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
 {
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
-    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     gui->addButton(std::move(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
         withTextContent("testButton1").build()), Events::ToMainMenuState());
 
@@ -109,9 +111,9 @@ TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
 TEST_F(SettingsStateTest, settingsStateUpdatesGuiProperly)
 {
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
-
+    EXPECT_CALL(*window, getMousePosition()).WillOnce(Return(sf::Vector2i{0, 0}));
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
-    EXPECT_CALL(*gui, update(A<const Core::IWindow&>()));
+    EXPECT_CALL(*gui, update(A<const sf::Vector2i&>()));
     EXPECT_CALL(*gui, getActiveAction()).WillOnce(Return(
         std::make_optional<Events::StateAction>([](States::MenuState&){})));
 
@@ -130,7 +132,7 @@ TEST_F(SettingsStateTest, settingsStateCallsActionReturnedByGui)
 
     MockFunction<void(States::MenuState&)> callback;
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
-    EXPECT_CALL(*gui, update(A<const Core::IWindow&>()));
+    EXPECT_CALL(*gui, update(A<const sf::Vector2i&>()));
     EXPECT_CALL(*gui, getActiveAction()).WillOnce(Return(
         std::make_optional<Events::StateAction>(callback.AsStdFunction())));
 
@@ -149,7 +151,7 @@ TEST_F(SettingsStateTest, settingsStateWontChangeStateIfNulloptIsReturnedByGui)
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
-    EXPECT_CALL(*gui, update(A<const Core::IWindow&>()));
+    EXPECT_CALL(*gui, update(A<const sf::Vector2i&>()));
     EXPECT_CALL(*gui, getActiveAction()).WillOnce(Return(
         std::nullopt));
 

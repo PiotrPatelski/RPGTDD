@@ -73,4 +73,19 @@ void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
         setColor(idleColors);
 }
 
+std::unique_ptr<IButton> MainMenuButton::clone(const std::string& targetTextContent, const sf::Vector2f& targetPosition)
+{
+    auto eventHandler = std::make_unique<Events::ButtonEventHandler>();
+    return std::make_unique<MainMenuButton>(
+        targetPosition,
+        size,
+        targetTextContent,
+        font,
+        textContent.getCharacterSize(),
+        idleColors,
+        hoverColors,
+        activeColors,
+        std::move(eventHandler));
+}
+
 }

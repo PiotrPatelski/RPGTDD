@@ -17,7 +17,7 @@ public:
     SettingsState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::SettingsAssetsManager>,
-        std::unique_ptr<Gui::SettingsGuiManager>,
+        std::unique_ptr<Gui::IGuiManager>,
         std::unique_ptr<Events::IInputListener>);
     virtual ~SettingsState() = default;
 
@@ -28,7 +28,7 @@ private:
     void initBackground();
 
     std::shared_ptr<sf::RectangleShape> background;
-    std::unique_ptr<Gui::IUserInterface> gui;
+    std::unique_ptr<Gui::UserInterface> gui;
     std::unique_ptr<Events::IInputListener> inputListener;
 };
 

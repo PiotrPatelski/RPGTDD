@@ -28,38 +28,70 @@ EventColor TEST_ACTIVE_COLORS = EventColor{
 
 struct MainMenuButtonTest : public testing::Test
 {
+    const sf::Vector2f position{50, 50};
+    const sf::Vector2f size{50, 50};
+    const std::string name{"test"};
+    const uint characterSize{50};
 
 };
 
 TEST_F(MainMenuButtonTest, buttonWillReturnItsTextContent)
 {
-    std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
-        sf::Vector2f(50, 50),
-        sf::Vector2f(50, 50),
-        "Test",
+        position,
+        size,
+        name,
         std::make_shared<sf::Font>(),
-        50,
+        characterSize,
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler));
-    ASSERT_EQ(sut->getTextContent().getString(), "Test");
+        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+    ASSERT_EQ(sut->getTextContent().getString(), name);
+}
+
+TEST_F(MainMenuButtonTest, buttonWillReturnItsSize)
+{
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
+        position,
+        size,
+        name,
+        std::make_shared<sf::Font>(),
+        characterSize,
+        TEST_IDLE_COLORS,
+        TEST_HOVER_COLORS,
+        TEST_ACTIVE_COLORS,
+        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+    ASSERT_EQ(sut->getSize(), size);
+}
+
+TEST_F(MainMenuButtonTest, buttonWillReturnItsPosition)
+{
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
+        position,
+        size,
+        name,
+        std::make_shared<sf::Font>(),
+        characterSize,
+        TEST_IDLE_COLORS,
+        TEST_HOVER_COLORS,
+        TEST_ACTIVE_COLORS,
+        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+    ASSERT_EQ(sut->getPosition(), position);
 }
 
 TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersectWithBackground)
 {
-    std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
-        sf::Vector2f(50, 50),
-        sf::Vector2f(50, 50),
-        "Test",
+        position,
+        size,
+        name,
         std::make_shared<sf::Font>(),
-        50,
+        characterSize,
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler));
+        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
     sut->update(sf::Vector2i{280, 280});
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_IDLE_COLORS.background);
 }
@@ -69,11 +101,11 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(false));
     std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
-        sf::Vector2f(50, 50),
-        sf::Vector2f(50, 50),
-        "Test",
+        position,
+        size,
+        name,
         std::make_shared<sf::Font>(),
-        50,
+        characterSize,
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
@@ -87,11 +119,11 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWi
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(true));
     std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
-        sf::Vector2f(50, 50),
-        sf::Vector2f(50, 50),
-        "Test",
+        position,
+        size,
+        name,
         std::make_shared<sf::Font>(),
-        50,
+        characterSize,
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
@@ -105,17 +137,36 @@ TEST_F(MainMenuButtonTest, buttonIndicatesThatIsPressedWhenEventHandlerReceivesS
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(true));
     std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
-        sf::Vector2f(50, 50),
-        sf::Vector2f(50, 50),
-        "Test",
+        position,
+        size,
+        name,
         std::make_shared<sf::Font>(),
-        50,
+        characterSize,
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::move(eventHandler));
     sut->update(sf::Vector2i{55, 55});
     ASSERT_TRUE(sut->isPressed());
+}
+
+TEST_F(MainMenuButtonTest, clonedButtonWillHaveTheSamePropertiesAsOriginalExceptNameAndPosition)
+{
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
+        position,
+        size,
+        name,
+        std::make_shared<sf::Font>(),
+        characterSize,
+        TEST_IDLE_COLORS,
+        TEST_HOVER_COLORS,
+        TEST_ACTIVE_COLORS,
+        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+    auto result = sut->clone("clonedButton", sf::Vector2f(100, 100));
+    ASSERT_EQ(result->getTextContent().getString().toAnsiString(), "clonedButton");
+    ASSERT_EQ(result->getPosition(), sf::Vector2f(100, 100));
+    ASSERT_EQ(result->getSize(), size);
+
 }
 
 TEST(MainMenuButtonHelperFunctionTest, calculateTextPosOnGivenBackground)

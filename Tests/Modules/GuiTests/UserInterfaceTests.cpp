@@ -6,6 +6,8 @@
 #include <WindowMock.hpp>
 #include <ButtonBuilderMock.hpp>
 #include <StateMock.hpp>
+#include <DropDownListMock.hpp>
+#include <DropDownListBuilderMock.hpp>
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -16,7 +18,7 @@ using namespace ::testing;
 
 struct UserInterfaceTest : public testing::Test
 {
-    std::unique_ptr<IUserInterface> sut;
+    std::unique_ptr<UserInterface> sut;
     NiceMock<Core::WindowMock> window;
 };
 
@@ -24,12 +26,12 @@ TEST_F(UserInterfaceTest, uiWillUpdateAddedButtonWithMousePositionOnWindow)
 {
     auto button = std::make_unique<NiceMock<ButtonMock>>();
     auto mockCallback = Events::StateAction([](States::MenuState&){});
-    EXPECT_CALL(window, getMousePosition()).WillOnce(Return(sf::Vector2i{3, 3}));
-    EXPECT_CALL(*button, update(Eq(sf::Vector2i{3, 3})));
+    auto mousePosition = sf::Vector2i{3, 3};
+    EXPECT_CALL(*button, update(Eq(mousePosition)));
 
-    sut = std::make_unique<UserInterface>();
+    sut = std::make_unique<MenuGui>();
     sut->addButton(std::move(button), mockCallback);
-    sut->update(window);
+    sut->update(mousePosition);
 }
 
 TEST_F(UserInterfaceTest, uiWillGetEmptyActionIfNoButtonsWerePressed)
@@ -38,22 +40,31 @@ TEST_F(UserInterfaceTest, uiWillGetEmptyActionIfNoButtonsWerePressed)
     auto mockCallback = Events::StateAction([](States::MenuState&){});
     EXPECT_CALL(*button, isPressed()).WillOnce(Return(false));
 
-    sut = std::make_unique<UserInterface>();
+    sut = std::make_unique<MenuGui>();
     sut->addButton(std::move(button), mockCallback);
     EXPECT_EQ(sut->getActiveAction(), std::nullopt);
 }
 
-// TEST_F(UserInterfaceTest, uiWillUpdateAddedDropDownListWithMousePositionOnWindow)
-// {
-//     auto button = std::make_unique<NiceMock<ButtonMock>>();
-//     auto dropDownList = std::make_shared<NiceMock<DropDownListMock>>();
-//     EXPECT_CALL(window, getMousePosition()).WillOnce(Return(sf::Vector2i{3, 3}));
-//     EXPECT_CALL(*dropDownList, update(Eq(sf::Vector2i{3, 3})));
+TEST_F(UserInterfaceTest, uiWillDrawAddedDropDownListToPassedWindow)
+{
+    auto dropDownList = std::make_unique<NiceMock<DropDownListMock>>();
+    EXPECT_CALL(*dropDownList, drawTo(A<Core::IWindow&>()));
 
-//     sut = std::make_unique<UserInterface>();
-//     sut->addDropDownList("TestDropDownList", button);
-//     sut->update(window);
-// }
+    sut = std::make_unique<MenuGui>();
+    sut->addDropDownList(std::move(dropDownList));
+    sut->drawTo(window);
+}
+
+TEST_F(UserInterfaceTest, uiWillUpdateAddedDropDownListWithMousePositionOnWindow)
+{
+    auto dropDownList = std::make_unique<NiceMock<DropDownListMock>>();
+    auto mousePosition = sf::Vector2i{3, 3};
+    EXPECT_CALL(*dropDownList, update(Eq(mousePosition)));
+
+    sut = std::make_unique<MenuGui>();
+    sut->addDropDownList(std::move(dropDownList));
+    sut->update(mousePosition);
+}
 /*
 dropDownList(std::string, std::unique_ptr<IButton>)
 
@@ -67,12 +78,15 @@ struct GuiManagerFixture : public UserInterfaceTest
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
+        dropDownListBuilder = std::make_unique<NiceMock<DropDownListBuilderMock>>();
         ON_CALL(*buttonBuilder, withTextContent(_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, withFont(_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, atPosition(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, withSize(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
+        ON_CALL(*dropDownListBuilder, withTextContent(_)).WillByDefault(ReturnRef(*dropDownListBuilder));
     }
     std::unique_ptr<NiceMock<ButtonBuilderMock>> buttonBuilder;
+    std::unique_ptr<NiceMock<DropDownListBuilderMock>> dropDownListBuilder;
 };
 
 struct MainMenuGuiManagerTest : public GuiManagerFixture
@@ -100,29 +114,32 @@ struct MainMenuGuiManagerTest : public GuiManagerFixture
     }
 };
 
-TEST_F(MainMenuGuiManagerTest, uiWillUpdateFourButtonsCreatedByMainMenuGuiManager)
-{
-    setupMainMenuButtons();
-    auto guiManager = std::make_unique<MainMenuGuiManager>(std::move(buttonBuilder));
-    sut = guiManager->createGui(std::make_shared<sf::Font>());
-    EXPECT_CALL(window, getMousePosition()).Times(4).WillRepeatedly(Return(sf::Vector2i{3, 3}));
-    sut->update(window);
-}
-
 TEST_F(MainMenuGuiManagerTest, uiWillDrawFourButtonsCreatedByMainMenuGuiManager)
 {
     setupMainMenuButtons();
-    auto guiManager = std::make_unique<MainMenuGuiManager>(std::move(buttonBuilder));
+    auto guiManager = std::make_unique<MainMenuGuiManager>(
+        std::move(buttonBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(8);
     sut->drawTo(window);
+}
+
+TEST_F(MainMenuGuiManagerTest, todo)
+{
+    setupMainMenuButtons();
+    auto guiManager = std::make_unique<MainMenuGuiManager>(
+        std::move(buttonBuilder));
+    auto mousePosition = sf::Vector2i{3, 3};
+    sut = guiManager->createGui(std::make_shared<sf::Font>());
+    sut->update(mousePosition);
 }
 
 TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToGameButtonHasBeenPressed)
 {
     EXPECT_CALL(*toGameButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
-    auto guiManager = std::make_unique<MainMenuGuiManager>(std::move(buttonBuilder));
+    auto guiManager = std::make_unique<MainMenuGuiManager>(
+        std::move(buttonBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
@@ -133,7 +150,8 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToSettingsBut
 {
     EXPECT_CALL(*toSettingsButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
-    auto guiManager = std::make_unique<MainMenuGuiManager>(std::move(buttonBuilder));
+    auto guiManager = std::make_unique<MainMenuGuiManager>(
+        std::move(buttonBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
@@ -144,7 +162,8 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToEditorButto
 {
     EXPECT_CALL(*toEditorButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
-    auto guiManager = std::make_unique<MainMenuGuiManager>(std::move(buttonBuilder));
+    auto guiManager = std::make_unique<MainMenuGuiManager>(
+        std::move(buttonBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
@@ -155,7 +174,8 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToExitButtonH
 {
     EXPECT_CALL(*toExitButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
-    auto guiManager = std::make_unique<MainMenuGuiManager>(std::move(buttonBuilder));
+    auto guiManager = std::make_unique<MainMenuGuiManager>(
+        std::move(buttonBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
@@ -168,31 +188,34 @@ struct SettingsGuiManagerTest : public GuiManagerFixture
     {
         applyButton = std::make_unique<NiceMock<ButtonMock>>();
         backButton = std::make_unique<NiceMock<ButtonMock>>();
+        resolutionList = std::make_unique<NiceMock<DropDownListMock>>();
     }
 
     std::unique_ptr<NiceMock<ButtonMock>> applyButton;
     std::unique_ptr<NiceMock<ButtonMock>> backButton;
+    std::unique_ptr<NiceMock<ButtonMock>> dropDownListButton;
+    std::unique_ptr<NiceMock<DropDownListMock>> resolutionList;
     void setupSettingsButtons()
     {
         EXPECT_CALL(*buttonBuilder, build())
             .WillOnce(Return(ByMove(std::move(applyButton))))
-            .WillOnce(Return(ByMove(std::move(backButton))));
+            .WillOnce(Return(ByMove(std::move(backButton))))
+            .WillOnce(Return(ByMove(std::move(dropDownListButton))));
+    }
+    void setupDropDownList()
+    {
+        EXPECT_CALL(*dropDownListBuilder, build(_))
+            .WillOnce(Return(ByMove(std::move(resolutionList))));
     }
 };
-
-TEST_F(SettingsGuiManagerTest, uiWillUpdateTwoButtonsCreatedBySettingsGuiManager)
-{
-    setupSettingsButtons();
-    auto guiManager = std::make_unique<SettingsGuiManager>(std::move(buttonBuilder));
-    sut = guiManager->createGui(std::make_shared<sf::Font>());
-    EXPECT_CALL(window, getMousePosition()).Times(2).WillRepeatedly(Return(sf::Vector2i{3, 3}));
-    sut->update(window);
-}
 
 TEST_F(SettingsGuiManagerTest, uiWillDrawTwoButtonsCreatedBySettingsGuiManager)
 {
     setupSettingsButtons();
-    auto guiManager = std::make_unique<SettingsGuiManager>(std::move(buttonBuilder));
+    setupDropDownList();
+    auto guiManager = std::make_unique<SettingsGuiManager>(
+        std::move(buttonBuilder),
+        std::move(dropDownListBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(4);
     sut->drawTo(window);
@@ -202,7 +225,10 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterApplyButtonHa
 {
     EXPECT_CALL(*applyButton, isPressed()).WillOnce(Return(true));
     setupSettingsButtons();
-    auto guiManager = std::make_unique<SettingsGuiManager>(std::move(buttonBuilder));
+    setupDropDownList();
+    auto guiManager = std::make_unique<SettingsGuiManager>(
+        std::move(buttonBuilder),
+        std::move(dropDownListBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
@@ -213,7 +239,24 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterBackButtonHas
 {
     EXPECT_CALL(*backButton, isPressed()).WillOnce(Return(true));
     setupSettingsButtons();
-    auto guiManager = std::make_unique<SettingsGuiManager>(std::move(buttonBuilder));
+    setupDropDownList();
+    auto guiManager = std::make_unique<SettingsGuiManager>(
+        std::move(buttonBuilder),
+        std::move(dropDownListBuilder));
+    sut = guiManager->createGui(std::make_shared<sf::Font>());
+    auto result = sut->getActiveAction();
+    ASSERT_NE(result, std::nullopt);
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
+}
+
+TEST_F(SettingsGuiManagerTest, uiWillReturnValidActionWhenDropDownListHasOneAvailable)
+{
+    EXPECT_CALL(*resolutionList, getActiveAction()).WillOnce(Return([](States::MenuState&){}));
+    setupSettingsButtons();
+    setupDropDownList();
+    auto guiManager = std::make_unique<SettingsGuiManager>(
+        std::move(buttonBuilder),
+        std::move(dropDownListBuilder));
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);

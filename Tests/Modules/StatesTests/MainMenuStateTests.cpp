@@ -11,6 +11,7 @@
 #include "WindowMock.hpp"
 #include "ButtonMock.hpp"
 #include "ButtonBuilderMock.hpp"
+#include "DropDownListBuilderMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -29,7 +30,7 @@ struct MainMenuStateTest : public testing::Test
         font = std::make_shared<sf::Font>();;
         configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
         mainMenuAssetsManager = std::make_unique<NiceMock<FileMgmt::MainMenuAssetsManagerMock>>();
-        mainMenuGuiManager = std::make_unique<NiceMock<Gui::MainMenuGuiManagerMock>>();
+        mainMenuGuiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
         ON_CALL(*mainMenuAssetsManager, getTexture()).WillByDefault(Return(texture));
         ON_CALL(*mainMenuAssetsManager, getFont()).WillByDefault(Return(font));
         dummyConfig.resolution = sf::VideoMode(480, 480);
@@ -39,7 +40,7 @@ struct MainMenuStateTest : public testing::Test
     std::shared_ptr<sf::Font>font;
     std::shared_ptr<Core::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::MainMenuAssetsManagerMock>> mainMenuAssetsManager;
-    std::unique_ptr<NiceMock<Gui::MainMenuGuiManagerMock>> mainMenuGuiManager;
+    std::unique_ptr<NiceMock<Gui::GuiManagerMock>> mainMenuGuiManager;
     NiceMock<Core::WindowMock> window;
     FileMgmt::GraphicsConfig dummyConfig;
 };
@@ -65,9 +66,11 @@ TEST_F(MainMenuStateTest, stateIsNotDoneWhenIsNotReadyToChange)
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundSizeProperly)
 {
-    FileMgmt::GraphicsConfig gfxConfig;
-    gfxConfig.resolution = sf::VideoMode{480,480};
-    configManager->setGraphics(gfxConfig);
+    configManager->queueGraphicsRequest(
+        [](FileMgmt::GraphicsConfig& gfxConfig)
+        {
+            gfxConfig.resolution = sf::VideoMode{480,480};
+        });
 
     auto sut = std::make_unique<MainMenuState>(
         configManager,
@@ -91,7 +94,7 @@ TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
 {
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
-    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     auto callback = [](States::MenuState&){};
     gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
             withTextContent("testButton1").build(), callback);
@@ -117,11 +120,8 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsGameStateWhenGameStateButtonIsPres
     EXPECT_CALL(*(gameButton), update(_));
     EXPECT_CALL(*(gameButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     gui->addButton(std::move(gameButton), Events::ToGameState());
-
-    auto gameAssetsManager = std::make_unique<NiceMock<FileMgmt::GameAssetsManagerMock>>();
-    auto gameGuiManager = std::make_unique<NiceMock<Gui::GameGuiManagerMock>>();
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
     auto sut = std::make_unique<MainMenuState>(
@@ -144,7 +144,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsSettingsStateWhenSettingsStateButt
     FileMgmt::KeyboardConfig config;
     EXPECT_CALL(*configManager, getKeyboard()).WillOnce(ReturnRef(config));
 
-    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     gui->addButton(std::move(settingsButton), Events::ToSettingsState());
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
@@ -165,7 +165,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsEditorStateWhenEditorStateButtonIs
     EXPECT_CALL(*(editorButton), update(_));
     EXPECT_CALL(*(editorButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     gui->addButton(std::move(editorButton), Events::ToEditorState());
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
@@ -186,7 +186,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsNullptrWhenExitStateButtonIsPresse
     EXPECT_CALL(*(exitButton), update(_));
     EXPECT_CALL(*(exitButton), isPressed()).WillOnce(Return(true));
 
-    std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
+    std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     gui->addButton(std::move(exitButton), Events::ToExitState());
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
@@ -199,9 +199,9 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsNullptrWhenExitStateButtonIsPresse
     ASSERT_EQ(sut->getNextState(), nullptr);
 }
 
-struct MainMenuStateButtonActionsTest : public MainMenuStateTest
+struct MenuStateButtonActionsTest : public MainMenuStateTest
 {
-    MainMenuStateButtonActionsTest()
+    MenuStateButtonActionsTest()
     {
         buttonBuilder = std::make_unique<NiceMock<Gui::ButtonBuilderMock>>();
         ON_CALL(*buttonBuilder, withTextContent(_)).WillByDefault(ReturnRef(*buttonBuilder));
@@ -218,9 +218,10 @@ struct MainMenuStateButtonActionsTest : public MainMenuStateTest
     std::unique_ptr<NiceMock<Gui::ButtonMock>> toSettingsButton;
     std::unique_ptr<NiceMock<Gui::ButtonMock>> toEditorButton;
     std::unique_ptr<NiceMock<Gui::ButtonMock>> toExitButton;
+    std::unique_ptr<NiceMock<Gui::DropDownListBuilderMock>> dropDownListBuilder;
 };
 
-TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameButtonIsPressed)
+TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameButtonIsPressed)
 {
     EXPECT_CALL(*(toGameButton), update(_));
     EXPECT_CALL(*(toGameButton), isPressed()).WillOnce(Return(true));
@@ -240,7 +241,7 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameBu
     ASSERT_EQ(typeid(*(sut->getNextState())), typeid(States::GameState));
 }
 
-TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsSettingsStateWhenToSettingsButtonIsPressed)
+TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsSettingsStateWhenToSettingsButtonIsPressed)
 {
     EXPECT_CALL(*(toSettingsButton), update(_));
     EXPECT_CALL(*(toSettingsButton), isPressed()).WillOnce(Return(true));
@@ -260,7 +261,7 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsSettingsStateWhenToSe
     ASSERT_EQ(typeid(*(sut->getNextState())), typeid(States::SettingsState));
 }
 
-TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsEditorStateWhenToEditorButtonIsPressed)
+TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsEditorStateWhenToEditorButtonIsPressed)
 {
     EXPECT_CALL(*(toEditorButton), update(_));
     EXPECT_CALL(*(toEditorButton), isPressed()).WillOnce(Return(true));
@@ -280,7 +281,7 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsEditorStateWhenToEdit
     ASSERT_EQ(typeid(*(sut->getNextState())), typeid(States::EditorState));
 }
 
-TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsNullptrWhenToExitButtonIsPressed)
+TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsNullptrWhenToExitButtonIsPressed)
 {
     EXPECT_CALL(*(toExitButton), update(_));
     EXPECT_CALL(*(toExitButton), isPressed()).WillOnce(Return(true));

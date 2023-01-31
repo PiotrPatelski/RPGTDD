@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <ButtonEventHandler.hpp>
+#include <StateActions.hpp>
 
 namespace Gui
 {
@@ -28,6 +29,7 @@ public:
     virtual sf::Vector2f getSize() const = 0;
     virtual sf::Font getFont() const = 0;
     virtual sf::RectangleShape getBackground() const = 0;
+    virtual std::unique_ptr<IButton> clone(const std::string&, const sf::Vector2f&) = 0;
 };
 
 class MainMenuButton : public IButton
@@ -54,6 +56,8 @@ public:
     virtual inline sf::Vector2f getSize() const override {return size;}
     virtual inline sf::Font getFont() const override {return *textContent.getFont();}
     virtual inline sf::RectangleShape getBackground() const override {return background;}
+    virtual std::unique_ptr<IButton> clone(const std::string&, const sf::Vector2f&) override;
+
 private:
     void initText(const uint);
     void initBackground();
@@ -70,6 +74,12 @@ private:
     EventColor hoverColors;
     EventColor activeColors;
     std::unique_ptr<Events::IButtonEventHandler> eventHandler;
+};
+
+struct ActionButton
+{
+    std::unique_ptr<Gui::IButton> object;
+    Events::StateAction action;
 };
 
 }

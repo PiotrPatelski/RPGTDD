@@ -11,7 +11,7 @@ namespace States
 MainMenuState::MainMenuState(
     std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
-    std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
+    std::unique_ptr<Gui::IGuiManager> guiManager)
     : MenuState(
         configManager,
         std::move(assetsManager))
@@ -32,7 +32,7 @@ void MainMenuState::initBackground()
 
 void MainMenuState::update(const Core::IWindow& window, const float deltaTime)
 {
-    gui->update(window);
+    gui->update(window.getMousePosition());
     auto action = gui->getActiveAction();
     if(action.has_value())
         get<Events::MenuAction>(action.value())(*this);

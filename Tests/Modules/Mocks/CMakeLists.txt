@@ -13,7 +13,8 @@ set(HEADERS
     UserInterfaceMock.hpp
     InputListenerMock.hpp
     KeyboardMapMock.hpp
-    ButtonEventHandlerMock.hpp)
+    ButtonEventHandlerMock.hpp
+    DropDownListMock.hpp)
 
 add_library(Mocks ${HEADERS})
 set_target_properties(Mocks PROPERTIES LINKER_LANGUAGE CXX)
