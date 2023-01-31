@@ -4,12 +4,14 @@ namespace States
 {
 
 SettingsState::SettingsState(
-    std::shared_ptr<Core::IConfigManager> config,
+    std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::SettingsAssetsManager> assetsManager,
-    std::unique_ptr<Gui::SettingsGuiManager> guiManager)
-    : State(
-        config,
-        std::move(assetsManager))
+    std::unique_ptr<Gui::SettingsGuiManager> guiManager,
+    std::unique_ptr<Events::IInputListener> inputListener)
+    : MenuState(
+        configManager,
+        std::move(assetsManager)),
+    inputListener(std::move(inputListener))
 {
     initBackground();
     gui = guiManager->createGui(State::assetsManager->getFont());
@@ -17,7 +19,7 @@ SettingsState::SettingsState(
 
 void SettingsState::initBackground()
 {
-    const auto& videoMode = config->getGraphics().resolution;
+    const auto& videoMode = configManager->getGraphics().resolution;
     background = std::make_shared<sf::RectangleShape>(
         sf::Vector2f(
             static_cast<float>(videoMode.width),
@@ -30,7 +32,11 @@ void SettingsState::update(const Core::IWindow& window, const float deltaTime)
     gui->update(window);
     auto action = gui->getActiveAction();
     if(action.has_value())
-        get<Events::SettingsAction>(action.value())(*this);
+        get<Events::MenuAction>(action.value())(*this);
+
+    action = inputListener->getActiveAction();
+    if(action.has_value())
+        get<Events::MenuAction>(action.value())(*this);
 }
 
 void SettingsState::drawOutput(Core::IWindow& window)

@@ -23,7 +23,7 @@ struct UserInterfaceTest : public testing::Test
 TEST_F(UserInterfaceTest, uiWillUpdateAddedButtonWithMousePositionOnWindow)
 {
     auto button = std::make_shared<NiceMock<ButtonMock>>();
-    auto mockCallback = Events::StateAction([](States::MainMenuState&){});
+    auto mockCallback = Events::StateAction([](States::MenuState&){});
     EXPECT_CALL(window, getMousePosition()).WillOnce(Return(sf::Vector2i{3, 3}));
     EXPECT_CALL(*button, update(Eq(sf::Vector2i{3, 3})));
 
@@ -35,7 +35,7 @@ TEST_F(UserInterfaceTest, uiWillUpdateAddedButtonWithMousePositionOnWindow)
 TEST_F(UserInterfaceTest, uiWillGetEmptyActionIfNoButtonsWerePressed)
 {
     auto button = std::make_shared<NiceMock<ButtonMock>>();
-    auto mockCallback = Events::StateAction([](States::MainMenuState&){});
+    auto mockCallback = Events::StateAction([](States::MenuState&){});
     EXPECT_CALL(*button, isPressed()).WillOnce(Return(false));
 
     sut = std::make_unique<UserInterface>();
@@ -101,7 +101,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToGameButtonH
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
-    ASSERT_NO_THROW(std::get<Events::MainMenuAction>(result.value()));
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
 }
 
 TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToSettingsButtonHasBeenPressed)
@@ -111,7 +111,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToSettingsBut
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
-    ASSERT_NO_THROW(std::get<Events::MainMenuAction>(result.value()));
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
 }
 
 TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToEditorButtonHasBeenPressed)
@@ -121,7 +121,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToEditorButto
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
-    ASSERT_NO_THROW(std::get<Events::MainMenuAction>(result.value()));
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
 }
 
 TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToExitButtonHasBeenPressed)
@@ -131,7 +131,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToExitButtonH
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
-    ASSERT_NO_THROW(std::get<Events::MainMenuAction>(result.value()));
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
 }
 
 struct SettingsGuiManagerTest : public GuiManagerFixture
@@ -172,7 +172,7 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterApplyButtonHa
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
-    ASSERT_NO_THROW(std::get<Events::SettingsAction>(result.value()));
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
 }
 
 TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterBackButtonHasBeenPressed)
@@ -182,7 +182,7 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterBackButtonHas
     sut = guiManager->createGui(std::make_shared<sf::Font>());
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
-    ASSERT_NO_THROW(std::get<Events::SettingsAction>(result.value()));
+    ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
 }
 
 }

@@ -174,7 +174,7 @@ TEST_F(EngineTest, engineForwardsUpdateDeltaTimeToClock)
 
 TEST_F(EngineTest, engineForwardsInitialStateToRunOnStateMachine)
 {
-    EXPECT_CALL(*stateMachine, setState);
+    EXPECT_CALL(*stateMachine, setState(A<std::shared_ptr<States::IState>>()));
     ON_CALL(coreBuilder, createStateMachine()).WillByDefault(Return(ByMove(std::move(stateMachine))));
 
     sut = std::make_unique<Engine>(coreBuilder);

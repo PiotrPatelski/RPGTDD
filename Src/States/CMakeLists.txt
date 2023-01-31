@@ -10,6 +10,7 @@ set(SOURCES
 
 set(HEADERS
     Headers/State.hpp
+    Headers/MenuState.hpp
     Headers/MainMenuState.hpp
     Headers/GameState.hpp
     Headers/EditorState.hpp

@@ -13,8 +13,8 @@ class ConfigManagerMock : public IConfigManager
 {
 public:
     MOCK_METHOD(void, setGraphics, (const FileMgmt::GraphicsConfig&), (override));
-    MOCK_METHOD(FileMgmt::GraphicsConfig, getGraphics, (), (const, override));
-    MOCK_METHOD(FileMgmt::KeyboardConfig, getKeyboard, (), (const, override));
+    MOCK_METHOD((const FileMgmt::GraphicsConfig&), getGraphics, (), (const, override));
+    MOCK_METHOD((const FileMgmt::KeyboardConfig&), getKeyboard, (), (const, override));
 };
 
 }

@@ -28,7 +28,7 @@ void UserInterface::drawTo(Core::IWindow& window)
     }
 }
 
-void UserInterface::update(const Core::IWindow& window)
+void UserInterface::update(const Core::IWindow& window)//TODO: we might need input from gameObj like player hp items etc. BUT i dont think we will need whole window. Mouse position should be enough
 {
     for (auto& button : buttons)
     {

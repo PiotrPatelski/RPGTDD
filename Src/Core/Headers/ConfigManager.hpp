@@ -15,8 +15,8 @@ public:
 
 	virtual void setGraphics(const FileMgmt::GraphicsConfig&) = 0;
 
-	virtual FileMgmt::GraphicsConfig getGraphics() const = 0;
-	virtual FileMgmt::KeyboardConfig getKeyboard() const = 0;
+	virtual const FileMgmt::GraphicsConfig& getGraphics() const = 0;
+	virtual const FileMgmt::KeyboardConfig& getKeyboard() const = 0;
 };
 
 class ConfigManager : public IConfigManager
@@ -27,8 +27,8 @@ public:
 
 	virtual inline void setGraphics(const FileMgmt::GraphicsConfig& newConfig) override {graphics = newConfig;}
 
-	virtual inline FileMgmt::GraphicsConfig getGraphics() const override {return graphics;}
-	virtual inline FileMgmt::KeyboardConfig getKeyboard() const override {return keyboard;}
+	virtual inline const FileMgmt::GraphicsConfig& getGraphics() const override {return graphics;}
+	virtual inline const FileMgmt::KeyboardConfig& getKeyboard() const override {return keyboard;}
 private:
 	FileMgmt::GraphicsConfig graphics;
 	FileMgmt::KeyboardConfig keyboard;

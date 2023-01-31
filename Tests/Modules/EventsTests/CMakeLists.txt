@@ -1,7 +1,8 @@
 set(MODULE_NAME EventsTests)
 
 set(SOURCES
-    ButtonActionsTests.cpp
+    StateActionsTests.cpp
+    InputListenerTests.cpp
 )
 
 add_executable(

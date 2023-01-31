@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Button.hpp>
-#include <ButtonActions.hpp>
+#include <StateActions.hpp>
 
 namespace Gui
 {

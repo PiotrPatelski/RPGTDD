@@ -1,12 +1,14 @@
 set(MODULE_NAME Events)
 
 set(SOURCES
-    Source/ButtonActions.cpp
+    Source/StateActions.cpp
+    Source/InputListener.cpp
     )
 
 set(HEADERS
     Headers/ButtonEventHandler.hpp
-    Headers/ButtonActions.hpp
+    Headers/StateActions.hpp
+    Headers/InputListener.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

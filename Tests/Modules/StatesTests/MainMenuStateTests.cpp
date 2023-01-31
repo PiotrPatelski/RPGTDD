@@ -33,7 +33,7 @@ struct MainMenuStateTest : public testing::Test
         ON_CALL(*mainMenuAssetsManager, getTexture()).WillByDefault(Return(texture));
         ON_CALL(*mainMenuAssetsManager, getFont()).WillByDefault(Return(font));
         dummyConfig.resolution = sf::VideoMode(480, 480);
-        ON_CALL(*configManager, getGraphics).WillByDefault(Return(dummyConfig));
+        ON_CALL(*configManager, getGraphics).WillByDefault(ReturnRef(dummyConfig));
     }
     std::shared_ptr<sf::Texture> texture;
     std::shared_ptr<sf::Font>font;
@@ -92,7 +92,7 @@ TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
     std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
-    auto callback = [](States::MainMenuState&){};
+    auto callback = [](States::MenuState&){};
     gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
             withTextContent("testButton1").build(), callback);
     gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
@@ -141,11 +141,11 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsSettingsStateWhenSettingsStateButt
     EXPECT_CALL(*(settingsButton), update(_));
     EXPECT_CALL(*(settingsButton), isPressed()).WillOnce(Return(true));
 
+    FileMgmt::KeyboardConfig config;
+    EXPECT_CALL(*configManager, getKeyboard()).WillOnce(ReturnRef(config));
+
     std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(settingsButton), Events::ToSettingsState());
-
-    auto settingsAssetsManager = std::make_unique<NiceMock<FileMgmt::SettingsAssetsManagerMock>>();
-    auto settingsGuiManager = std::make_unique<NiceMock<Gui::SettingsGuiManagerMock>>();
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
     auto sut = std::make_unique<MainMenuState>(
@@ -167,9 +167,6 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsEditorStateWhenEditorStateButtonIs
 
     std::unique_ptr<Gui::IUserInterface> gui = std::make_unique<Gui::UserInterface>();
     gui->addButton(std::move(editorButton), Events::ToEditorState());
-
-    auto editorAssetsManager = std::make_unique<NiceMock<FileMgmt::EditorAssetsManagerMock>>();
-    auto editorGuiManager = std::make_unique<NiceMock<Gui::EditorGuiManagerMock>>();
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
     auto sut = std::make_unique<MainMenuState>(

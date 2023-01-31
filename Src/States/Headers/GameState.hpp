@@ -4,6 +4,8 @@
 #include <State.hpp>
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
+#include <GuiManager.hpp>
+#include <UserInterface.hpp>
 
 namespace States
 {

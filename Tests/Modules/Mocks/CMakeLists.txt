@@ -11,6 +11,8 @@ set(HEADERS
     GuiManagerMock.hpp
     ConfigManagerMock.hpp
     UserInterfaceMock.hpp
+    InputListenerMock.hpp
+    KeyboardMapMock.hpp
     ButtonEventHandlerMock.hpp)
 
 add_library(Mocks ${HEADERS})

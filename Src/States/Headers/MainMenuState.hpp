@@ -1,12 +1,14 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <State.hpp>
+#include <MenuState.hpp>
+#include <GuiManager.hpp>
+#include <UserInterface.hpp>
 
 namespace States
 {
 
-class MainMenuState : public State
+class MainMenuState : public MenuState
 {
 public:
     MainMenuState(

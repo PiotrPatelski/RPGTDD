@@ -9,11 +9,11 @@ namespace States
 {
 
 MainMenuState::MainMenuState(
-    std::shared_ptr<Core::IConfigManager> config,
+    std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
     std::unique_ptr<Gui::MainMenuGuiManager> guiManager)
-    : State(
-        config,
+    : MenuState(
+        configManager,
         std::move(assetsManager))
 {
     initBackground();
@@ -22,7 +22,7 @@ MainMenuState::MainMenuState(
 
 void MainMenuState::initBackground()
 {
-    const auto& videoMode = config->getGraphics().resolution;
+    const auto& videoMode = configManager->getGraphics().resolution;
     background = std::make_shared<sf::RectangleShape>(
         sf::Vector2f(
             static_cast<float>(videoMode.width),
@@ -35,7 +35,7 @@ void MainMenuState::update(const Core::IWindow& window, const float deltaTime)
     gui->update(window);
     auto action = gui->getActiveAction();
     if(action.has_value())
-        get<Events::MainMenuAction>(action.value())(*this);
+        get<Events::MenuAction>(action.value())(*this);
 }
 
 void MainMenuState::drawOutput(Core::IWindow& window)

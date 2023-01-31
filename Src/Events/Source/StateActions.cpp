@@ -1,3 +1,4 @@
+#include <StateActions.hpp>
 #include <GameState.hpp>
 #include <EditorState.hpp>
 #include <SettingsState.hpp>
@@ -6,7 +7,7 @@
 namespace Events
 {
 
-void ToMainMenuState::operator()(States::SettingsState& state)
+void ToMainMenuState::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
     state.setNextState(std::make_unique<States::MainMenuState>(
@@ -18,7 +19,7 @@ void ToMainMenuState::operator()(States::SettingsState& state)
     state.finishState();
 }
 
-void ToGameState::operator()(States::MainMenuState& state)
+void ToGameState::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
     state.setNextState(std::make_unique<States::GameState>(
@@ -30,19 +31,19 @@ void ToGameState::operator()(States::MainMenuState& state)
     state.finishState();
 }
 
-void ToSettingsState::operator()(States::MainMenuState& state)
+void ToSettingsState::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
     state.setNextState(std::make_unique<States::SettingsState>(
         config,
         std::make_unique<FileMgmt::SettingsAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
-            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
-        )));
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)),
+        std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
     state.finishState();
 }
 
-void ToEditorState::operator()(States::MainMenuState& state)
+void ToEditorState::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
     state.setNextState(std::make_unique<States::EditorState>(
@@ -54,21 +55,21 @@ void ToEditorState::operator()(States::MainMenuState& state)
     state.finishState();
 }
 
-void ToExitState::operator()(States::MainMenuState& state)
+void ToExitState::operator()(States::MenuState& state)
 {
     state.setNextState(nullptr);
     state.finishState();
 }
 
-void ApplySettings::operator()(States::SettingsState& state)
+void ApplySettings::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
     state.setNextState(std::make_unique<States::SettingsState>(
         config,
         std::make_unique<FileMgmt::SettingsAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
-            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
-        )));
+            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)),
+        std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
     state.finishState();
 }
 

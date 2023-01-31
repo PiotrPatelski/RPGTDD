@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Window.hpp>
-#include <ButtonActions.hpp>
+#include <StateActions.hpp>
 #include <Button.hpp>
 
 namespace Core

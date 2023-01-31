@@ -1,10 +1,7 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
-#include <GuiManager.hpp>
-#include <Button.hpp>
 #include <Window.hpp>
 namespace States
 {
@@ -39,12 +36,12 @@ public:
 
     virtual const bool isReadyToChange() const override {return readyToChange;}
     virtual std::unique_ptr<IState> getNextState() override {return std::move(nextState);}
-    virtual std::shared_ptr<Core::IConfigManager> getConfig() override {return config;}
+    virtual std::shared_ptr<Core::IConfigManager> getConfig() override {return configManager;}
 protected:
     bool readyToChange{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<FileMgmt::IAssetsManager> assetsManager;
-    std::shared_ptr<Core::IConfigManager> config;
+    std::shared_ptr<Core::IConfigManager> configManager;
 };
 
 }

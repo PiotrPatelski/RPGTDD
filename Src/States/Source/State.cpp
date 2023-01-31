@@ -4,9 +4,9 @@ namespace States
 {
 
 State::State(
-    std::shared_ptr<Core::IConfigManager> config,
+    std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::IAssetsManager> assetsManager)
-    : config(config),
+    : configManager(configManager),
       assetsManager(std::move(assetsManager))
 {}
 

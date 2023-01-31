@@ -1,20 +1,24 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <State.hpp>
+#include <MenuState.hpp>
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
+#include <InputListener.hpp>
+#include <GuiManager.hpp>
+#include <UserInterface.hpp>
 
 namespace States
 {
 
-class SettingsState : public State
+class SettingsState : public MenuState
 {
 public:
     SettingsState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::SettingsAssetsManager>,
-        std::unique_ptr<Gui::SettingsGuiManager>);
+        std::unique_ptr<Gui::SettingsGuiManager>,
+        std::unique_ptr<Events::IInputListener>);
     virtual ~SettingsState() = default;
 
     virtual void update(const Core::IWindow& window, const float) override;
@@ -25,6 +29,7 @@ private:
 
     std::shared_ptr<sf::RectangleShape> background;
     std::unique_ptr<Gui::IUserInterface> gui;
+    std::unique_ptr<Events::IInputListener> inputListener;
 };
 
 }
