@@ -34,7 +34,7 @@ struct MainMenuButtonTest : public testing::Test
 TEST_F(MainMenuButtonTest, buttonWillReturnItsTextContent)
 {
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
-    std::shared_ptr<IButton> sut = std::make_shared<MainMenuButton>(
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
         sf::Vector2f(50, 50),
         sf::Vector2f(50, 50),
         "Test",
@@ -50,7 +50,7 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsTextContent)
 TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersectWithBackground)
 {
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
-    std::shared_ptr<IButton> sut = std::make_shared<MainMenuButton>(
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
         sf::Vector2f(50, 50),
         sf::Vector2f(50, 50),
         "Test",
@@ -68,7 +68,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
 {
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(false));
-    std::shared_ptr<IButton> sut = std::make_shared<MainMenuButton>(
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
         sf::Vector2f(50, 50),
         sf::Vector2f(50, 50),
         "Test",
@@ -86,7 +86,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWi
 {
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(true));
-    std::shared_ptr<IButton> sut = std::make_shared<MainMenuButton>(
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
         sf::Vector2f(50, 50),
         sf::Vector2f(50, 50),
         "Test",
@@ -104,7 +104,7 @@ TEST_F(MainMenuButtonTest, buttonIndicatesThatIsPressedWhenEventHandlerReceivesS
 {
     std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
     EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(true));
-    std::shared_ptr<IButton> sut = std::make_shared<MainMenuButton>(
+    std::unique_ptr<IButton> sut = std::make_unique<MainMenuButton>(
         sf::Vector2f(50, 50),
         sf::Vector2f(50, 50),
         "Test",

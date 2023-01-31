@@ -113,7 +113,7 @@ TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
 
 TEST_F(MainMenuStateTest, mainMenuStateAssignsGameStateWhenGameStateButtonIsPressed)
 {
-    auto gameButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
+    auto gameButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
     EXPECT_CALL(*(gameButton), update(_));
     EXPECT_CALL(*(gameButton), isPressed()).WillOnce(Return(true));
 
@@ -137,7 +137,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsGameStateWhenGameStateButtonIsPres
 
 TEST_F(MainMenuStateTest, mainMenuStateAssignsSettingsStateWhenSettingsStateButtonIsPressed)
 {
-    auto settingsButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
+    auto settingsButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
     EXPECT_CALL(*(settingsButton), update(_));
     EXPECT_CALL(*(settingsButton), isPressed()).WillOnce(Return(true));
 
@@ -161,7 +161,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsSettingsStateWhenSettingsStateButt
 
 TEST_F(MainMenuStateTest, mainMenuStateAssignsEditorStateWhenEditorStateButtonIsPressed)
 {
-    auto editorButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
+    auto editorButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
     EXPECT_CALL(*(editorButton), update(_));
     EXPECT_CALL(*(editorButton), isPressed()).WillOnce(Return(true));
 
@@ -182,7 +182,7 @@ TEST_F(MainMenuStateTest, mainMenuStateAssignsEditorStateWhenEditorStateButtonIs
 
 TEST_F(MainMenuStateTest, mainMenuStateAssignsNullptrWhenExitStateButtonIsPressed)
 {
-    auto exitButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
+    auto exitButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
     EXPECT_CALL(*(exitButton), update(_));
     EXPECT_CALL(*(exitButton), isPressed()).WillOnce(Return(true));
 
@@ -208,16 +208,16 @@ struct MainMenuStateButtonActionsTest : public MainMenuStateTest
         ON_CALL(*buttonBuilder, withFont(_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, atPosition(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, withSize(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
-        toGameButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
-        toSettingsButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
-        toEditorButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
-        toExitButton = std::make_shared<NiceMock<Gui::ButtonMock>>();
+        toGameButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
+        toSettingsButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
+        toEditorButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
+        toExitButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
     }
     std::unique_ptr<NiceMock<Gui::ButtonBuilderMock>> buttonBuilder;
-    std::shared_ptr<NiceMock<Gui::ButtonMock>> toGameButton;
-    std::shared_ptr<NiceMock<Gui::ButtonMock>> toSettingsButton;
-    std::shared_ptr<NiceMock<Gui::ButtonMock>> toEditorButton;
-    std::shared_ptr<NiceMock<Gui::ButtonMock>> toExitButton;
+    std::unique_ptr<NiceMock<Gui::ButtonMock>> toGameButton;
+    std::unique_ptr<NiceMock<Gui::ButtonMock>> toSettingsButton;
+    std::unique_ptr<NiceMock<Gui::ButtonMock>> toEditorButton;
+    std::unique_ptr<NiceMock<Gui::ButtonMock>> toExitButton;
 };
 
 TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameButtonIsPressed)
@@ -226,10 +226,10 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameBu
     EXPECT_CALL(*(toGameButton), isPressed()).WillOnce(Return(true));
 
     EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(toGameButton))
-        .WillOnce(Return(toSettingsButton))
-        .WillOnce(Return(toEditorButton))
-        .WillOnce(Return(toExitButton));
+        .WillOnce(Return(ByMove(std::move(toGameButton))))
+        .WillOnce(Return(ByMove(std::move(toSettingsButton))))
+        .WillOnce(Return(ByMove(std::move(toEditorButton))))
+        .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
@@ -246,10 +246,10 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsSettingsStateWhenToSe
     EXPECT_CALL(*(toSettingsButton), isPressed()).WillOnce(Return(true));
 
     EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(toGameButton))
-        .WillOnce(Return(toSettingsButton))
-        .WillOnce(Return(toEditorButton))
-        .WillOnce(Return(toExitButton));
+        .WillOnce(Return(ByMove(std::move(toGameButton))))
+        .WillOnce(Return(ByMove(std::move(toSettingsButton))))
+        .WillOnce(Return(ByMove(std::move(toEditorButton))))
+        .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
@@ -266,10 +266,10 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsEditorStateWhenToEdit
     EXPECT_CALL(*(toEditorButton), isPressed()).WillOnce(Return(true));
 
     EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(toGameButton))
-        .WillOnce(Return(toSettingsButton))
-        .WillOnce(Return(toEditorButton))
-        .WillOnce(Return(toExitButton));
+        .WillOnce(Return(ByMove(std::move(toGameButton))))
+        .WillOnce(Return(ByMove(std::move(toSettingsButton))))
+        .WillOnce(Return(ByMove(std::move(toEditorButton))))
+        .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
@@ -286,10 +286,10 @@ TEST_F(MainMenuStateButtonActionsTest, mainMenuStateAssignsNullptrWhenToExitButt
     EXPECT_CALL(*(toExitButton), isPressed()).WillOnce(Return(true));
 
     EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(toGameButton))
-        .WillOnce(Return(toSettingsButton))
-        .WillOnce(Return(toEditorButton))
-        .WillOnce(Return(toExitButton));
+        .WillOnce(Return(ByMove(std::move(toGameButton))))
+        .WillOnce(Return(ByMove(std::move(toSettingsButton))))
+        .WillOnce(Return(ByMove(std::move(toEditorButton))))
+        .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),

@@ -32,9 +32,9 @@ ButtonBuilder::ButtonBuilder(const sf::VideoMode& resolution)
   font(std::make_shared<sf::Font>())
 {}
 
-std::shared_ptr<IButton> ButtonBuilder::build()
+std::unique_ptr<IButton> ButtonBuilder::build()
 {
-    return std::make_shared<MainMenuButton>(
+    return std::make_unique<MainMenuButton>(
         position,
         size,
         textContent,

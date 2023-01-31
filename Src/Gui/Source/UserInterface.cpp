@@ -5,7 +5,7 @@
 namespace Gui
 {
 
-void UserInterface::addButton(std::shared_ptr<IButton> button, Events::StateAction action)
+void UserInterface::addButton(std::unique_ptr<IButton> button, Events::StateAction action)
 {
     buttons.push_back(ActionButton{std::move(button), action});
 }

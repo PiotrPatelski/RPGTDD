@@ -34,7 +34,7 @@ public:
     virtual IButtonBuilder& atPosition(const float, const float) = 0;
     virtual IButtonBuilder& withSize(const float, const float) = 0;
     virtual IButtonBuilder& withFont(const std::shared_ptr<sf::Font>) = 0;
-    virtual std::shared_ptr<IButton> build() = 0;
+    virtual std::unique_ptr<IButton> build() = 0;
 };
 
 class ButtonBuilder : public IButtonBuilder
@@ -47,7 +47,7 @@ public:
     virtual ButtonBuilder& atPosition(const float x, const float y) override;
     virtual ButtonBuilder& withSize(const float x, const float y) override;
     virtual ButtonBuilder& withFont(const std::shared_ptr<sf::Font>) override;
-    virtual std::shared_ptr<IButton> build() override;
+    virtual std::unique_ptr<IButton> build() override;
 
 private:
     sf::VideoMode screenResolution;

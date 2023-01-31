@@ -16,7 +16,7 @@ public:
     MOCK_METHOD(IButtonBuilder&, atPosition, (const float, const float), (override));
     MOCK_METHOD(IButtonBuilder&, withSize, (const float, const float), (override));
     MOCK_METHOD(IButtonBuilder&, withFont, (const std::shared_ptr<sf::Font>), (override));
-    MOCK_METHOD(std::shared_ptr<IButton>, build, (), (override));
+    MOCK_METHOD(std::unique_ptr<IButton>, build, (), (override));
 };
 
 }

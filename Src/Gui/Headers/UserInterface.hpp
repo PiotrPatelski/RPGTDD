@@ -14,7 +14,7 @@ namespace Gui
 
 struct ActionButton
 {
-    std::shared_ptr<Gui::IButton> object;
+    std::unique_ptr<Gui::IButton> object;
     Events::StateAction action;
 };
 
@@ -24,7 +24,7 @@ public:
     IUserInterface(){}
     virtual ~IUserInterface(){}
 
-    virtual void addButton(std::shared_ptr<IButton>, Events::StateAction) = 0;
+    virtual void addButton(std::unique_ptr<IButton>, Events::StateAction) = 0;
     virtual std::optional<Events::StateAction> getActiveAction() = 0;
     virtual void drawTo(Core::IWindow&) = 0;
     virtual void update(const Core::IWindow&) = 0;
@@ -36,7 +36,7 @@ public:
     UserInterface(){}
     virtual ~UserInterface(){}
 
-    virtual void addButton(std::shared_ptr<IButton>, Events::StateAction) override;
+    virtual void addButton(std::unique_ptr<IButton>, Events::StateAction) override;
     virtual std::optional<Events::StateAction> getActiveAction() override;
     virtual void drawTo(Core::IWindow&) override;
     virtual void update(const Core::IWindow&) override;
