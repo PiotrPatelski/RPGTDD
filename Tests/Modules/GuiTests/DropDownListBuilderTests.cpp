@@ -13,6 +13,8 @@ struct DropDownListBuilderTest : public testing::Test
     DropDownListBuilderTest()
     {
         sut = std::make_unique<MenuDropDownListBuilder>();
+        button = std::make_unique<NiceMock<ButtonMock>>();
+        ON_CALL(*button, getPosition()).WillByDefault(Return(sf::Vector2f{0, 0}));
     }
     std::unique_ptr<DropDownListBuilder> sut;
     std::unique_ptr<NiceMock<ButtonMock>> button;

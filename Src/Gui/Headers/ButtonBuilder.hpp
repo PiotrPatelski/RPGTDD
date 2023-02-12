@@ -6,7 +6,7 @@
 namespace Gui
 {
 
-uint calculateFontSize(const sf::VideoMode&);
+uint calculateFontSize(const sf::Vector2f&);
 
 class ScreenPercentage
 {

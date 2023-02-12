@@ -23,6 +23,7 @@ TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithDefaultValues)
 {
     auto button = sut->build();
     ASSERT_EQ(button->getTextContent().getString(), "");
+    ASSERT_EQ(button->getTextContent().getCharacterSize(), 0);
     ASSERT_EQ(button->getPosition().x, 0.f);
     ASSERT_EQ(button->getPosition().y, 0.f);
     ASSERT_EQ(button->getSize().x, 0.f);
@@ -73,18 +74,18 @@ TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithGivenFont)
     ASSERT_EQ(button->getFont().getInfo().family, "xBONES");
 }
 
-TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithCalculatedCharacterSize)
+TEST_F(ButtonBuilderTest, buttonBuilderCreatesButtonWithCalculatedCharacterSizeWhenButtonSizeIsNotZero)
 {
-    auto button = sut->withTextContent("New Game").build();
-    ASSERT_EQ(button->getTextContent().getCharacterSize(), 42);
+    auto button = sut->withTextContent("New Game").withSize(9.f, 7.f).build();
+    ASSERT_EQ(button->getTextContent().getCharacterSize(), 30);
 }
 
 TEST(ButtonBuilderHelperFunctionTest, calculatesFontSizeFromScreenResolution)
 {
-    const uint screenWidth = 1920;
-    const uint screenHeight = 1080;
-    const uint result = 42;
-    ASSERT_EQ(calculateFontSize(sf::VideoMode(screenWidth, screenHeight)), result);
+    const uint buttonWidth = 150.f;
+    const uint buttonHeight = 90.f;
+    const uint result = 30;
+    ASSERT_EQ(calculateFontSize(sf::Vector2f(buttonWidth, buttonHeight)), result);
 }
 
 }

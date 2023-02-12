@@ -11,7 +11,18 @@ MenuDropDownList::MenuDropDownList(
   textContent(textContent),
   active(false)
 {
+    setTextPosition();
+}
 
+void MenuDropDownList::setTextPosition()
+{
+    const auto listPosition = this->initiatingButton.object->getPosition();
+    const float xOffset = 13.0f;
+    const float yOffset = -40.f;
+    auto textPosition = listPosition + sf::Vector2f{xOffset, yOffset};
+    if(textPosition.y < 0)
+        textPosition.y = 0;
+    this->textContent.setPosition(textPosition);
 }
 
 void MenuDropDownList::addSection(const std::string& name, Events::StateAction action)
@@ -42,6 +53,7 @@ void MenuDropDownList::update(const sf::Vector2i& currentMousePosition)
 
 void MenuDropDownList::drawTo(Core::IWindow& window)
 {
+    window.draw(textContent);
     window.draw(initiatingButton.object->getBackground());
     window.draw(initiatingButton.object->getTextContent());
     if(active)

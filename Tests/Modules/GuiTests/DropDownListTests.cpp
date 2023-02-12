@@ -14,6 +14,32 @@ struct DropDownListTest : public testing::Test
     NiceMock<Core::WindowMock> window;
 };
 
+TEST_F(DropDownListTest, dropDownListWillGetInitiatingButtonPositionToSetTextPositionWithHardcodedOffsetUponCreation)
+{
+    auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
+    const sf::Vector2f buttonPosition{50, 50};
+    EXPECT_CALL(*initiatingButton, getPosition()).WillOnce(Return(buttonPosition));
+    auto sut = std::make_unique<MenuDropDownList>(
+        sf::Text{},
+        std::move(initiatingButton));
+    const auto result = sut->getTextContent().getPosition();
+    EXPECT_EQ(result.x, buttonPosition.x + 13);
+    EXPECT_EQ(result.y, buttonPosition.y - 40);
+}
+
+TEST_F(DropDownListTest, dropDownListWillGetInitiatingButtonPositionToSetTextPositionWithZeroYWhenCalculatedPosIsLessThanZero)
+{
+    auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
+    const sf::Vector2f buttonPosition{3, 3};
+    EXPECT_CALL(*initiatingButton, getPosition()).WillOnce(Return(buttonPosition));
+    auto sut = std::make_unique<MenuDropDownList>(
+        sf::Text{},
+        std::move(initiatingButton));
+    const auto result = sut->getTextContent().getPosition();
+    EXPECT_EQ(result.x, buttonPosition.x + 13);
+    EXPECT_EQ(result.y, 0);
+}
+
 TEST_F(DropDownListTest, dropDownListWillUpdateItsInitiatingButtonAndCheckIfItsPressed)
 {
     auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
@@ -50,7 +76,9 @@ TEST_F(DropDownListTest, addSectionWillCloneInitiatingButton)
     auto sectionButton1 = std::make_unique<NiceMock<ButtonMock>>();
     auto sectionButton2 = std::make_unique<NiceMock<ButtonMock>>();
     EXPECT_CALL(*initiatingButton, getSize()).WillOnce(Return(sf::Vector2f{10.f, 10.f}));
-    EXPECT_CALL(*initiatingButton, getPosition()).WillOnce(Return(sf::Vector2f{3.f, 3.f}));
+    EXPECT_CALL(*initiatingButton, getPosition())
+        .WillOnce(Return(sf::Vector2f{3.f, 3.f}))
+        .WillOnce(Return(sf::Vector2f{3.f, 3.f}));
     EXPECT_CALL(*sectionButton1, getSize()).WillOnce(Return(sf::Vector2f{10.f, 10.f}));
     EXPECT_CALL(*sectionButton1, getPosition()).WillOnce(Return(sf::Vector2f{3.f, 13.f}));
     EXPECT_CALL(*initiatingButton, clone(StrEq("FirstSection"), Eq(sf::Vector2f{3.f, 13.f})))
@@ -227,8 +255,27 @@ TEST_F(DropDownListTest, menuDropDownListWillDrawBothInitiatingButtonAndSections
     sut->addSection("SecondSection", std::monostate{});
 
     sut->update(sf::Vector2i{3, 3});
+    //draw list text and Twice per section, including initiatingButton
+    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(7);
+    sut->drawTo(window);
+}
 
-    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(6); //Twice per section, including initiatingButton
+TEST_F(DropDownListTest, menuDropDownListWillDrawItsTextContent)
+{
+    auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
+    ON_CALL(*initiatingButton, isPressed())
+        .WillByDefault(Return(false));
+    ON_CALL(*initiatingButton, getBackground())
+        .WillByDefault(Return(sf::RectangleShape{}));
+    ON_CALL(*initiatingButton, getTextContent())
+        .WillByDefault(Return(sf::Text{}));
+
+    auto sut = std::make_unique<MenuDropDownList>(
+        sf::Text{},
+        std::move(initiatingButton));
+
+    //draw list text and button background and button text
+    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(3);
     sut->drawTo(window);
 }
 

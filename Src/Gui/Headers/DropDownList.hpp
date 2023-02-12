@@ -36,6 +36,7 @@ public:
     virtual void update(const sf::Vector2i&) override;
     virtual void drawTo(Core::IWindow&) override;
 private:
+    void setTextPosition();
     Events::StateAction findActiveAction(const sf::Vector2i&);
     sf::Vector2f calculateNextSectionPosition();
     void drawSections(Core::IWindow&);

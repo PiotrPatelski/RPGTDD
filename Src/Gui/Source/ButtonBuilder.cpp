@@ -18,10 +18,12 @@ EventColor DEFAULT_ACTIVE_COLORS = EventColor{
     sf::Color(20, 20, 20, 50),
     sf::Color::Transparent};
 
-uint calculateFontSize(const sf::VideoMode& screenResolution)
+uint calculateFontSize(const sf::Vector2f& buttonSize)
 {
-    const uint divider = 70;
-    return static_cast<unsigned>((screenResolution.width + screenResolution.height) / divider);
+    const uint divider = static_cast<unsigned>(buttonSize.x + buttonSize.y);
+    if(divider != 0)
+        return (divider / 8);
+    return 0;
 }
 
 ButtonBuilder::ButtonBuilder(const sf::VideoMode& resolution)
@@ -39,7 +41,7 @@ std::unique_ptr<IButton> ButtonBuilder::build()
         size,
         textContent,
         font,
-        calculateFontSize(screenResolution),
+        calculateFontSize(size),
         idleColors,
         hoverColors,
         activeColors,
