@@ -27,7 +27,7 @@ public:
 	virtual ~ConfigManager(){}
 
 	virtual inline void queueGraphicsRequest(std::function<void(FileMgmt::GraphicsConfig&)> request) override {request(diff);}
-	virtual void applyDiff() override {graphics = diff;}//TODO OVERWRITE CONFIG FILE WITH MOST RECENT CHANGE
+	virtual void applyDiff() override;
 
 	virtual inline const FileMgmt::GraphicsConfig& getGraphics() const override {return graphics;}
 	virtual inline const FileMgmt::KeyboardConfig& getKeyboard() const override {return keyboard;}

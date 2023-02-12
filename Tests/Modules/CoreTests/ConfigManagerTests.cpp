@@ -15,6 +15,27 @@ struct ConfigManagerTest : public testing::Test
         sut = std::make_unique<ConfigManager>();
     }
     std::unique_ptr<IConfigManager> sut;
+    ~ConfigManagerTest()
+    {
+        void resetToDefaultConfig();
+    }
+    void resetToDefaultConfig()
+    {
+        FileMgmt::IniParser::setBuildPath(TEST_PATH);
+        sf::ContextSettings ctxSettings;
+        ctxSettings.antialiasingLevel = 1;
+        FileMgmt::GraphicsConfig defaultTestConfig
+        {
+            "TESTCONFIG",
+            sf::VideoMode(21, 37),
+            true,
+            30,
+            true,
+            ctxSettings
+        };
+        FileMgmt::IniParser parser;
+        parser.setGraphicsConfig(defaultTestConfig);
+    }
 };
 
 TEST_F(ConfigManagerTest, configIsModifiedWithDiffOnlyAfterApplyCall)
@@ -25,7 +46,9 @@ TEST_F(ConfigManagerTest, configIsModifiedWithDiffOnlyAfterApplyCall)
     sut->queueGraphicsRequest(request);
     ASSERT_NE(sut->getGraphics().resolution, requestedResolution);
     sut->applyDiff();
-    ASSERT_EQ(sut->getGraphics().resolution, requestedResolution);
+    sut = std::make_unique<ConfigManager>();
+    ASSERT_EQ(sut->getGraphics().resolution.width, requestedResolution.width);
+    ASSERT_EQ(sut->getGraphics().resolution.height, requestedResolution.height);
 }
 
 }

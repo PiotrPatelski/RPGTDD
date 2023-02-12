@@ -10,11 +10,11 @@ public:
     IIniParser(){}
     virtual ~IIniParser(){}
 
-    virtual GraphicsConfig parseGraphicsConfig() = 0;
-    virtual SupportedKeys parseKeyboardConfig() = 0;
-    virtual MainMenuKeys parseMainMenuKeys(const SupportedKeys&) = 0;
-private:
-    virtual std::ifstream findAndOpenFile(const std::string& path) = 0;
+    virtual GraphicsConfig getGraphicsConfig() = 0;
+    virtual SupportedKeys getKeyboardConfig() = 0;
+    virtual MainMenuKeys getMainMenuKeys(const SupportedKeys&) = 0;
+
+    virtual void setGraphicsConfig(const GraphicsConfig&) = 0;
 };
 
 class IniParser : public IIniParser
@@ -23,13 +23,15 @@ public:
     IniParser(){}
     virtual ~IniParser(){}
 
-    virtual GraphicsConfig parseGraphicsConfig() override;
-    virtual SupportedKeys parseKeyboardConfig() override;
-    virtual MainMenuKeys parseMainMenuKeys(const SupportedKeys&) override;
+    virtual GraphicsConfig getGraphicsConfig() override;
+    virtual SupportedKeys getKeyboardConfig() override;
+    virtual MainMenuKeys getMainMenuKeys(const SupportedKeys&) override;
 
+    virtual void setGraphicsConfig(const GraphicsConfig&) override;
     static void setBuildPath(const std::string& path) {buildPath = path;}
 private:
-    virtual std::ifstream findAndOpenFile(const std::string& path) override;
+    std::ifstream openFileForPull(const std::string& path);
+    std::ofstream openFileForPush(const std::string& path);
     static std::string buildPath;
 };
 

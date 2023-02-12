@@ -17,16 +17,35 @@ struct IniParserTest : public testing::Test
     {
         IniParser::setBuildPath(TEST_PATH);
         sut = std::make_unique<IniParser>();
+        resetToDefaultConfig();
     }
+
     GraphicsConfig graphicsConfig;
     SupportedKeys supportedKeys;
     MainMenuKeys mainMenuKeys;
     std::unique_ptr<IIniParser> sut;
+    void resetToDefaultConfig()
+    {
+        IniParser::setBuildPath(TEST_PATH);
+        sf::ContextSettings ctxSettings;
+        ctxSettings.antialiasingLevel = 1;
+        GraphicsConfig defaultTestConfig
+        {
+            "TESTCONFIG",
+            sf::VideoMode(21, 37),
+            true,
+            30,
+            true,
+            ctxSettings
+        };
+        sut->setGraphicsConfig(defaultTestConfig);
+    }
+
 };
 
 TEST_F(IniParserTest, iniParserFillsGraphicsConfigWithDataParsedFromTestConfigFile)
 {
-    ASSERT_NO_THROW(graphicsConfig = sut->parseGraphicsConfig());
+    ASSERT_NO_THROW(graphicsConfig = sut->getGraphicsConfig());
     ASSERT_EQ(graphicsConfig.gameTitle, "TESTCONFIG");
     ASSERT_EQ(graphicsConfig.resolution.width, 21);
     ASSERT_EQ(graphicsConfig.resolution.height, 37);
@@ -36,15 +55,15 @@ TEST_F(IniParserTest, iniParserFillsGraphicsConfigWithDataParsedFromTestConfigFi
     ASSERT_EQ(graphicsConfig.contextSettings.antialiasingLevel, 1);
 }
 
-TEST_F(IniParserTest, iniParserThrowsWhenGraphicsConfigFilePathIsInvalid)
+TEST_F(IniParserTest, iniParserThrowsWhenGraphicsConfigFilePathIsInvalidOnRead)
 {
     IniParser::setBuildPath("invalidPath");
-    ASSERT_THROW(sut->parseGraphicsConfig(), std::runtime_error);
+    ASSERT_THROW(sut->getGraphicsConfig(), std::runtime_error);
 }
 
 TEST_F(IniParserTest, iniParserFillsSupportedKeysConfigWithDataParsedFromTestConfigFile)
 {
-    ASSERT_NO_THROW(supportedKeys = sut->parseKeyboardConfig());
+    ASSERT_NO_THROW(supportedKeys = sut->getKeyboardConfig());
     ASSERT_EQ(supportedKeys.getKeys().at("Escape"), 36);
     ASSERT_EQ(supportedKeys.getKeys().at("D"), 3);
     ASSERT_EQ(supportedKeys.getKeys().at("PageDown"), 62);
@@ -53,20 +72,49 @@ TEST_F(IniParserTest, iniParserFillsSupportedKeysConfigWithDataParsedFromTestCon
 TEST_F(IniParserTest, iniParserThrowsWhenSupportedKeysConfigFilePathIsInvalid)
 {
     IniParser::setBuildPath("invalidPath");
-    ASSERT_THROW(sut->parseKeyboardConfig(), std::runtime_error);
+    ASSERT_THROW(sut->getKeyboardConfig(), std::runtime_error);
 }
 
 TEST_F(IniParserTest, iniParserFillsMainMenuKeysWithDataParsedFromTestConfigFile)
 {
-    ASSERT_NO_THROW(supportedKeys = sut->parseKeyboardConfig());
-    ASSERT_NO_THROW(mainMenuKeys = sut->parseMainMenuKeys(supportedKeys));
+    ASSERT_NO_THROW(supportedKeys = sut->getKeyboardConfig());
+    ASSERT_NO_THROW(mainMenuKeys = sut->getMainMenuKeys(supportedKeys));
     ASSERT_EQ(mainMenuKeys.getKeys().at("CLOSE"), 36);
 }
 
 TEST_F(IniParserTest, iniParserThrowsWhenMainMenuKeysFilePathIsInvalid)
 {
     IniParser::setBuildPath("invalidPath");
-    ASSERT_THROW(sut->parseMainMenuKeys(supportedKeys), std::runtime_error);
+    ASSERT_THROW(sut->getMainMenuKeys(supportedKeys), std::runtime_error);
+}
+
+TEST_F(IniParserTest, iniParserOverwritesGraphicsIniWithNoThrow)
+{
+    GraphicsConfig configToOverwrite
+    {
+        "overwrite",
+        sf::VideoMode(480, 480),
+        false,
+        40,
+        false,
+        sf::ContextSettings()
+    };
+    ASSERT_NO_THROW(sut->setGraphicsConfig(configToOverwrite));
+    ASSERT_NO_THROW(graphicsConfig = sut->getGraphicsConfig());
+    ASSERT_EQ(graphicsConfig.gameTitle, configToOverwrite.gameTitle);
+    ASSERT_EQ(graphicsConfig.resolution.width, configToOverwrite.resolution.width);
+    ASSERT_EQ(graphicsConfig.resolution.height, configToOverwrite.resolution.height);
+    ASSERT_FALSE(graphicsConfig.fullscreen);
+    ASSERT_EQ(graphicsConfig.frameRateLimit, configToOverwrite.frameRateLimit);
+    ASSERT_FALSE(graphicsConfig.verticalSync);
+    ASSERT_EQ(graphicsConfig.contextSettings.antialiasingLevel, 0);
+}
+
+TEST_F(IniParserTest, iniParserThrowsWhenGraphicsFilePathIsInvalidOnWrite)
+{
+    GraphicsConfig configToOverwrite;
+    IniParser::setBuildPath("invalidPath");
+    ASSERT_THROW(sut->setGraphicsConfig(configToOverwrite), std::runtime_error);
 }
 
 }

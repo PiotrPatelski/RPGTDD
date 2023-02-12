@@ -6,10 +6,17 @@ namespace Core
 ConfigManager::ConfigManager()
 {
     FileMgmt::IniParser parser;
-    graphics = parser.parseGraphicsConfig();
+    graphics = parser.getGraphicsConfig();
     diff = graphics;
-    keyboard.supportedKeys = parser.parseKeyboardConfig();
-    keyboard.mainMenuKeys = parser.parseMainMenuKeys(keyboard.supportedKeys);
+    keyboard.supportedKeys = parser.getKeyboardConfig();
+    keyboard.mainMenuKeys = parser.getMainMenuKeys(keyboard.supportedKeys);
+}
+
+void ConfigManager::applyDiff()
+{
+    graphics = diff;
+    FileMgmt::IniParser parser;
+    parser.setGraphicsConfig(graphics);
 }
 
 }
