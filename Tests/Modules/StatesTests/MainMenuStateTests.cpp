@@ -11,7 +11,7 @@
 #include "WindowMock.hpp"
 #include "ButtonMock.hpp"
 #include "ButtonBuilderMock.hpp"
-#include "DropDownListBuilderMock.hpp"
+#include "ButtonListBuilderMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -218,7 +218,7 @@ struct MenuStateButtonActionsTest : public MainMenuStateTest
     std::unique_ptr<NiceMock<Gui::ButtonMock>> toSettingsButton;
     std::unique_ptr<NiceMock<Gui::ButtonMock>> toEditorButton;
     std::unique_ptr<NiceMock<Gui::ButtonMock>> toExitButton;
-    std::unique_ptr<NiceMock<Gui::DropDownListBuilderMock>> dropDownListBuilder;
+    std::unique_ptr<NiceMock<Gui::ButtonListBuilderMock>> dropDownListBuilder;
 };
 
 TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameButtonIsPressed)

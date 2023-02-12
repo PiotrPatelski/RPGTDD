@@ -4,18 +4,20 @@
 namespace States
 {
 class MenuState;
+class GameState;
 }
 
 namespace Events
 {
 using MenuAction = std::function<void(States::MenuState&)>;
-// using GameStateAction = std::function<void(States::GameState&)>;
+using GameAction = std::function<void(States::GameState&)>;
 // using SettingsAction = std::function<void(States::SettingsState&)>;
 // using EditorAction = std::function<void(States::EditorState&)>;
 
 using StateAction = std::variant<
     std::monostate,
-    MenuAction>;
+    MenuAction,
+    GameAction>;
 
 struct ToMainMenuState
 {

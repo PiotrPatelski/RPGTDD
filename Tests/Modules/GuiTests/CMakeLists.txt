@@ -3,6 +3,7 @@ set(MODULE_NAME GuiTests)
 set(SOURCES
     ButtonTests.cpp
     ButtonBuilderTests.cpp
+    ButtonMenuTests.cpp
     UserInterfaceTests.cpp
     DropDownListTests.cpp
     DropDownListBuilderTests.cpp)

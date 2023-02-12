@@ -92,10 +92,10 @@ void SettingsGuiManager::addResolutionList(const std::shared_ptr<sf::Font> font)
 
     fillListWithResolutionModes(*resolutionList);
 
-    gui->addDropDownList(std::move(resolutionList));
+    gui->addButtonList(std::move(resolutionList));
 }
 
-void SettingsGuiManager::fillListWithResolutionModes(DropDownList& list)
+void SettingsGuiManager::fillListWithResolutionModes(ButtonList& list)
 {
     auto availableModes = sf::VideoMode::getFullscreenModes();
     for(auto mode : availableModes)

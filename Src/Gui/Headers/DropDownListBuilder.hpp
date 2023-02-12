@@ -1,23 +1,15 @@
 #pragma once
-#include <DropDownList.hpp>
+#include <ButtonListBuilder.hpp>
 
 namespace Gui
 {
 
-class DropDownListBuilder
+class DropDownListBuilder : public ButtonListBuilder
 {
 public:
     virtual ~DropDownListBuilder() = default;
-    virtual DropDownListBuilder& withTextContent(const sf::Text&) = 0;
-    virtual std::unique_ptr<DropDownList> build(std::unique_ptr<IButton>) = 0;
-};
-
-class MenuDropDownListBuilder : public DropDownListBuilder
-{
-public:
-    virtual ~MenuDropDownListBuilder() = default;
-    virtual MenuDropDownListBuilder& withTextContent(const sf::Text&) override;
-    virtual std::unique_ptr<DropDownList> build(std::unique_ptr<IButton>) override;
+    virtual DropDownListBuilder& withTextContent(const sf::Text&) override;
+    virtual std::unique_ptr<ButtonList> build(std::unique_ptr<IButton>) override;
 private:
     sf::Text textContent;
 };

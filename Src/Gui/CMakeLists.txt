@@ -3,19 +3,23 @@ set(MODULE_NAME Gui)
 set(SOURCES
     Source/Button.cpp
     Source/ButtonBuilder.cpp
+    Source/ButtonMenu.cpp
     Source/GuiManager.cpp
     Source/UserInterface.cpp
-    Source/DropDownList.cpp
     Source/DropDownListBuilder.cpp
+    Source/DropDownList.cpp
     )
 
 set(HEADERS
     Headers/Button.hpp
     Headers/ButtonBuilder.hpp
+    Headers/ButtonMenu.hpp
     Headers/GuiManager.hpp
     Headers/UserInterface.hpp
-    Headers/DropDownList.hpp
+    Headers/ButtonList.hpp
+    Headers/ButtonListBuilder.hpp
     Headers/DropDownListBuilder.hpp
+    Headers/DropDownList.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

@@ -13,7 +13,7 @@ class UserInterfaceMock : public UserInterface
 {
 public:
     MOCK_METHOD(void, addButton, (std::unique_ptr<IButton>, Events::StateAction), (override));
-    MOCK_METHOD(void, addDropDownList, (std::unique_ptr<DropDownList>), (override));
+    MOCK_METHOD(void, addButtonList, (std::unique_ptr<ButtonList>), (override));
     MOCK_METHOD(std::optional<Events::StateAction>, getActiveAction, (), (override));
     MOCK_METHOD(void, drawTo, (Core::IWindow&), (override));
     MOCK_METHOD(void, update, (const sf::Vector2i&), (override));

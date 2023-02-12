@@ -3,6 +3,7 @@
 #include <EditorState.hpp>
 #include <SettingsState.hpp>
 #include <MainMenuState.hpp>
+#include <DropDownListBuilder.hpp>
 
 namespace Events
 {
@@ -39,7 +40,7 @@ void ToSettingsState::operator()(States::MenuState& state)
         std::make_unique<FileMgmt::SettingsAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
             std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution),
-            std::make_unique<Gui::MenuDropDownListBuilder>()),
+            std::make_unique<Gui::DropDownListBuilder>()),
         std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
     state.finishState();
 }
@@ -71,7 +72,7 @@ void ApplySettings::operator()(States::MenuState& state)
         std::make_unique<FileMgmt::SettingsAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
             std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution),
-            std::make_unique<Gui::MenuDropDownListBuilder>()),
+            std::make_unique<Gui::DropDownListBuilder>()),
         std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
     state.finishState();
 }

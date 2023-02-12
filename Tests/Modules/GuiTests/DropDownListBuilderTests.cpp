@@ -8,19 +8,19 @@ namespace Gui
 
 using namespace ::testing;
 
-struct DropDownListBuilderTest : public testing::Test
+struct ButtonListBuilderTest : public testing::Test
 {
-    DropDownListBuilderTest()
+    ButtonListBuilderTest()
     {
-        sut = std::make_unique<MenuDropDownListBuilder>();
+        sut = std::make_unique<DropDownListBuilder>();
         button = std::make_unique<NiceMock<ButtonMock>>();
         ON_CALL(*button, getPosition()).WillByDefault(Return(sf::Vector2f{0, 0}));
     }
-    std::unique_ptr<DropDownListBuilder> sut;
+    std::unique_ptr<ButtonListBuilder> sut;
     std::unique_ptr<NiceMock<ButtonMock>> button;
 };
 
-TEST_F(DropDownListBuilderTest, dropDownListBuilderCreatesDropDownListWithDefaultValues)
+TEST_F(ButtonListBuilderTest, dropDownListBuilderCreatesButtonListWithDefaultValues)
 {
     auto dropDownList = sut->build(std::move(button));
     ASSERT_EQ(dropDownList->getTextContent().getString(), "");
@@ -28,11 +28,11 @@ TEST_F(DropDownListBuilderTest, dropDownListBuilderCreatesDropDownListWithDefaul
     ASSERT_FALSE(dropDownList->isActive());
 }
 
-TEST_F(DropDownListBuilderTest, dropDownListBuilderCreatesDropDownListWithGivenTextContent)
+TEST_F(ButtonListBuilderTest, dropDownListBuilderCreatesButtonListWithGivenTextContent)
 {
-    sf::Text text("TestDropDownList", sf::Font{});
+    sf::Text text("TestButtonList", sf::Font{});
     auto dropDownList = sut->withTextContent(text).build(std::move(button));
-    ASSERT_EQ(dropDownList->getTextContent().getString(), "TestDropDownList");
+    ASSERT_EQ(dropDownList->getTextContent().getString(), "TestButtonList");
 }
 
 }

@@ -10,7 +10,7 @@ void MenuGui::addButton(std::unique_ptr<IButton> button, Events::StateAction act
     buttons.push_back(ActionButton{std::move(button), action});
 }
 
-void MenuGui::addDropDownList(std::unique_ptr<DropDownList> list)
+void MenuGui::addButtonList(std::unique_ptr<ButtonList> list)
 {
     dropDownLists.push_back(std::move(list));
 }
@@ -19,7 +19,7 @@ std::optional<Events::StateAction> MenuGui::getActiveAction()
 {
     auto action = pollActionFromButtons();
     if(action == std::nullopt)
-        action = pollActionFromDropDownLists();
+        action = pollActionFromButtonLists();
     return action;
 }
 
@@ -57,7 +57,7 @@ std::optional<Events::StateAction> MenuGui::pollActionFromButtons()
     return std::nullopt;
 }
 
-std::optional<Events::StateAction> MenuGui::pollActionFromDropDownLists()
+std::optional<Events::StateAction> MenuGui::pollActionFromButtonLists()
 {
     for (auto& list : dropDownLists)
     {

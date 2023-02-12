@@ -2,16 +2,18 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <DropDownList.hpp>
+#include <ButtonList.hpp>
 
 namespace Gui
 {
 
 using ::testing::Test;
 
-class DropDownListMock : public DropDownList
+class ButtonListMock : public ButtonList
 {
 public:
+    ButtonListMock()
+    : ButtonList(sf::Text{}){}
     MOCK_METHOD((const bool), isActive, (), (const, override));
     MOCK_METHOD(std::optional<Events::StateAction>, getActiveAction, (), (override));
     MOCK_METHOD((const sf::Text), getTextContent, (), (const, override));

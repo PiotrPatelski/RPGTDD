@@ -2,7 +2,7 @@
 
 #include <SFML/Window.hpp>
 #include <ButtonBuilder.hpp>
-#include <DropDownListBuilder.hpp>
+#include <ButtonListBuilder.hpp>
 #include <UserInterface.hpp>
 
 
@@ -64,7 +64,7 @@ class SettingsGuiManager : public IGuiManager
 public:
     SettingsGuiManager(
         std::unique_ptr<IButtonBuilder> buttonBuilder,
-        std::unique_ptr<DropDownListBuilder> dropDownListBuilder)
+        std::unique_ptr<ButtonListBuilder> dropDownListBuilder)
         : buttonBuilder(std::move(buttonBuilder)),
           dropDownListBuilder(std::move(dropDownListBuilder))
         {std::cout<<"SettingsGuiManager"<<std::endl;}
@@ -75,9 +75,9 @@ private:
     void addApplyButton(const std::shared_ptr<sf::Font>);
     void addBackButton(const std::shared_ptr<sf::Font>);
     void addResolutionList(const std::shared_ptr<sf::Font>);
-    void fillListWithResolutionModes(DropDownList&);
+    void fillListWithResolutionModes(ButtonList&);
     std::unique_ptr<IButtonBuilder> buttonBuilder;
-    std::unique_ptr<DropDownListBuilder> dropDownListBuilder;
+    std::unique_ptr<ButtonListBuilder> dropDownListBuilder;
     std::unique_ptr<Gui::UserInterface> gui;
 };
 

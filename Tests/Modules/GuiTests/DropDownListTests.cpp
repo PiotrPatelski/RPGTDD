@@ -19,7 +19,7 @@ TEST_F(DropDownListTest, dropDownListWillGetInitiatingButtonPositionToSetTextPos
     auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
     const sf::Vector2f buttonPosition{50, 50};
     EXPECT_CALL(*initiatingButton, getPosition()).WillOnce(Return(buttonPosition));
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
     const auto result = sut->getTextContent().getPosition();
@@ -32,7 +32,7 @@ TEST_F(DropDownListTest, dropDownListWillGetInitiatingButtonPositionToSetTextPos
     auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
     const sf::Vector2f buttonPosition{3, 3};
     EXPECT_CALL(*initiatingButton, getPosition()).WillOnce(Return(buttonPosition));
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
     const auto result = sut->getTextContent().getPosition();
@@ -45,7 +45,7 @@ TEST_F(DropDownListTest, dropDownListWillUpdateItsInitiatingButtonAndCheckIfItsP
     auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
     EXPECT_CALL(*initiatingButton, update(Eq(sf::Vector2i{3, 3})));
     EXPECT_CALL(*initiatingButton, isPressed()).WillOnce(Return(false));
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
     sut->update(sf::Vector2i{3, 3});
@@ -59,7 +59,7 @@ TEST_F(DropDownListTest, dropDownListWillActivateOrHideDependingOnItsPreviousSta
         .WillOnce(Return(true))
         .WillOnce(Return(true));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -86,7 +86,7 @@ TEST_F(DropDownListTest, addSectionWillCloneInitiatingButton)
     EXPECT_CALL(*initiatingButton, clone(StrEq("SecondSection"), Eq(sf::Vector2f{3.f, 23.f})))
         .WillOnce(Return(ByMove(std::move(sectionButton2))));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -107,7 +107,7 @@ TEST_F(DropDownListTest, dropDownListWillUpdateSectionsOnceActivated)
     EXPECT_CALL(*initiatingButton, clone(_, _))
         .WillOnce(Return(ByMove(std::move(sectionButton))));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -130,7 +130,7 @@ TEST_F(DropDownListTest, dropDownListWillStopUpdatingSectionsOnceInitiatingButto
     EXPECT_CALL(*initiatingButton, clone(_, _))
         .WillOnce(Return(ByMove(std::move(sectionButton))));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -147,7 +147,7 @@ TEST_F(DropDownListTest, dropDownListWillReturnNulloptWhenNoSectionsAreToBePress
     EXPECT_CALL(*initiatingButton, isPressed())
         .WillOnce(Return(true));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -155,7 +155,7 @@ TEST_F(DropDownListTest, dropDownListWillReturnNulloptWhenNoSectionsAreToBePress
     EXPECT_EQ(sut->getActiveAction(), std::nullopt);
 }
 
-TEST_F(DropDownListTest, menuDropDownListWillReturnAMenuActionOnceWhenSectionIsPressedOnce)
+TEST_F(DropDownListTest, dropDownListWillReturnAMenuActionOnceWhenSectionIsPressedOnce)
 {
     auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
     EXPECT_CALL(*initiatingButton, update(Eq(sf::Vector2i{3, 3}))).Times(2);
@@ -171,7 +171,7 @@ TEST_F(DropDownListTest, menuDropDownListWillReturnAMenuActionOnceWhenSectionIsP
     EXPECT_CALL(*initiatingButton, clone(_, _))
         .WillOnce(Return(ByMove(std::move(sectionButton))));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -183,7 +183,7 @@ TEST_F(DropDownListTest, menuDropDownListWillReturnAMenuActionOnceWhenSectionIsP
     ASSERT_EQ(sut->getActiveAction(), std::nullopt);
 }
 
-TEST_F(DropDownListTest, menuDropDownListWillReturnNulloptWhenNoneOfExistingSectionsArePressed)
+TEST_F(DropDownListTest, dropDownListWillReturnNulloptWhenNoneOfExistingSectionsArePressed)
 {
     auto sectionButton1 = std::make_unique<NiceMock<ButtonMock>>();
     EXPECT_CALL(*sectionButton1, update(_));
@@ -210,7 +210,7 @@ TEST_F(DropDownListTest, menuDropDownListWillReturnNulloptWhenNoneOfExistingSect
         .WillOnce(Return(ByMove(std::move(sectionButton2))))
         .WillOnce(Return(ByMove(std::move(sectionButton3))));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -221,7 +221,7 @@ TEST_F(DropDownListTest, menuDropDownListWillReturnNulloptWhenNoneOfExistingSect
     ASSERT_EQ(sut->getActiveAction(), std::nullopt);
 }
 
-TEST_F(DropDownListTest, menuDropDownListWillDrawBothInitiatingButtonAndSectionsWhenActive)
+TEST_F(DropDownListTest, dropDownListWillDrawBothInitiatingButtonAndSectionsWhenActive)
 {
     auto sectionButton1 = std::make_unique<NiceMock<ButtonMock>>();
     EXPECT_CALL(*sectionButton1, getBackground())
@@ -247,7 +247,7 @@ TEST_F(DropDownListTest, menuDropDownListWillDrawBothInitiatingButtonAndSections
         .WillOnce(Return(ByMove(std::move(sectionButton1))))
         .WillOnce(Return(ByMove(std::move(sectionButton2))));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
@@ -260,7 +260,7 @@ TEST_F(DropDownListTest, menuDropDownListWillDrawBothInitiatingButtonAndSections
     sut->drawTo(window);
 }
 
-TEST_F(DropDownListTest, menuDropDownListWillDrawItsTextContent)
+TEST_F(DropDownListTest, dropDownListWillDrawItsTextContent)
 {
     auto initiatingButton = std::make_unique<NiceMock<ButtonMock>>();
     ON_CALL(*initiatingButton, isPressed())
@@ -270,7 +270,7 @@ TEST_F(DropDownListTest, menuDropDownListWillDrawItsTextContent)
     ON_CALL(*initiatingButton, getTextContent())
         .WillByDefault(Return(sf::Text{}));
 
-    auto sut = std::make_unique<MenuDropDownList>(
+    auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
