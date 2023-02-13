@@ -25,5 +25,6 @@
 #include <stdexcept>
 #include <filesystem>
 #include <variant>
+#include <optional>
 
 #endif

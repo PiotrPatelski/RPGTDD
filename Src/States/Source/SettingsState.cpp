@@ -6,7 +6,7 @@ namespace States
 SettingsState::SettingsState(
     std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::SettingsAssetsManager> assetsManager,
-    std::unique_ptr<Gui::IGuiManager> guiManager,
+    std::unique_ptr<Gui::GuiManager> guiManager,
     std::unique_ptr<Events::IInputListener> inputListener)
     : MenuState(
         configManager,

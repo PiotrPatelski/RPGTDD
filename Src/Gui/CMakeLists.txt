@@ -4,8 +4,12 @@ set(SOURCES
     Source/Button.cpp
     Source/ButtonBuilder.cpp
     Source/ButtonMenu.cpp
-    Source/GuiManager.cpp
-    Source/UserInterface.cpp
+    Source/MainMenuGuiManager.cpp
+    Source/SettingsGuiManager.cpp
+    Source/EditorGuiManager.cpp
+    Source/MenuGui.cpp
+    Source/EditorGui.cpp
+    Source/GameGui.cpp
     Source/DropDownListBuilder.cpp
     Source/DropDownList.cpp
     )
@@ -14,7 +18,14 @@ set(HEADERS
     Headers/Button.hpp
     Headers/ButtonBuilder.hpp
     Headers/ButtonMenu.hpp
+    Headers/MenuGui.hpp
+    Headers/EditorGui.hpp
+    Headers/GameGui.hpp
     Headers/GuiManager.hpp
+    Headers/MainMenuGuiManager.hpp
+    Headers/SettingsGuiManager.hpp
+    Headers/EditorGuiManager.hpp
+    Headers/GameGuiManager.hpp
     Headers/UserInterface.hpp
     Headers/ButtonList.hpp
     Headers/ButtonListBuilder.hpp

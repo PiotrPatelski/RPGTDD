@@ -4,7 +4,7 @@
 #include <State.hpp>
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
-#include <GuiManager.hpp>
+#include <GameGuiManager.hpp>
 #include <UserInterface.hpp>
 
 namespace States
@@ -16,7 +16,7 @@ public:
     GameState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::GameAssetsManager>,
-        std::unique_ptr<Gui::IGuiManager>);
+        std::unique_ptr<Gui::GuiManager>);
     virtual ~GameState() = default;
 
     virtual void update(const Core::IWindow& window, const float) override {}

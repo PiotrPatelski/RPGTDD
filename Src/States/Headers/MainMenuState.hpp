@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <MenuState.hpp>
-#include <GuiManager.hpp>
+#include <MainMenuGuiManager.hpp>
 #include <UserInterface.hpp>
 
 namespace States
@@ -14,7 +14,7 @@ public:
     MainMenuState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::MainMenuAssetsManager>,
-        std::unique_ptr<Gui::IGuiManager>);
+        std::unique_ptr<Gui::GuiManager>);
     virtual ~MainMenuState() = default;
 
     virtual void update(const Core::IWindow& window, const float) override;

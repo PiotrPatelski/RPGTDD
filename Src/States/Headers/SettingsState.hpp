@@ -5,7 +5,7 @@
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
 #include <InputListener.hpp>
-#include <GuiManager.hpp>
+#include <SettingsGuiManager.hpp>
 #include <UserInterface.hpp>
 
 namespace States
@@ -17,7 +17,7 @@ public:
     SettingsState(
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::SettingsAssetsManager>,
-        std::unique_ptr<Gui::IGuiManager>,
+        std::unique_ptr<Gui::GuiManager>,
         std::unique_ptr<Events::IInputListener>);
     virtual ~SettingsState() = default;
 

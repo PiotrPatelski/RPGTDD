@@ -4,7 +4,13 @@ set(SOURCES
     ButtonTests.cpp
     ButtonBuilderTests.cpp
     ButtonMenuTests.cpp
-    UserInterfaceTests.cpp
+    MenuGuiTests.cpp
+    EditorGuiTests.cpp
+    GameGuiTests.cpp
+    MainMenuGuiManagerTests.cpp
+    SettingsGuiManagerTests.cpp
+    EditorGuiManagerTests.cpp
+    GameGuiManagerTests.cpp
     DropDownListTests.cpp
     DropDownListBuilderTests.cpp)
 

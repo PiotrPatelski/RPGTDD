@@ -10,7 +10,7 @@ namespace Gui
 using ::testing::Test;
 using testing::Return;
 
-class GuiManagerMock : public IGuiManager
+class GuiManagerMock : public GuiManager
 {
 public:
 

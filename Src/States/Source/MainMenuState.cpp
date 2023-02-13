@@ -11,7 +11,7 @@ namespace States
 MainMenuState::MainMenuState(
     std::shared_ptr<Core::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
-    std::unique_ptr<Gui::IGuiManager> guiManager)
+    std::unique_ptr<Gui::GuiManager> guiManager)
     : MenuState(
         configManager,
         std::move(assetsManager))

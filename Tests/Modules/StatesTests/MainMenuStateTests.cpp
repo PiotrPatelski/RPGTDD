@@ -4,6 +4,7 @@
 #include <GameState.hpp>
 #include <EditorState.hpp>
 #include <SettingsState.hpp>
+#include <MenuGui.hpp>
 #include <ConfigManagerMock.hpp>
 #include <IniParser.hpp>
 #include "AssetsManagerMock.hpp"
