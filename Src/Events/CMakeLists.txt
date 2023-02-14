@@ -9,6 +9,7 @@ set(HEADERS
     Headers/ButtonEventHandler.hpp
     Headers/StateActions.hpp
     Headers/InputListener.hpp
+    Headers/GuiActions.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

@@ -1,7 +1,14 @@
 #include <GameGui.hpp>
+#include <GuiActions.hpp>
 
 namespace Gui
 {
+
+void GameGui::acceptRequest(Events::GuiAction& action)
+{
+    action.execute(*this);
+}
+
 void GameGui::addButton(std::unique_ptr<IButton> button, Events::StateAction action)
 {
 

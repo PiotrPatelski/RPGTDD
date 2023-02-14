@@ -1,9 +1,15 @@
 #include <MenuGui.hpp>
 #include <Window.hpp>
+#include <GuiActions.hpp>
 
 
 namespace Gui
 {
+
+void MenuGui::acceptRequest(Events::GuiAction& action)
+{
+    action.execute(*this);
+}
 
 void MenuGui::addButton(std::unique_ptr<IButton> button, Events::StateAction action)
 {

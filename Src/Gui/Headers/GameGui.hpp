@@ -9,6 +9,11 @@ namespace Core
 class IWindow;
 }
 
+namespace Events
+{
+class GuiAction;
+}
+
 namespace Gui
 {
 
@@ -17,7 +22,7 @@ class GameGui : public UserInterface
 public:
     GameGui(){}
     virtual ~GameGui(){}
-
+    virtual void acceptRequest(Events::GuiAction&) override;
     virtual void addButton(std::unique_ptr<IButton>, Events::StateAction) override;
     virtual void addButtonList(std::unique_ptr<ButtonList>) override;
     virtual std::optional<Events::StateAction> getActiveAction() override;

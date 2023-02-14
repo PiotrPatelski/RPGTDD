@@ -9,6 +9,11 @@ namespace Core
 class IWindow;
 }
 
+namespace Events
+{
+class GuiAction;
+}
+
 namespace Gui
 {
 
@@ -17,6 +22,8 @@ class UserInterface
 public:
     UserInterface(){}
     virtual ~UserInterface(){}
+
+    virtual void acceptRequest(Events::GuiAction&) = 0;
 
     virtual void addButton(std::unique_ptr<IButton>, Events::StateAction) = 0;
     virtual void addButtonList(std::unique_ptr<ButtonList>) = 0;

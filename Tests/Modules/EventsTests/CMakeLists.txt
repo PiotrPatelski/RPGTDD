@@ -2,6 +2,7 @@ set(MODULE_NAME EventsTests)
 
 set(SOURCES
     StateActionsTests.cpp
+    GuiActionsTests.cpp
     InputListenerTests.cpp
 )
 

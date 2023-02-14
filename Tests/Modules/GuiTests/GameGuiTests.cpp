@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include <WindowMock.hpp>
 #include <GameGui.hpp>
+#include <GuiActionMock.hpp>
 
 namespace Gui
 {
@@ -14,9 +15,12 @@ struct GameGuiTest : public testing::Test
 };
 
 
-TEST_F(GameGuiTest, emptyGameGuiCreated)
+TEST_F(GameGuiTest, GameGuiExecutesGivenAction)
 {
+    NiceMock<Events::GuiActionMock> guiAction;
+    EXPECT_CALL(guiAction, execute(A<GameGui&>()));
     sut = std::make_unique<GameGui>();
+    sut->acceptRequest(guiAction);
 }
 
 }

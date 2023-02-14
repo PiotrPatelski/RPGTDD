@@ -9,6 +9,7 @@
 #include <ButtonListMock.hpp>
 #include <ButtonListBuilderMock.hpp>
 #include <MenuGui.hpp>
+#include <GuiActionMock.hpp>
 
 namespace Gui
 {
@@ -63,6 +64,14 @@ TEST_F(MenuGuiTest, uiWillUpdateAddedButtonListWithMousePositionOnWindow)
     sut = std::make_unique<MenuGui>();
     sut->addButtonList(std::move(dropDownList));
     sut->update(mousePosition);
+}
+
+TEST_F(MenuGuiTest, MenuGuiExecutesGivenAction)
+{
+    NiceMock<Events::GuiActionMock> guiAction;
+    EXPECT_CALL(guiAction, execute(A<MenuGui&>()));
+    sut = std::make_unique<MenuGui>();
+    sut->acceptRequest(guiAction);
 }
 
 }

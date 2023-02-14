@@ -9,6 +9,7 @@ set(HEADERS
     ButtonBuilderMock.hpp
     AssetsManagerMock.hpp
     GuiManagerMock.hpp
+    GuiActionMock.hpp
     ConfigManagerMock.hpp
     UserInterfaceMock.hpp
     InputListenerMock.hpp

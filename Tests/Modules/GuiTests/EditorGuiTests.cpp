@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <WindowMock.hpp>
+#include <GuiActionMock.hpp>
 #include <EditorGui.hpp>
 
 namespace Gui
@@ -14,9 +14,12 @@ struct EditorGuiTest : public testing::Test
 };
 
 
-TEST_F(EditorGuiTest, emptyEditorGuiCreated)
+TEST_F(EditorGuiTest, EditorGuiExecutesGivenAction)
 {
+    NiceMock<Events::GuiActionMock> guiAction;
+    EXPECT_CALL(guiAction, execute(A<EditorGui&>()));
     sut = std::make_unique<EditorGui>();
+    sut->acceptRequest(guiAction);
 }
 
 }
