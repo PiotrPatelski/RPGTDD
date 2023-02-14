@@ -48,11 +48,13 @@ void ToSettingsState::operator()(States::MenuState& state)
 void ToEditorState::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
+    auto resolution = config->getGraphics().resolution;
     state.setNextState(std::make_unique<States::EditorState>(
         config,
         std::make_unique<FileMgmt::EditorAssetsManager>(),
         std::make_unique<Gui::EditorGuiManager>(
-            std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution)
+            std::make_unique<Gui::ButtonBuilder>(resolution),
+            resolution
         )));
     state.finishState();
 }

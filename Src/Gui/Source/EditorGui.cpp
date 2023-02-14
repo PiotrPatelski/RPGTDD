@@ -19,6 +19,11 @@ void EditorGui::addButtonList(std::unique_ptr<ButtonList> list)
 
 }
 
+void EditorGui::addPauseMenu(std::unique_ptr<ButtonList> list)
+{
+    pauseMenu = std::move(list);
+}
+
 std::optional<Events::StateAction> EditorGui::getActiveAction()
 {
 
@@ -31,7 +36,8 @@ void EditorGui::drawTo(Core::IWindow& window)
 
 void EditorGui::update(const sf::Vector2i& currentMousePos)
 {
-
+    if(paused)
+        pauseMenu->update(currentMousePos);
 }
 
 std::optional<Events::StateAction> EditorGui::pollActionFromButtons()
