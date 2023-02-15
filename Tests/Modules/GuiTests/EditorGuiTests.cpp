@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include <GuiActionMock.hpp>
 #include <ButtonListMock.hpp>
+#include <WindowMock.hpp>
 #include <EditorGui.hpp>
 
 namespace Gui
@@ -42,6 +43,27 @@ TEST_F(EditorGuiTest, EditorGuiUpdatesAddedPauseMenuWhenPaused)
     sut->addPauseMenu(std::move(pauseMenu));
     sut->togglePause();
     sut->update(currentMousePosition);
+}
+
+TEST_F(EditorGuiTest, EditorGuiDrawsAddedPauseMenuWhenPaused)
+{
+    auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    EXPECT_CALL(*pauseMenu, drawTo(A<Core::IWindow&>()));
+    sut = std::make_unique<EditorGui>();
+    sut->addPauseMenu(std::move(pauseMenu));
+    sut->togglePause();
+    NiceMock<Core::WindowMock> window;
+    sut->drawTo(window);
+}
+
+TEST_F(EditorGuiTest, EditorGuiDoesNotDrawAddedPauseMenuWhenNotPaused)
+{
+    auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    EXPECT_CALL(*pauseMenu, drawTo(A<Core::IWindow&>())).Times(0);
+    sut = std::make_unique<EditorGui>();
+    sut->addPauseMenu(std::move(pauseMenu));
+    NiceMock<Core::WindowMock> window;
+    sut->drawTo(window);
 }
 
 }

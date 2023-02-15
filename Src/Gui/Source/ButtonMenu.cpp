@@ -15,6 +15,7 @@ ButtonMenu::ButtonMenu(
   font(font),
   buttonBuilder(std::move(buttonBuilder))
 {
+    //TODO CREATE BUILDER FOR THIS CLASS THAT HANDLES THIS INITIALIZATION
     background.setSize(sf::Vector2f(static_cast<float>(resolution.width),
 									static_cast<float>(resolution.height)));
 	background.setFillColor(sf::Color(20, 20, 20, 100));

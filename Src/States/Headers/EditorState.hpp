@@ -19,8 +19,8 @@ public:
         std::unique_ptr<Gui::GuiManager>);
     virtual ~EditorState() = default;
 
-    virtual void update(const Core::IWindow& window, const float) override {}
-    virtual void drawOutput(Core::IWindow&) override {}
+    virtual void update(const Core::IWindow&, const float) override;
+    virtual void drawOutput(Core::IWindow&) override;
 private:
     std::unique_ptr<Gui::UserInterface> gui;
 };

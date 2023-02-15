@@ -31,7 +31,8 @@ std::optional<Events::StateAction> EditorGui::getActiveAction()
 
 void EditorGui::drawTo(Core::IWindow& window)
 {
-
+    if(paused)
+        pauseMenu->drawTo(window);
 }
 
 void EditorGui::update(const sf::Vector2i& currentMousePos)

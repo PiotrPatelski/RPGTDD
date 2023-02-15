@@ -2,7 +2,8 @@ set(MODULE_NAME StatesTests)
 
 set(SOURCES
     MainMenuStateTests.cpp
-    SettingsStateTests.cpp)
+    SettingsStateTests.cpp
+    EditorStateTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 
