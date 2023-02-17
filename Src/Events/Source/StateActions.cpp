@@ -41,7 +41,7 @@ void ToSettingsState::operator()(States::MenuState& state)
         std::make_unique<Gui::SettingsGuiManager>(
             std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution),
             std::make_unique<Gui::DropDownListBuilder>()),
-        std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
+        std::make_unique<Events::MenuInputListener>(config->getKeyboard())));
     state.finishState();
 }
 
@@ -75,7 +75,7 @@ void ApplySettings::operator()(States::MenuState& state)
         std::make_unique<Gui::SettingsGuiManager>(
             std::make_unique<Gui::ButtonBuilder>(config->getGraphics().resolution),
             std::make_unique<Gui::DropDownListBuilder>()),
-        std::make_unique<Events::InputListener>(config->getKeyboard().mainMenuKeys)));
+        std::make_unique<Events::MenuInputListener>(config->getKeyboard())));
     state.finishState();
 }
 

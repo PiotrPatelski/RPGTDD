@@ -8,8 +8,8 @@ ConfigManager::ConfigManager()
     FileMgmt::IniParser parser;
     graphics = parser.getGraphicsConfig();
     diff = graphics;
-    keyboard.supportedKeys = parser.getKeyboardConfig();
-    keyboard.mainMenuKeys = parser.getMainMenuKeys(keyboard.supportedKeys);
+    keyboard.setSupportedKeyboard(parser.getKeyboardConfig());
+    keyboard.setMainMenuKeyboard(parser.getMainMenuKeys(keyboard.getSupportedKeyboard()));
 }
 
 void ConfigManager::applyDiff()

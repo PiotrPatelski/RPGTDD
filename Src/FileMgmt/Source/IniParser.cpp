@@ -63,32 +63,32 @@ GraphicsConfig IniParser::getGraphicsConfig()
     return config;
 }
 
-SupportedKeys IniParser::getKeyboardConfig()
+std::unique_ptr<KeyMap> IniParser::getKeyboardConfig()
 {
     auto sourceFile = std::move(openFileForPull("/Config/keyboard.ini"));
-    SupportedKeys target;
+    auto target = std::make_unique<KeyboardMap>();
 
     std::string key = "";
     int keyValue = 0;
     while (sourceFile >> key >> keyValue)
-        target.setKey(key, keyValue);
+        target->setKey(key, keyValue);
     sourceFile.close();
 
-    return target;
+    return std::move(target);
 }
 
-MainMenuKeys IniParser::getMainMenuKeys(const SupportedKeys& availableKeys)
+std::unique_ptr<KeyMap> IniParser::getMainMenuKeys(const KeyMap& availableKeys)
 {
     auto sourceFile = std::move(openFileForPull("/Config/mainmenu_keybinds.ini"));
-    MainMenuKeys target;
+    auto target = std::make_unique<KeyboardMap>();
 
     std::string key = "";
     std::string supportedKey = "";
     while (sourceFile >> key >> supportedKey)
-        target.setKey(key, availableKeys.getKeys().at(supportedKey));
+        target->setKey(key, availableKeys.getKey(supportedKey));
 
     sourceFile.close();
-    return target;
+    return std::move(target);
 }
 
 }

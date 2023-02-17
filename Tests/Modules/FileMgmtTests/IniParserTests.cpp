@@ -21,8 +21,8 @@ struct IniParserTest : public testing::Test
     }
 
     GraphicsConfig graphicsConfig;
-    SupportedKeys supportedKeys;
-    MainMenuKeys mainMenuKeys;
+    std::unique_ptr<KeyMap> supportedKeys;
+    std::unique_ptr<KeyMap> mainMenuKeys;
     std::unique_ptr<IIniParser> sut;
     void resetToDefaultConfig()
     {
@@ -64,9 +64,9 @@ TEST_F(IniParserTest, iniParserThrowsWhenGraphicsConfigFilePathIsInvalidOnRead)
 TEST_F(IniParserTest, iniParserFillsSupportedKeysConfigWithDataParsedFromTestConfigFile)
 {
     ASSERT_NO_THROW(supportedKeys = sut->getKeyboardConfig());
-    ASSERT_EQ(supportedKeys.getKeys().at("Escape"), 36);
-    ASSERT_EQ(supportedKeys.getKeys().at("D"), 3);
-    ASSERT_EQ(supportedKeys.getKeys().at("PageDown"), 62);
+    ASSERT_EQ(supportedKeys->getKey("Escape"), 36);
+    ASSERT_EQ(supportedKeys->getKey("D"), 3);
+    ASSERT_EQ(supportedKeys->getKey("PageDown"), 62);
 }
 
 TEST_F(IniParserTest, iniParserThrowsWhenSupportedKeysConfigFilePathIsInvalid)
@@ -78,14 +78,14 @@ TEST_F(IniParserTest, iniParserThrowsWhenSupportedKeysConfigFilePathIsInvalid)
 TEST_F(IniParserTest, iniParserFillsMainMenuKeysWithDataParsedFromTestConfigFile)
 {
     ASSERT_NO_THROW(supportedKeys = sut->getKeyboardConfig());
-    ASSERT_NO_THROW(mainMenuKeys = sut->getMainMenuKeys(supportedKeys));
-    ASSERT_EQ(mainMenuKeys.getKeys().at("CLOSE"), 36);
+    ASSERT_NO_THROW(mainMenuKeys = sut->getMainMenuKeys(*supportedKeys));
+    ASSERT_EQ(mainMenuKeys->getKey("CLOSE"), 36);
 }
 
 TEST_F(IniParserTest, iniParserThrowsWhenMainMenuKeysFilePathIsInvalid)
 {
     IniParser::setBuildPath("invalidPath");
-    ASSERT_THROW(sut->getMainMenuKeys(supportedKeys), std::runtime_error);
+    ASSERT_THROW(sut->getMainMenuKeys(*supportedKeys), std::runtime_error);
 }
 
 TEST_F(IniParserTest, iniParserOverwritesGraphicsIniWithNoThrow)

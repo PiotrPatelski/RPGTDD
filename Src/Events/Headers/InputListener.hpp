@@ -14,17 +14,17 @@ public:
     virtual std::optional<Events::StateAction> getActiveAction() const = 0;
 };
 
-class InputListener : public IInputListener
+class MenuInputListener : public IInputListener
 {
 public:
-    InputListener(const FileMgmt::IKeyboardMap& config)
-    : config(config)
+    MenuInputListener(const FileMgmt::KeyboardConfig& config)
+    : keyboard(config.getMainMenuKeyboard())
     {}
-    virtual ~InputListener(){}
+    virtual ~MenuInputListener(){}
 
     virtual std::optional<Events::StateAction> getActiveAction() const override;
 private:
-    const FileMgmt::IKeyboardMap& config;
+    const FileMgmt::KeyMap& keyboard;
 };
 
 }

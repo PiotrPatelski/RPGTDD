@@ -9,29 +9,29 @@ namespace Events
 
 using namespace ::testing;
 
-struct InputListenerTest : public testing::Test
+struct MenuInputListenerTest : public testing::Test
 {
     std::shared_ptr<NiceMock<Core::ConfigManagerMock>> configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
 };
 
-TEST_F(InputListenerTest, inputListenerGetsActiveActionWithNoThrowWhenValidKeysAreChecked)
+TEST_F(MenuInputListenerTest, inputListenerGetsActiveActionWithNoThrowWhenValidKeysAreChecked)
 {
-    NiceMock<FileMgmt::KeyboardMapMock> availableKeys;
-    std::map<std::string, uint> keyIds;
-    keyIds["CLOSE"] = 0;
-    EXPECT_CALL(availableKeys, getKeys()).WillOnce(ReturnRef(keyIds));
-    InputListener sut(availableKeys);
-    EXPECT_NO_THROW(sut.getActiveAction());
+    auto availableKeys = std::make_unique<NiceMock<FileMgmt::KeyboardMapMock>>();
+    EXPECT_CALL(*availableKeys, isPressedAt(StrEq("CLOSE"))).WillOnce(Return(true));
+    FileMgmt::KeyboardConfig config;
+    config.setMainMenuKeyboard(std::move(availableKeys));
+    MenuInputListener sut(config);
+    ASSERT_NE(sut.getActiveAction(), std::nullopt);
 }
 
-TEST_F(InputListenerTest, inputListenerThrowsOnGetActiveActionWhenCheckedKeysAreNotFound)
+TEST_F(MenuInputListenerTest, inputListenerThrowsOnGetActiveActionWhenCheckedKeysAreNotFound)
 {
-    NiceMock<FileMgmt::KeyboardMapMock> availableKeys;
-    std::map<std::string, uint> keyIds;
-    keyIds["UNEXPECTED_KEY"] = 0;
-    EXPECT_CALL(availableKeys, getKeys()).WillOnce(ReturnRef(keyIds));
-    InputListener sut(availableKeys);
-    EXPECT_THROW(sut.getActiveAction(), std::out_of_range);
+    auto availableKeys = std::make_unique<NiceMock<FileMgmt::KeyboardMapMock>>();
+    EXPECT_CALL(*availableKeys, isPressedAt(StrEq("CLOSE"))).WillOnce(Return(false));
+    FileMgmt::KeyboardConfig config;
+    config.setMainMenuKeyboard(std::move(availableKeys));
+    MenuInputListener sut(config);
+    EXPECT_EQ(sut.getActiveAction(), std::nullopt);
 }
 
 }

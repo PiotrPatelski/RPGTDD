@@ -4,9 +4,9 @@
 namespace Events
 {
 
-std::optional<Events::StateAction> InputListener::getActiveAction() const
+std::optional<Events::StateAction> MenuInputListener::getActiveAction() const
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(config.getKeys().at("CLOSE"))))
+    if (keyboard.isPressedAt("CLOSE"))
     {
         return std::make_optional<Events::StateAction>(ToMainMenuState());
     }
