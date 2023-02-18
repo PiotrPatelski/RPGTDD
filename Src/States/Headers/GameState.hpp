@@ -15,7 +15,7 @@ class GameState : public State
 public:
     GameState(
         std::shared_ptr<Core::IConfigManager>,
-        std::unique_ptr<FileMgmt::GameAssetsManager>,
+        std::unique_ptr<FileMgmt::AssetsManager>,
         std::unique_ptr<Gui::GuiManager>);
     virtual ~GameState() = default;
 

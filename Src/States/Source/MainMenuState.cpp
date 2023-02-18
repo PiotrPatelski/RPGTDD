@@ -10,14 +10,14 @@ namespace States
 
 MainMenuState::MainMenuState(
     std::shared_ptr<Core::IConfigManager> configManager,
-    std::unique_ptr<FileMgmt::MainMenuAssetsManager> assetsManager,
+    std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
     std::unique_ptr<Gui::GuiManager> guiManager)
     : MenuState(
         configManager,
         std::move(assetsManager))
 {
     initBackground();
-    gui = guiManager->createGui(State::assetsManager->getFont());
+    gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
 }
 
 void MainMenuState::initBackground()
@@ -27,7 +27,7 @@ void MainMenuState::initBackground()
         sf::Vector2f(
             static_cast<float>(videoMode.width),
             static_cast<float>(videoMode.height)));
-    background->setTexture(State::assetsManager->getTexture().get());
+    background->setTexture(State::assetsManager->getTexture("MENU_BACKGROUND"));
 }
 
 void MainMenuState::update(const Core::IWindow& window, const float deltaTime)

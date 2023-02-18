@@ -13,15 +13,12 @@ sf::Vector2f calculateTextPosOnBackground(const sf::Shape& background, const sf:
 MainMenuButton::MainMenuButton(
     const sf::Vector2f& position,
     const sf::Vector2f& size,
-    const std::string& textContent,
-    const std::shared_ptr<sf::Font> font,
-    const uint characterSize,
+    const std::optional<sf::Text> textContent,
     const EventColor& idleColors,
     const EventColor& hoverColors,
     const EventColor& activeColors,
     std::unique_ptr<Events::IButtonEventHandler> eventHandler)
-: font(font),
-  textContent(textContent, *font),
+: textContent(textContent),
   position(position),
   size(size),
   idleColors(idleColors),
@@ -30,14 +27,14 @@ MainMenuButton::MainMenuButton(
   eventHandler(std::move(eventHandler))
 {
     initBackground();
-    initText(characterSize);
+    if(textContent)
+        initText();
 }
 
-void MainMenuButton::initText(const uint characterSize)
+void MainMenuButton::initText()
 {
-    textContent.setCharacterSize(characterSize);
-	textContent.setFillColor(idleColors.text);
-	textContent.setPosition(calculateTextPosOnBackground(background, textContent));
+	textContent->setFillColor(idleColors.text);
+	textContent->setPosition(calculateTextPosOnBackground(background, *textContent));
 }
 
 void MainMenuButton::initBackground()
@@ -53,7 +50,12 @@ void MainMenuButton::setColor(const EventColor& colors)
 {
     background.setFillColor(colors.background);
     background.setOutlineColor(colors.outline);
-    textContent.setFillColor(colors.text);
+    textContent->setFillColor(colors.text);
+}
+
+std::optional<sf::Font> MainMenuButton::getFont() const
+{
+    return textContent ? std::make_optional<sf::Font>(*(textContent->getFont())) : std::nullopt;
 }
 
 void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
@@ -73,15 +75,14 @@ void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
         setColor(idleColors);
 }
 
-std::unique_ptr<IButton> MainMenuButton::clone(const std::string& targetTextContent, const sf::Vector2f& targetPosition)
+std::unique_ptr<Button> MainMenuButton::clone(const std::optional<sf::Text> targetTextContent, const sf::Vector2f& targetPosition)
 {
     auto eventHandler = std::make_unique<Events::ButtonEventHandler>();
+    const auto targetText = targetTextContent ? targetTextContent : std::nullopt;
     return std::make_unique<MainMenuButton>(
         targetPosition,
         size,
-        targetTextContent,
-        font,
-        textContent.getCharacterSize(),
+        targetText,
         idleColors,
         hoverColors,
         activeColors,

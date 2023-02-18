@@ -23,7 +23,7 @@ public:
     MenuGui(){}
     virtual ~MenuGui(){}
     virtual void acceptRequest(Events::GuiAction&) override;
-    virtual void addButton(std::unique_ptr<IButton>, Events::StateAction) override;
+    virtual void addButton(std::unique_ptr<Button>, Events::StateAction) override;
     virtual void addButtonList(std::unique_ptr<ButtonList>) override;
     virtual std::optional<Events::StateAction> getActiveAction() override;
     virtual void drawTo(Core::IWindow&) override;

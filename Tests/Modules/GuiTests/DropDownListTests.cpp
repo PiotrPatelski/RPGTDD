@@ -81,17 +81,17 @@ TEST_F(DropDownListTest, addSectionWillCloneInitiatingButton)
         .WillOnce(Return(sf::Vector2f{3.f, 3.f}));
     EXPECT_CALL(*sectionButton1, getSize()).WillOnce(Return(sf::Vector2f{10.f, 10.f}));
     EXPECT_CALL(*sectionButton1, getPosition()).WillOnce(Return(sf::Vector2f{3.f, 13.f}));
-    EXPECT_CALL(*initiatingButton, clone(StrEq("FirstSection"), Eq(sf::Vector2f{3.f, 13.f})))
+    EXPECT_CALL(*initiatingButton, clone(Optional(Property(&sf::Text::getString, StrEq("FirstSection"))), Eq(sf::Vector2f{3.f, 13.f})))
         .WillOnce(Return(ByMove(std::move(sectionButton1))));
-    EXPECT_CALL(*initiatingButton, clone(StrEq("SecondSection"), Eq(sf::Vector2f{3.f, 23.f})))
+    EXPECT_CALL(*initiatingButton, clone(Optional(Property(&sf::Text::getString, StrEq("SecondSection"))), Eq(sf::Vector2f{3.f, 23.f})))
         .WillOnce(Return(ByMove(std::move(sectionButton2))));
 
     auto sut = std::make_unique<DropDownList>(
         sf::Text{},
         std::move(initiatingButton));
 
-    sut->addSection("FirstSection", std::monostate{});
-    sut->addSection("SecondSection", std::monostate{});
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), std::monostate{});
+    sut->addSection(sf::Text("SecondSection", sf::Font{}), std::monostate{});
 }
 
 TEST_F(DropDownListTest, dropDownListWillUpdateSectionsOnceActivated)
@@ -111,7 +111,7 @@ TEST_F(DropDownListTest, dropDownListWillUpdateSectionsOnceActivated)
         sf::Text{},
         std::move(initiatingButton));
 
-    sut->addSection("FirstSection", std::monostate{});
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), std::monostate{});
     sut->update(sf::Vector2i{3, 3});
     sut->update(sf::Vector2i{3, 3});
     sut->update(sf::Vector2i{3, 3});
@@ -134,7 +134,7 @@ TEST_F(DropDownListTest, dropDownListWillStopUpdatingSectionsOnceInitiatingButto
         sf::Text{},
         std::move(initiatingButton));
 
-    sut->addSection("FirstSection", std::monostate{});
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), std::monostate{});
     sut->update(sf::Vector2i{3, 3});
     sut->update(sf::Vector2i{3, 3});
     sut->update(sf::Vector2i{3, 3});
@@ -175,7 +175,7 @@ TEST_F(DropDownListTest, dropDownListWillReturnAMenuActionOnceWhenSectionIsPress
         sf::Text{},
         std::move(initiatingButton));
 
-    sut->addSection("FirstSection", [](States::MenuState&){});
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), [](States::MenuState&){});
     sut->update(sf::Vector2i{3, 3});
     ASSERT_NE(sut->getActiveAction(), std::nullopt);
     EXPECT_TRUE(std::holds_alternative<Events::MenuAction>(sut->getActiveAction().value()));
@@ -214,9 +214,9 @@ TEST_F(DropDownListTest, dropDownListWillReturnNulloptWhenNoneOfExistingSections
         sf::Text{},
         std::move(initiatingButton));
 
-    sut->addSection("FirstSection", [](States::MenuState&){});
-    sut->addSection("SecondSection", [](States::MenuState&){});
-    sut->addSection("ThirdSection", [](States::MenuState&){});
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), [](States::MenuState&){});
+    sut->addSection(sf::Text("SecondSection", sf::Font{}), [](States::MenuState&){});
+    sut->addSection(sf::Text("ThirdSection", sf::Font{}), [](States::MenuState&){});
     sut->update(sf::Vector2i{3, 3});
     ASSERT_EQ(sut->getActiveAction(), std::nullopt);
 }
@@ -251,8 +251,8 @@ TEST_F(DropDownListTest, dropDownListWillDrawBothInitiatingButtonAndSectionsWhen
         sf::Text{},
         std::move(initiatingButton));
 
-    sut->addSection("FirstSection", std::monostate{});
-    sut->addSection("SecondSection", std::monostate{});
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), [](States::MenuState&){});
+    sut->addSection(sf::Text("SecondSection", sf::Font{}), [](States::MenuState&){});
 
     sut->update(sf::Vector2i{3, 3});
     //draw list text and Twice per section, including initiatingButton

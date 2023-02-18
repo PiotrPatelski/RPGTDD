@@ -9,7 +9,7 @@ class DropDownListBuilder : public ButtonListBuilder
 public:
     virtual ~DropDownListBuilder() = default;
     virtual DropDownListBuilder& withTextContent(const sf::Text&) override;
-    virtual std::unique_ptr<ButtonList> build(std::unique_ptr<IButton>) override;
+    virtual std::unique_ptr<ButtonList> build(std::unique_ptr<Button>) override;
 private:
     sf::Text textContent;
 };

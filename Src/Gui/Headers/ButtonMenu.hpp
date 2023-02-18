@@ -15,15 +15,15 @@ class ButtonMenu : public ButtonList
 public:
     ButtonMenu(
         const std::string&,
-        const std::shared_ptr<sf::Font>,
+        const sf::Font&,
         const sf::VideoMode&,
         const sf::Vector2f&,
         const sf::Vector2f&,
-        std::unique_ptr<IButtonBuilder>);
+        std::unique_ptr<ButtonBuilder>);
     virtual ~ButtonMenu(){}
 
     virtual std::optional<Events::StateAction> getActiveAction() override;
-    virtual void addSection(const std::string&, Events::StateAction) override;
+    virtual void addSection(const std::optional<sf::Text>, Events::StateAction) override;
     virtual void update(const sf::Vector2i&) override;
     virtual void drawTo(Core::IWindow&) override;
 private:
@@ -33,8 +33,7 @@ private:
     sf::Vector2f calculatePositionWithNoButtons();
     sf::RectangleShape background;
 	sf::RectangleShape container;
-    std::shared_ptr<sf::Font> font;
-    std::unique_ptr<IButtonBuilder> buttonBuilder;
+    std::unique_ptr<ButtonBuilder> buttonBuilder;
     std::vector<ActionButton> sections;
 };
 

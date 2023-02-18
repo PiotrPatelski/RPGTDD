@@ -5,45 +5,33 @@ namespace FileMgmt
 
 std::string AssetsManager::buildPath = std::filesystem::current_path().string() + "/../build/";
 
-AssetsManager::AssetsManager()
+MainMenuAssetsManager::MainMenuAssetsManager()
 {
-    std::cout<<"AssetsManager"<<std::endl;
-    buttonFont = std::make_shared<sf::Font>();
-    fetchFontFromFile();
-    backgroundTexture = std::make_shared<sf::Texture>();
-    fetchTextureFromFile();
+    std::cout<<"MainMenuAssetsManager"<<std::endl;
+    fetchFontsFromFiles();
+    fetchTexturesFromFiles();
 }
 
-void AssetsManager::fetchTextureFromFile()
+void MainMenuAssetsManager::fetchTexturesFromFiles()
 {
-    const std::string texturePath = buildPath + "/Assets/Textures/MainMenu/menu.jpg";
-    if(not backgroundTexture->loadFromFile(texturePath))
-    {
-        throw std::runtime_error(
-            std::string("ERROR::cannot open texture file from given path: " + texturePath));
-	}
+    textures.emplace("MENU_BACKGROUND", File<sf::Texture>(buildPath + "/Assets/Textures/MainMenu/menu.jpg"));
     std::cout << "Initialized MainMenu Textures..." << std::endl;
 }
 
-std::shared_ptr<sf::Texture> AssetsManager::getTexture() const
+const sf::Texture* MainMenuAssetsManager::getTexture(const std::string& objectName) const
 {
-    return backgroundTexture;
+    return textures.at(objectName).getContent();
 }
 
-void AssetsManager::fetchFontFromFile()
+void MainMenuAssetsManager::fetchFontsFromFiles()
 {
-    const std::string fontPath = buildPath + "/Assets/Fonts/MainMenu/xbones.ttf";
-    if(not buttonFont->loadFromFile(fontPath))
-    {
-        throw std::runtime_error(
-            std::string("ERROR::cannot open font file from given path: " + fontPath));
-	}
+    fonts.emplace("MENU_BUTTON", File<sf::Font>(buildPath + "/Assets/Fonts/MainMenu/xbones.ttf"));
     std::cout << "Initialized MainMenu Fonts..." << std::endl;
 }
 
-std::shared_ptr<sf::Font> AssetsManager::getFont() const
+const sf::Font& MainMenuAssetsManager::getFont(const std::string& objectName) const
 {
-    return buttonFont;
+    return *(fonts.at(objectName).getContent());
 }
 
 }

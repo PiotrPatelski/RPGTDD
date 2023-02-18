@@ -31,31 +31,7 @@ TEST_F(MainMenuAssetsManagerTest, mainMenuAssetsManagerGetsValidFontWhenValidPat
 {
     AssetsManager::setBuildPath(TEST_PATH);
     auto sut = std::make_unique<MainMenuAssetsManager>();
-    ASSERT_EQ(sut->getFont()->getInfo().family, "xBONES");
-}
-
-struct SettingsAssetsManagerTest : public testing::Test
-{
-
-};
-
-TEST_F(SettingsAssetsManagerTest, settingsAssetsManagerThrowsWhenPathIsInvalid)
-{
-    AssetsManager::setBuildPath("Invalid/Test/Path");
-    EXPECT_THROW(std::make_unique<SettingsAssetsManager>(), std::runtime_error);
-}
-
-TEST_F(SettingsAssetsManagerTest, settingsAssetsManagerDoesntThrowWhenValidPathIsProvided)
-{
-    AssetsManager::setBuildPath(TEST_PATH);
-    ASSERT_NO_THROW(std::make_unique<SettingsAssetsManager>());
-}
-
-TEST_F(SettingsAssetsManagerTest, settingsAssetsManagerGetsValidFontWhenValidPathIsProvided)
-{
-    AssetsManager::setBuildPath(TEST_PATH);
-    auto sut = std::make_unique<SettingsAssetsManager>();
-    ASSERT_EQ(sut->getFont()->getInfo().family, "xBONES");
+    ASSERT_EQ(sut->getFont("MENU_BUTTON").getInfo().family, "xBONES");
 }
 
 }

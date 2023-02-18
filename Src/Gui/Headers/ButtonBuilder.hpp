@@ -24,37 +24,34 @@ private:
     uint screenHeight;
 };
 
-class IButtonBuilder
+class ButtonBuilder
 {
 public:
-    IButtonBuilder(){}
-    virtual ~IButtonBuilder(){}
+    ButtonBuilder(){}
+    virtual ~ButtonBuilder(){}
 
-    virtual IButtonBuilder& withTextContent(const std::string&) = 0;
-    virtual IButtonBuilder& atPosition(const float, const float) = 0;
-    virtual IButtonBuilder& withSize(const float, const float) = 0;
-    virtual IButtonBuilder& withFont(const std::shared_ptr<sf::Font>) = 0;
-    virtual std::unique_ptr<IButton> build() = 0;
+    virtual ButtonBuilder& withTextContent(const sf::Text&) = 0;
+    virtual ButtonBuilder& atPosition(const float, const float) = 0;
+    virtual ButtonBuilder& withSize(const float, const float) = 0;
+    virtual std::unique_ptr<Button> build() = 0;
 };
 
-class ButtonBuilder : public IButtonBuilder
+class MenuButtonBuilder : public ButtonBuilder
 {
 public:
-    ButtonBuilder(const sf::VideoMode&);
-    virtual ~ButtonBuilder(){}
+    MenuButtonBuilder(const sf::VideoMode&);
+    virtual ~MenuButtonBuilder(){}
  
-    virtual ButtonBuilder& withTextContent(const std::string& text) override;
-    virtual ButtonBuilder& atPosition(const float x, const float y) override;
-    virtual ButtonBuilder& withSize(const float x, const float y) override;
-    virtual ButtonBuilder& withFont(const std::shared_ptr<sf::Font>) override;
-    virtual std::unique_ptr<IButton> build() override;
+    virtual MenuButtonBuilder& withTextContent(const sf::Text& text) override;
+    virtual MenuButtonBuilder& atPosition(const float x, const float y) override;
+    virtual MenuButtonBuilder& withSize(const float x, const float y) override;
+    virtual std::unique_ptr<Button> build() override;
 
 private:
     sf::VideoMode screenResolution;
-    std::string textContent;
+    std::optional<sf::Text> textContent;
     sf::Vector2f position{0.f, 0.f};
     sf::Vector2f size{0.f, 0.f};
-    std::shared_ptr<sf::Font> font;
     EventColor idleColors;
     EventColor hoverColors;
     EventColor activeColors;

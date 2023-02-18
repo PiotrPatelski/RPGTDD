@@ -27,20 +27,18 @@ struct MainMenuStateTest : public testing::Test
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
-        texture = std::make_shared<sf::Texture>();
-        font = std::make_shared<sf::Font>();;
         configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
-        mainMenuAssetsManager = std::make_unique<NiceMock<FileMgmt::MainMenuAssetsManagerMock>>();
+        mainMenuAssetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         mainMenuGuiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
-        ON_CALL(*mainMenuAssetsManager, getTexture()).WillByDefault(Return(texture));
-        ON_CALL(*mainMenuAssetsManager, getFont()).WillByDefault(Return(font));
+        ON_CALL(*mainMenuAssetsManager, getTexture(_)).WillByDefault(Return(&texture));
+        ON_CALL(*mainMenuAssetsManager, getFont(_)).WillByDefault(ReturnRef(font));
         dummyConfig.resolution = sf::VideoMode(480, 480);
         ON_CALL(*configManager, getGraphics).WillByDefault(ReturnRef(dummyConfig));
     }
-    std::shared_ptr<sf::Texture> texture;
-    std::shared_ptr<sf::Font>font;
+    sf::Texture texture;
+    sf::Font font;
     std::shared_ptr<Core::ConfigManagerMock> configManager;
-    std::unique_ptr<NiceMock<FileMgmt::MainMenuAssetsManagerMock>> mainMenuAssetsManager;
+    std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> mainMenuAssetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> mainMenuGuiManager;
     NiceMock<Core::WindowMock> window;
     FileMgmt::GraphicsConfig dummyConfig;
@@ -83,7 +81,8 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundSizeProperly)
 
 TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundTextureProperly)
 {
-    EXPECT_CALL(*mainMenuAssetsManager, getTexture()).WillOnce(Return(std::make_shared<sf::Texture>()));
+    const sf::Texture texture;
+    EXPECT_CALL(*mainMenuAssetsManager, getTexture(Eq("MENU_BACKGROUND"))).WillOnce(Return(&texture));
     auto sut = std::make_unique<MainMenuState>(
         configManager,
         std::move(mainMenuAssetsManager),
@@ -97,14 +96,14 @@ TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
 
     std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     auto callback = [](States::MenuState&){};
-    gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
-            withTextContent("testButton1").build(), callback);
-    gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
-            withTextContent("testButton2").build(), callback);
-    gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
-            withTextContent("testButton3").build(), callback);
-    gui->addButton(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
-            withTextContent("testButton4").build(), callback);
+    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+            withTextContent(sf::Text("testButton1", font)).build(), callback);
+    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+            withTextContent(sf::Text("testButton2", font)).build(), callback);
+    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+            withTextContent(sf::Text("testButton3", font)).build(), callback);
+    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+            withTextContent(sf::Text("testButton4", font)).build(), callback);
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
     auto sut = std::make_unique<MainMenuState>(
@@ -206,7 +205,6 @@ struct MenuStateButtonActionsTest : public MainMenuStateTest
     {
         buttonBuilder = std::make_unique<NiceMock<Gui::ButtonBuilderMock>>();
         ON_CALL(*buttonBuilder, withTextContent(_)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, withFont(_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, atPosition(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, withSize(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
         toGameButton = std::make_unique<NiceMock<Gui::ButtonMock>>();

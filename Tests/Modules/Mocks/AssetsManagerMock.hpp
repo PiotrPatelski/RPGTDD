@@ -9,32 +9,11 @@ namespace FileMgmt
 
 using ::testing::Test;
 
-class MainMenuAssetsManagerMock : public MainMenuAssetsManager
+class AssetsManagerMock : public AssetsManager
 {
 public:
-   MOCK_METHOD(std::shared_ptr<sf::Texture>, getTexture, (), (const, override));
-   MOCK_METHOD(std::shared_ptr<sf::Font>, getFont, (), (const, override));
-};
-
-class GameAssetsManagerMock : public GameAssetsManager
-{
-public:
-   MOCK_METHOD(std::shared_ptr<sf::Texture>, getTexture, (), (const, override));
-   MOCK_METHOD(std::shared_ptr<sf::Font>, getFont, (), (const, override));
-};
-
-class SettingsAssetsManagerMock : public SettingsAssetsManager
-{
-public:
-   MOCK_METHOD(std::shared_ptr<sf::Texture>, getTexture, (), (const, override));
-   MOCK_METHOD(std::shared_ptr<sf::Font>, getFont, (), (const, override));
-};
-
-class EditorAssetsManagerMock : public EditorAssetsManager
-{
-public:
-   MOCK_METHOD(std::shared_ptr<sf::Texture>, getTexture, (), (const, override));
-   MOCK_METHOD(std::shared_ptr<sf::Font>, getFont, (), (const, override));
+   MOCK_METHOD((const sf::Texture*), getTexture, (const std::string&), (const, override));
+   MOCK_METHOD((const sf::Font&), getFont, (const std::string&), (const, override));
 };
 
 }

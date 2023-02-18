@@ -24,7 +24,7 @@ TEST_F(ButtonMenuCreationTest, buttonMenuPositionsTextWithinBoundsOfContainer)
 
     auto sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
@@ -43,20 +43,19 @@ TEST_F(ButtonMenuCreationTest, buttonMenuWillAddButtonWithPositionWithinBoundsOf
     const sf::Vector2f position{480.f, 480.f};
     auto buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
     auto dummyCallback = [](States::GameState&){};
-    EXPECT_CALL(*buttonBuilder, withTextContent(StrEq("test"))).WillOnce(ReturnRef(*buttonBuilder));
-    EXPECT_CALL(*buttonBuilder, withFont(A<std::shared_ptr<sf::Font>>())).WillOnce(ReturnRef(*buttonBuilder));
+    EXPECT_CALL(*buttonBuilder, withTextContent(Property(&sf::Text::getString, StrEq("test")))).WillOnce(ReturnRef(*buttonBuilder));
     EXPECT_CALL(*buttonBuilder, atPosition(FloatNear(480.f, 1), FloatNear(503.f, 1))).WillOnce(ReturnRef(*buttonBuilder));
     EXPECT_CALL(*buttonBuilder, withSize(FloatNear(15.f, 1), FloatNear(11.f, 1))).WillOnce(ReturnRef(*buttonBuilder));
     EXPECT_CALL(*buttonBuilder, build())
             .WillOnce(Return(ByMove(std::make_unique<NiceMock<ButtonMock>>())));
     auto sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
-    sut->addSection("test", dummyCallback);
+    sut->addSection(sf::Text("test", sf::Font{}), dummyCallback);
     const auto result = sut->getTextContent().getPosition();
 }
 
@@ -66,7 +65,6 @@ struct ButtonMenuBehaviourTest : public testing::Test
     {
         buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
         ON_CALL(*buttonBuilder, withTextContent(_)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, withFont(_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, atPosition(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, withSize(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
     }
@@ -92,14 +90,14 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionParamsToCreateNewSec
         .WillOnce(Return(ByMove(std::move(testButton2))));
     sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
 
-    sut->addSection("test1", [](States::GameState&){});
-    sut->addSection("test2", [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
 }
 
 TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionAndNewestSectionParamsToCreateNewSectionWhenAddingOverTwoSections)
@@ -122,15 +120,15 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionAndNewestSectionPara
         .WillOnce(Return(ByMove(std::move(testButton3))));
     sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
 
-    sut->addSection("test1", [](States::GameState&){});
-    sut->addSection("test2", [](States::GameState&){});
-    sut->addSection("test3", [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test3", sf::Font{}), [](States::GameState&){});
 }
 
 TEST_F(ButtonMenuBehaviourTest, buttonMenuWillUpdateItsButtonsWithGivenPosition)
@@ -148,16 +146,16 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillUpdateItsButtonsWithGivenPosition)
         .WillOnce(Return(ByMove(std::move(testButton3))));
     sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
 
 
-    sut->addSection("test", [](States::GameState&){});
-    sut->addSection("test1", [](States::GameState&){});
-    sut->addSection("test2", [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test3", sf::Font{}), [](States::GameState&){});
     sut->update(mousePosition);
 }
 
@@ -180,13 +178,13 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillRenderButtonsAndContainerAndTextAn
         .WillOnce(Return(ByMove(std::move(testButton2))));
     sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
-    sut->addSection("test", [](States::GameState&){});
-    sut->addSection("test1", [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
 
     EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(7);
     sut->drawTo(window);
@@ -205,14 +203,14 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillReturnAStateActionOnceWhenSectionI
         .WillOnce(Return(ByMove(std::move(testButton1))));
     sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
 
     std::function<void(States::GameState&)> dummyCallback = [](States::GameState&){};
-    sut->addSection("FirstSection", dummyCallback);
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), dummyCallback);
     sut->update(sf::Vector2i{3, 3});
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
@@ -232,14 +230,14 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillReturnNulloptWhenNoSectionIsPresse
         .WillOnce(Return(ByMove(std::move(testButton1))));
     sut = std::make_unique<ButtonMenu>(
         "test",
-        std::make_shared<sf::Font>(),
+        sf::Font{},
         resolution,
         size,
         position,
         std::move(buttonBuilder));
 
     std::function<void(States::GameState&)> dummyCallback = [](States::GameState&){};
-    sut->addSection("FirstSection", dummyCallback);
+    sut->addSection(sf::Text("FirstSection", sf::Font{}), dummyCallback);
     sut->update(sf::Vector2i{3, 3});
     ASSERT_EQ(sut->getActiveAction(), std::nullopt);
 }

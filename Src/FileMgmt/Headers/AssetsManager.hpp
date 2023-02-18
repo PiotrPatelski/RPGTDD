@@ -5,41 +5,48 @@
 namespace FileMgmt
 {
 
-class IAssetsManager
+template <typename Type>
+class File
 {
 public:
-    IAssetsManager(){}
-    virtual ~IAssetsManager(){}
-
-    virtual std::shared_ptr<sf::Font> getFont() const = 0;
-    virtual std::shared_ptr<sf::Texture> getTexture() const = 0;
+    File(const std::string& path) {fetchFromFile(path);}
+    const Type* getContent() const {return &content;}
+private:
+    void fetchFromFile(const std::string& path)
+    {
+        if(not content.loadFromFile(path))
+        {
+            throw std::runtime_error(
+                std::string("ERROR::cannot open file from given path: " + path));
+        }
+    }
+    Type content;
 };
 
-class AssetsManager : public IAssetsManager
+class AssetsManager
 {
 public:
-    AssetsManager();
+    AssetsManager(){}
     virtual ~AssetsManager(){}
-
     static void setBuildPath(const std::string& path) {buildPath = path;}
-    virtual std::shared_ptr<sf::Font> getFont() const override;
-    virtual std::shared_ptr<sf::Texture> getTexture() const override;
+    virtual const sf::Font& getFont(const std::string&) const = 0;
+    virtual const sf::Texture* getTexture(const std::string&) const = 0;
 protected:
     static std::string buildPath;
-    std::shared_ptr<sf::Font> buttonFont;
-    std::shared_ptr<sf::Texture> backgroundTexture;
-private:
-    virtual void fetchFontFromFile();
-    virtual void fetchTextureFromFile();
+    std::map<std::string, File<sf::Font>> fonts;
+    std::map<std::string, File<sf::Texture>> textures;
 };
 
 class MainMenuAssetsManager : public AssetsManager
 {
 public:
-    MainMenuAssetsManager()
-    : AssetsManager()
-    {std::cout<<"MainMenuAssetsManager"<<std::endl;}
+    MainMenuAssetsManager();
     virtual ~MainMenuAssetsManager(){}
+    virtual const sf::Font& getFont(const std::string&) const override;
+    virtual const sf::Texture* getTexture(const std::string&) const override;
+private:
+    virtual void fetchFontsFromFiles();
+    virtual void fetchTexturesFromFiles();
 };
 
 class GameAssetsManager : public AssetsManager
@@ -49,6 +56,10 @@ public:
     : AssetsManager()
     {std::cout<<"GameAssetsManager"<<std::endl;}
     virtual ~GameAssetsManager(){}
+    virtual const sf::Font& getFont(const std::string&) const override {return font;}
+    virtual const sf::Texture* getTexture(const std::string&) const override {return nullptr;}
+private:
+    sf::Font font;
 };
 
 class EditorAssetsManager : public AssetsManager
@@ -58,15 +69,10 @@ public:
     : AssetsManager()
     {std::cout<<"EditorAssetsManager"<<std::endl;}
     virtual ~EditorAssetsManager(){}
-};
-
-class SettingsAssetsManager : public AssetsManager
-{
-public:
-    SettingsAssetsManager()
-    : AssetsManager()
-    {std::cout<<"SettingsAssetsManager"<<std::endl;}
-    virtual ~SettingsAssetsManager(){}
+    virtual const sf::Font& getFont(const std::string&) const override {return font;}
+    virtual const sf::Texture* getTexture(const std::string&) const override {return nullptr;}
+private:
+    sf::Font font;
 };
 
 }

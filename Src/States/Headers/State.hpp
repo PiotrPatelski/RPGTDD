@@ -28,7 +28,7 @@ class State : public IState
 public:
     State(
         std::shared_ptr<Core::IConfigManager>,
-        std::unique_ptr<FileMgmt::IAssetsManager>);
+        std::unique_ptr<FileMgmt::AssetsManager>);
     virtual ~State(){}
 
     virtual void finishState() override {readyToChange = true;}
@@ -40,7 +40,7 @@ public:
 protected:
     bool readyToChange{false};
     std::unique_ptr<IState> nextState;
-    std::unique_ptr<FileMgmt::IAssetsManager> assetsManager;
+    std::unique_ptr<FileMgmt::AssetsManager> assetsManager;
     std::shared_ptr<Core::IConfigManager> configManager;
 };
 

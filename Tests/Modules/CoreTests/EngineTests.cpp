@@ -28,13 +28,13 @@ struct EngineTest : public testing::Test
         window = std::make_unique<NiceMock<WindowMock>>();
         clock = std::make_unique<NiceMock<ClockMock>>();
         stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
-        assetsManager = std::make_unique<NiceMock<FileMgmt::MainMenuAssetsManagerMock>>();
+        assetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
     }
     std::shared_ptr<ConfigManager> configManager;
     std::unique_ptr<NiceMock<WindowMock>> window;
     std::unique_ptr<NiceMock<ClockMock>> clock;
     std::unique_ptr<NiceMock<StateMachineMock>> stateMachine;
-    std::unique_ptr<NiceMock<FileMgmt::MainMenuAssetsManagerMock>> assetsManager;
+    std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> assetsManager;
     NiceMock<CoreBuilderMock> coreBuilder;
     std::unique_ptr<IEngine> sut;
 };

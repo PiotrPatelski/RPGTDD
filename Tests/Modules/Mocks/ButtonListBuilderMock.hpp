@@ -13,7 +13,7 @@ class ButtonListBuilderMock : public ButtonListBuilder
 {
 public:
     MOCK_METHOD(ButtonListBuilder&, withTextContent, (const sf::Text&), (override));
-    MOCK_METHOD(std::unique_ptr<ButtonList>, build, (std::unique_ptr<IButton>), (override));
+    MOCK_METHOD(std::unique_ptr<ButtonList>, build, (std::unique_ptr<Button>), (override));
 };
 
 }

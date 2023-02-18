@@ -12,7 +12,7 @@ class EditorGuiManager : public GuiManager
 {
 public:
     EditorGuiManager(
-        std::unique_ptr<IButtonBuilder> buttonBuilder,
+        std::unique_ptr<ButtonBuilder> buttonBuilder,
         const sf::VideoMode& resolution)
         : buttonBuilder(std::move(buttonBuilder)),
           resolution(resolution)
@@ -21,9 +21,9 @@ public:
     }
     virtual ~EditorGuiManager(){}
 
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override;
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const sf::Font&) override;
 private:
-    std::unique_ptr<IButtonBuilder> buttonBuilder;
+    std::unique_ptr<ButtonBuilder> buttonBuilder;
     const sf::VideoMode resolution;
 };
 

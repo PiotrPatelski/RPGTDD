@@ -14,7 +14,7 @@ public:
     GuiManager(){}
     virtual ~GuiManager(){}
     
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) = 0;
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const sf::Font&) = 0;
 };
 
 }

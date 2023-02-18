@@ -5,16 +5,16 @@
 namespace Events
 {
 
-class IInputListener
+class InputListener
 {
 public:
-    IInputListener(){}
-    virtual ~IInputListener(){}
+    InputListener(){}
+    virtual ~InputListener(){}
 
     virtual std::optional<Events::StateAction> getActiveAction() const = 0;
 };
 
-class MenuInputListener : public IInputListener
+class MenuInputListener : public InputListener
 {
 public:
     MenuInputListener(const FileMgmt::KeyboardConfig& config)

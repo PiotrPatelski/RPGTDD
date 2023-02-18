@@ -6,13 +6,12 @@ namespace Gui
 
 ButtonMenu::ButtonMenu(
     const std::string& menuTitle,
-    const std::shared_ptr<sf::Font> font,
+    const sf::Font& font,
     const sf::VideoMode& resolution,
     const sf::Vector2f& size,
     const sf::Vector2f& position,
-    std::unique_ptr<IButtonBuilder> buttonBuilder)
-: ButtonList(sf::Text(menuTitle, *font)),
-  font(font),
+    std::unique_ptr<ButtonBuilder> buttonBuilder)
+: ButtonList(sf::Text(menuTitle, font)),
   buttonBuilder(std::move(buttonBuilder))
 {
     //TODO CREATE BUILDER FOR THIS CLASS THAT HANDLES THIS INITIALIZATION
@@ -64,15 +63,16 @@ sf::Vector2f ButtonMenu::calculatePositionRelativeToLastButton()
     return lastButtonLowerBorderPosition + buttonSeparationOffset;
 }
 
-void ButtonMenu::addSection(const std::string& name, Events::StateAction action)
+void ButtonMenu::addSection(const std::optional<sf::Text> name, Events::StateAction action)
 {
     const auto nextSectionPosition = calculateNextSectionPosition();
     const auto sectionSize = sf::Vector2f(container.getSize().x / 2, container.getSize().y / 6);
+
+    if(name)
+        *buttonBuilder = buttonBuilder->withTextContent(*name);
     auto button = buttonBuilder
-        ->withTextContent(name)
-        .atPosition(nextSectionPosition.x, nextSectionPosition.y)
+        ->atPosition(nextSectionPosition.x, nextSectionPosition.y)
         .withSize(sectionSize.x, sectionSize.y)
-        .withFont(font)
         .build();
     sections.push_back(ActionButton{std::move(button), action});
 }
@@ -93,7 +93,9 @@ void ButtonMenu::drawTo(Core::IWindow& window)
     for(auto& section : sections)
     {
         window.draw(section.object->getBackground());
-        window.draw(section.object->getTextContent());
+        const auto sectionText = section.object->getTextContent();
+        if(sectionText)
+            window.draw(*sectionText);
     }
 }
 

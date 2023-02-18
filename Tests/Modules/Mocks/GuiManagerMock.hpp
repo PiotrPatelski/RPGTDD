@@ -14,7 +14,7 @@ class GuiManagerMock : public GuiManager
 {
 public:
 
-    MOCK_METHOD(std::unique_ptr<Gui::UserInterface>, createGui, (const std::shared_ptr<sf::Font>), (override));
+    MOCK_METHOD(std::unique_ptr<Gui::UserInterface>, createGui, (const sf::Font&), (override));
 };
 
 }

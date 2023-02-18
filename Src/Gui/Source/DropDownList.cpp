@@ -6,7 +6,7 @@ namespace Gui
 
 DropDownList::DropDownList(
     const sf::Text& textContent,
-    std::unique_ptr<IButton> initiatingButton)
+    std::unique_ptr<Button> initiatingButton)
 : ButtonList(textContent),
   initiatingButton(ActionButton{std::move(initiatingButton), std::monostate{}})
 {
@@ -24,7 +24,7 @@ void DropDownList::setTextPosition()
     ButtonList::textContent.setPosition(textPosition);
 }
 
-void DropDownList::addSection(const std::string& name, Events::StateAction action)
+void DropDownList::addSection(const std::optional<sf::Text> name, Events::StateAction action)
 {
     sf::Vector2f sectionPosition = calculateNextSectionPosition();
     sections.push_back(
@@ -54,7 +54,9 @@ void DropDownList::drawTo(Core::IWindow& window)
 {
     window.draw(textContent);
     window.draw(initiatingButton.object->getBackground());
-    window.draw(initiatingButton.object->getTextContent());
+    const auto& buttonText = initiatingButton.object->getTextContent();
+    if(buttonText)
+        window.draw(*buttonText);
     if(active)
     {
         drawSections(window);
@@ -66,7 +68,9 @@ void DropDownList::drawSections(Core::IWindow& window)
     for(const auto& section : sections)
     {
         window.draw(section.object->getBackground());
-        window.draw(section.object->getTextContent());
+        const auto& sectionText = section.object->getTextContent();
+        if(sectionText)
+            window.draw(*sectionText);
     }
 }
 

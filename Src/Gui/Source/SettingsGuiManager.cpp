@@ -5,7 +5,7 @@
 namespace Gui
 {
 
-std::unique_ptr<Gui::UserInterface> SettingsGuiManager::createGui(const std::shared_ptr<sf::Font> font)
+std::unique_ptr<Gui::UserInterface> SettingsGuiManager::createGui(const sf::Font& font)
 {
     gui = std::make_unique<Gui::MenuGui>();
     std::cout<<"SettingsGuiManager::createGui"<<std::endl;
@@ -16,45 +16,45 @@ std::unique_ptr<Gui::UserInterface> SettingsGuiManager::createGui(const std::sha
     return std::move(gui);
 }
 
-void SettingsGuiManager::addApplyButton(const std::shared_ptr<sf::Font> font)
+void SettingsGuiManager::addApplyButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
-            withTextContent("Apply").withFont(font).
+            withTextContent(sf::Text("Apply", font)).
             atPosition(72.f, 81.f).withSize(13.f, 6.f).
             build(),
         Events::ApplySettings());
 }
 
-void SettingsGuiManager::addBackButton(const std::shared_ptr<sf::Font> font)
+void SettingsGuiManager::addBackButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
-            withTextContent("Back").withFont(font).
+            withTextContent(sf::Text("Back", font)).
             atPosition(55.f, 81.f).withSize(13.f, 6.f).
             build(),
         Events::ToMainMenuState());
 }
 
-void SettingsGuiManager::addResolutionList(const std::shared_ptr<sf::Font> font)
+void SettingsGuiManager::addResolutionList(const sf::Font& font)
 {
     auto resolutionList = dropDownListBuilder->
-        withTextContent(sf::Text("Resolution", *font)).
+        withTextContent(sf::Text("Resolution", font)).
         build(buttonBuilder->
-            withTextContent("").withFont(font).
+            withTextContent(sf::Text("", font)).
             atPosition(42.f, 42.f).withSize(10.4f, 4.5f).
             build());
 
-    fillListWithResolutionModes(*resolutionList);
+    fillListWithResolutionModes(*resolutionList, font);
 
     gui->addButtonList(std::move(resolutionList));
 }
 
-void SettingsGuiManager::fillListWithResolutionModes(ButtonList& list)
+void SettingsGuiManager::fillListWithResolutionModes(ButtonList& list, const sf::Font& font)
 {
     auto availableModes = sf::VideoMode::getFullscreenModes();
     for(auto mode : availableModes)
     {
         auto sectionName = std::to_string(mode.width) + 'x' + std::to_string(mode.height);
-        list.addSection(sectionName, Events::SetResolutionTo(mode));
+        list.addSection(sf::Text(sectionName, font), Events::SetResolutionTo(mode));
     }
 }
 

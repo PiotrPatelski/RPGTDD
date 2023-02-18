@@ -61,7 +61,7 @@ void Engine::runInitialState(std::shared_ptr<ConfigManager> configManager)
             configManager,
             std::make_unique<FileMgmt::MainMenuAssetsManager>(),
             std::make_unique<Gui::MainMenuGuiManager>(
-                std::make_unique<Gui::ButtonBuilder>(configManager->getGraphics().resolution)
+                std::make_unique<Gui::MenuButtonBuilder>(configManager->getGraphics().resolution)
             )));
 }
 

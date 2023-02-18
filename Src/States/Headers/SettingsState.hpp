@@ -16,9 +16,9 @@ class SettingsState : public MenuState
 public:
     SettingsState(
         std::shared_ptr<Core::IConfigManager>,
-        std::unique_ptr<FileMgmt::SettingsAssetsManager>,
+        std::unique_ptr<FileMgmt::AssetsManager>,
         std::unique_ptr<Gui::GuiManager>,
-        std::unique_ptr<Events::IInputListener>);
+        std::unique_ptr<Events::InputListener>);
     virtual ~SettingsState() = default;
 
     virtual void update(const Core::IWindow& window, const float) override;
@@ -29,7 +29,7 @@ private:
 
     std::shared_ptr<sf::RectangleShape> background;
     std::unique_ptr<Gui::UserInterface> gui;
-    std::unique_ptr<Events::IInputListener> inputListener;
+    std::unique_ptr<Events::InputListener> inputListener;
 };
 
 }

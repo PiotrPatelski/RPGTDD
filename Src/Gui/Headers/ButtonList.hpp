@@ -21,7 +21,7 @@ public:
     virtual const bool isActive() const {return active;}
     virtual const sf::Text getTextContent() const {return textContent;}
     virtual std::optional<Events::StateAction> getActiveAction() = 0;
-    virtual void addSection(const std::string&, Events::StateAction) = 0;
+    virtual void addSection(const std::optional<sf::Text>, Events::StateAction) = 0;
     virtual void update(const sf::Vector2i&) = 0;
     virtual void drawTo(Core::IWindow&) = 0;
 protected:

@@ -5,7 +5,7 @@
 namespace Gui
 {
 
-std::unique_ptr<Gui::UserInterface> MainMenuGuiManager::createGui(const std::shared_ptr<sf::Font> font)
+std::unique_ptr<Gui::UserInterface> MainMenuGuiManager::createGui(const sf::Font& font)
 {
     gui = std::make_unique<Gui::MenuGui>();
     std::cout<<"MainMenuGuiManager::createGui"<<std::endl;
@@ -17,37 +17,37 @@ std::unique_ptr<Gui::UserInterface> MainMenuGuiManager::createGui(const std::sha
     return std::move(gui);
 }
 
-void MainMenuGuiManager::addToGameButton(const std::shared_ptr<sf::Font> font)
+void MainMenuGuiManager::addToGameButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
-            withTextContent("New Game").withFont(font).
+            withTextContent(sf::Text("New Game", font)).
             atPosition(15.6f, 30.f).withSize(13.f, 6.f).
             build(),
         Events::ToGameState());
 }
 
-void MainMenuGuiManager::addToSettingsButton(const std::shared_ptr<sf::Font> font)
+void MainMenuGuiManager::addToSettingsButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
-            withTextContent("Settings").withFont(font).
+            withTextContent(sf::Text("Settings", font)).
             atPosition(15.6f, 40.f).withSize(13.f, 6.f).
             build(),
         Events::ToSettingsState());
 }
 
-void MainMenuGuiManager::addToEditorButton(const std::shared_ptr<sf::Font> font)
+void MainMenuGuiManager::addToEditorButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
-            withTextContent("Editor").withFont(font).
+            withTextContent(sf::Text("Editor", font)).
             atPosition(15.6f, 50.f).withSize(13.f, 6.f).
             build(),
         Events::ToEditorState());
 }
 
-void MainMenuGuiManager::addExitButton(const std::shared_ptr<sf::Font> font)
+void MainMenuGuiManager::addExitButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
-            withTextContent("Exit").withFont(font).
+            withTextContent(sf::Text("Exit", font)).
             atPosition(15.6f, 65.5f).withSize(13.f, 6.f).
             build(), 
         Events::ToExitState());

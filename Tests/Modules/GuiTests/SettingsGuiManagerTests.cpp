@@ -23,6 +23,8 @@ struct SettingsGuiManagerTest : public GuiManagerFixture
         applyButton = std::make_unique<NiceMock<ButtonMock>>();
         backButton = std::make_unique<NiceMock<ButtonMock>>();
         resolutionList = std::make_unique<NiceMock<ButtonListMock>>();
+        ON_CALL(*applyButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
+        ON_CALL(*backButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
     }
 
     std::unique_ptr<NiceMock<ButtonMock>> applyButton;
@@ -50,7 +52,7 @@ TEST_F(SettingsGuiManagerTest, uiWillDrawTwoButtonsCreatedBySettingsGuiManager)
     auto guiManager = std::make_unique<SettingsGuiManager>(
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
-    sut = guiManager->createGui(std::make_shared<sf::Font>());
+    sut = guiManager->createGui(sf::Font{});
     EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(4);
     sut->drawTo(window);
 }
@@ -63,7 +65,7 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterApplyButtonHa
     auto guiManager = std::make_unique<SettingsGuiManager>(
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
-    sut = guiManager->createGui(std::make_shared<sf::Font>());
+    sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
     ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
@@ -77,7 +79,7 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterBackButtonHas
     auto guiManager = std::make_unique<SettingsGuiManager>(
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
-    sut = guiManager->createGui(std::make_shared<sf::Font>());
+    sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
     ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));
@@ -91,7 +93,7 @@ TEST_F(SettingsGuiManagerTest, uiWillReturnValidActionWhenButtonListHasOneAvaila
     auto guiManager = std::make_unique<SettingsGuiManager>(
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
-    sut = guiManager->createGui(std::make_shared<sf::Font>());
+    sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();
     ASSERT_NE(result, std::nullopt);
     ASSERT_NO_THROW(std::get<Events::MenuAction>(result.value()));

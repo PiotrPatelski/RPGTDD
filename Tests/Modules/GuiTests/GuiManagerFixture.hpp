@@ -22,7 +22,6 @@ struct GuiManagerFixture : public testing::Test
         buttonBuilder = std::make_unique<testing::NiceMock<ButtonBuilderMock>>();
         dropDownListBuilder = std::make_unique<testing::NiceMock<ButtonListBuilderMock>>();
         ON_CALL(*buttonBuilder, withTextContent(testing::_)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, withFont(testing::_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, atPosition(testing::_, testing::_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*buttonBuilder, withSize(testing::_, testing::_)).WillByDefault(ReturnRef(*buttonBuilder));
         ON_CALL(*dropDownListBuilder, withTextContent(testing::_)).WillByDefault(ReturnRef(*dropDownListBuilder));

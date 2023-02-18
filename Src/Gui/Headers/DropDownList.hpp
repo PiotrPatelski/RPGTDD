@@ -12,11 +12,11 @@ namespace Gui
 class DropDownList : public ButtonList
 {
 public:
-    DropDownList(const sf::Text&, std::unique_ptr<IButton>);
+    DropDownList(const sf::Text&, std::unique_ptr<Button>);
     virtual ~DropDownList(){}
 
     virtual std::optional<Events::StateAction> getActiveAction() override;
-    virtual void addSection(const std::string&, Events::StateAction) override;
+    virtual void addSection(const std::optional<sf::Text>, Events::StateAction) override;
     virtual void update(const sf::Vector2i&) override;
     virtual void drawTo(Core::IWindow&) override;
 private:

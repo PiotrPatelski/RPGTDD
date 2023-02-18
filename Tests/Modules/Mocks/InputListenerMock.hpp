@@ -9,7 +9,7 @@ namespace Events
 
 using ::testing::Test;
 
-class InputListenerMock : public IInputListener
+class InputListenerMock : public InputListener
 {
 public:
     MOCK_METHOD(std::optional<Events::StateAction>, getActiveAction, (), (const, override));

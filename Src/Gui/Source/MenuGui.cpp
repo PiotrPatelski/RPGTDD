@@ -11,7 +11,7 @@ void MenuGui::acceptRequest(Events::GuiAction& action)
     action.execute(*this);
 }
 
-void MenuGui::addButton(std::unique_ptr<IButton> button, Events::StateAction action)
+void MenuGui::addButton(std::unique_ptr<Button> button, Events::StateAction action)
 {
     buttons.push_back(ActionButton{std::move(button), action});
 }
@@ -34,7 +34,9 @@ void MenuGui::drawTo(Core::IWindow& window)
     for(const auto& button : buttons)
     {
         window.draw(button.object->getBackground());
-        window.draw(button.object->getTextContent());
+        const auto buttonText = button.object->getTextContent();
+        if(buttonText)
+            window.draw(*buttonText);
     }
     for(auto& list : dropDownLists)
     {

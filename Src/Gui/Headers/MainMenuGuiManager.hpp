@@ -13,17 +13,17 @@ class UserInterface;
 class MainMenuGuiManager : public GuiManager
 {
 public:
-    MainMenuGuiManager(std::unique_ptr<IButtonBuilder> buttonBuilder)
+    MainMenuGuiManager(std::unique_ptr<ButtonBuilder> buttonBuilder)
         : buttonBuilder(std::move(buttonBuilder)){std::cout<<"MainMenuGuiManager"<<std::endl;}
     virtual ~MainMenuGuiManager(){}
 
-    virtual std::unique_ptr<Gui::UserInterface> createGui(const std::shared_ptr<sf::Font>) override;
+    virtual std::unique_ptr<Gui::UserInterface> createGui(const sf::Font&) override;
 private:
-    void addToGameButton(const std::shared_ptr<sf::Font>);
-    void addToSettingsButton(const std::shared_ptr<sf::Font>);
-    void addToEditorButton(const std::shared_ptr<sf::Font>);
-    void addExitButton(const std::shared_ptr<sf::Font>);
-    std::unique_ptr<IButtonBuilder> buttonBuilder;
+    void addToGameButton(const sf::Font&);
+    void addToSettingsButton(const sf::Font&);
+    void addToEditorButton(const sf::Font&);
+    void addExitButton(const sf::Font&);
+    std::unique_ptr<ButtonBuilder> buttonBuilder;
     std::unique_ptr<UserInterface> gui;
 };
 

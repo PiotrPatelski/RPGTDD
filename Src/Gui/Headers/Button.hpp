@@ -15,32 +15,30 @@ struct EventColor
     sf::Color outline;
 };
 
-class IButton
+class Button
 {
 public:
-    IButton(){}
-    virtual ~IButton(){}
+    Button(){}
+    virtual ~Button(){}
 
     virtual const bool isPressed() const = 0;
     virtual void update(const sf::Vector2i&) = 0;
 
-    virtual sf::Text getTextContent() const = 0;
+    virtual std::optional<sf::Text> getTextContent() const = 0;
     virtual sf::Vector2f getPosition() const = 0;
     virtual sf::Vector2f getSize() const = 0;
-    virtual sf::Font getFont() const = 0;
+    virtual std::optional<sf::Font> getFont() const = 0;
     virtual sf::RectangleShape getBackground() const = 0;
-    virtual std::unique_ptr<IButton> clone(const std::string&, const sf::Vector2f&) = 0;
+    virtual std::unique_ptr<Button> clone(const std::optional<sf::Text>, const sf::Vector2f&) = 0;
 };
 
-class MainMenuButton : public IButton
+class MainMenuButton : public Button
 {
 public:
     MainMenuButton(
         const sf::Vector2f&,
         const sf::Vector2f&,
-        const std::string&,
-        const std::shared_ptr<sf::Font>,
-        const uint,
+        const std::optional<sf::Text>,
         const EventColor&,
         const EventColor&,
         const EventColor&,
@@ -51,15 +49,15 @@ public:
     virtual inline const bool isPressed() const override {return active;}
     virtual void update(const sf::Vector2i&) override;
 
-    virtual inline sf::Text getTextContent() const override {return textContent;}
+    virtual inline std::optional<sf::Text> getTextContent() const override {return textContent;}
     virtual inline sf::Vector2f getPosition() const override {return position;}
     virtual inline sf::Vector2f getSize() const override {return size;}
-    virtual inline sf::Font getFont() const override {return *textContent.getFont();}
+    virtual std::optional<sf::Font> getFont() const override;
     virtual inline sf::RectangleShape getBackground() const override {return background;}
-    virtual std::unique_ptr<IButton> clone(const std::string&, const sf::Vector2f&) override;
+    virtual std::unique_ptr<Button> clone(const std::optional<sf::Text>, const sf::Vector2f&) override;
 
 private:
-    void initText(const uint);
+    void initText();
     void initBackground();
     void setColor(const EventColor&);
 
@@ -68,8 +66,7 @@ private:
     sf::RectangleShape background;
     sf::Vector2f position;
     sf::Vector2f size;
-    std::shared_ptr<sf::Font> font;
-    sf::Text textContent;
+    std::optional<sf::Text> textContent;
     EventColor idleColors;
     EventColor hoverColors;
     EventColor activeColors;
@@ -78,7 +75,7 @@ private:
 
 struct ActionButton
 {
-    std::unique_ptr<Gui::IButton> object;
+    std::unique_ptr<Gui::Button> object;
     Events::StateAction action;
 };
 

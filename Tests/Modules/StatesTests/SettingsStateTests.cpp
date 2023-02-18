@@ -24,20 +24,18 @@ struct SettingsStateTest : public testing::Test
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
-        texture = std::make_shared<sf::Texture>();
-        font = std::make_shared<sf::Font>();;
         configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
-        settingsAssetsManager = std::make_unique<NiceMock<FileMgmt::SettingsAssetsManagerMock>>();
+        settingsAssetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         settingsGuiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
-        ON_CALL(*settingsAssetsManager, getTexture()).WillByDefault(Return(texture));
-        ON_CALL(*settingsAssetsManager, getFont()).WillByDefault(Return(font));
+        ON_CALL(*settingsAssetsManager, getTexture(_)).WillByDefault(Return(&texture));
+        ON_CALL(*settingsAssetsManager, getFont(_)).WillByDefault(ReturnRef(font));
         dummyConfig.resolution = sf::VideoMode(480, 480);
         ON_CALL(*configManager, getGraphics).WillByDefault(ReturnRef(dummyConfig));
     }
-    std::shared_ptr<sf::Texture> texture;
-    std::shared_ptr<sf::Font> font;
+    sf::Texture texture;
+    sf::Font font;
     std::shared_ptr<Core::ConfigManagerMock> configManager;
-    std::unique_ptr<NiceMock<FileMgmt::SettingsAssetsManagerMock>> settingsAssetsManager;
+    std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> settingsAssetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> settingsGuiManager;
     FileMgmt::GraphicsConfig dummyConfig;
 };
@@ -82,7 +80,7 @@ TEST_F(SettingsStateTest, settingsStateInitializesBackgroundSizeProperly)
 
 TEST_F(SettingsStateTest, settingsStateStateInitializesBackgroundTextureProperly)
 {
-    EXPECT_CALL(*settingsAssetsManager, getTexture()).WillOnce(Return(std::make_shared<sf::Texture>()));
+    EXPECT_CALL(*settingsAssetsManager, getTexture(Eq("MENU_BACKGROUND"))).WillOnce(Return(&texture));
     auto sut = std::make_unique<SettingsState>(
         configManager,
         std::move(settingsAssetsManager),
@@ -96,8 +94,8 @@ TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
     auto window = std::make_unique<NiceMock<Core::WindowMock>>();
 
     std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
-    gui->addButton(std::move(Gui::ButtonBuilder(sf::VideoMode(100, 100)).
-        withTextContent("testButton1").build()), Events::ToMainMenuState());
+    gui->addButton(std::move(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+        withTextContent(sf::Text("testButton1", font)).build()), Events::ToMainMenuState());
 
     EXPECT_CALL(*settingsGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
     auto sut = std::make_unique<SettingsState>(

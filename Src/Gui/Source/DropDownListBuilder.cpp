@@ -10,7 +10,7 @@ DropDownListBuilder& DropDownListBuilder::withTextContent(const sf::Text& name)
     return *this;
 }
 
-std::unique_ptr<ButtonList> DropDownListBuilder::build(std::unique_ptr<IButton> initiatingButton)
+std::unique_ptr<ButtonList> DropDownListBuilder::build(std::unique_ptr<Button> initiatingButton)
 {
     return std::make_unique<DropDownList>(textContent, std::move(initiatingButton));
 }

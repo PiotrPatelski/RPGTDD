@@ -32,7 +32,7 @@ public:
     MenuStateMock()
     : MenuState(
         std::make_shared<NiceMock<Core::ConfigManagerMock>>(),
-        std::make_unique<NiceMock<FileMgmt::MainMenuAssetsManagerMock>>())
+        std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>())
     {}
     MOCK_METHOD(void, finishState, (), ());
     MOCK_METHOD(void, setNextState, (std::unique_ptr<IState>), (override));
