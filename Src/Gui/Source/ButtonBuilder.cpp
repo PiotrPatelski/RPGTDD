@@ -1,5 +1,7 @@
 #include <ButtonBuilder.hpp>
 
+#include <PixelsPoint.hpp>
+
 namespace Gui
 {
 
@@ -18,25 +20,14 @@ EventColor DEFAULT_ACTIVE_COLORS = EventColor{
     sf::Color(20, 20, 20, 50),
     sf::Color::Transparent};
 
-uint calculateFontSize(const sf::Vector2f& buttonSize)
-{
-    const uint divider = static_cast<unsigned>(buttonSize.x + buttonSize.y);
-    if(divider != 0)
-        return (divider / 8);
-    return 0;
-}
-
-MenuButtonBuilder::MenuButtonBuilder(const sf::VideoMode& resolution)
-: screenResolution(resolution),
-  idleColors(DEFAULT_IDLE_COLORS),
+MenuButtonBuilder::MenuButtonBuilder()
+: idleColors(DEFAULT_IDLE_COLORS),
   hoverColors(DEFAULT_HOVER_COLORS),
   activeColors(DEFAULT_ACTIVE_COLORS)
 {}
 
 std::unique_ptr<Button> MenuButtonBuilder::build()
 {
-    if(textContent)
-        textContent->setCharacterSize(calculateFontSize(size));
     return std::make_unique<MainMenuButton>(
         position,
         size,
@@ -53,19 +44,15 @@ MenuButtonBuilder& MenuButtonBuilder::withTextContent(const sf::Text& text)
     return *this;
 }
 
-MenuButtonBuilder& MenuButtonBuilder::atPosition(const float x, const float y)
+MenuButtonBuilder& MenuButtonBuilder::atPosition(const VectorMath::ScreenPercentagePoint& position)
 {
-    const float xPixels = ScreenPercentage(screenResolution).toPixelsOnX(x);
-    const float yPixels = ScreenPercentage(screenResolution).toPixelsOnY(y);
-    position = sf::Vector2f(xPixels, yPixels);
+    this->position = position;
     return *this;
 }
 
-MenuButtonBuilder& MenuButtonBuilder::withSize(const float width, const float height)
+MenuButtonBuilder& MenuButtonBuilder::withSize(const VectorMath::ScreenPercentagePoint& size)
 {
-    const float widthPixels = ScreenPercentage(screenResolution).toPixelsOnX(width);
-    const float heightPixels = ScreenPercentage(screenResolution).toPixelsOnY(height);
-    size = sf::Vector2f(widthPixels, heightPixels);
+    this->size = size;
     return *this;
 }
 

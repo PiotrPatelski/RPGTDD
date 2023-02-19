@@ -26,7 +26,7 @@ public:
     virtual void addButton(std::unique_ptr<Button>, Events::StateAction) override;
     virtual void addButtonList(std::unique_ptr<ButtonList>) override;
     virtual std::optional<Events::StateAction> getActiveAction() override;
-    virtual void drawTo(Core::IWindow&) override;
+    virtual void drawTo(Types::IWindow&) override;
     virtual void update(const sf::Vector2i&) override;
 private:
     std::optional<Events::StateAction> pollActionFromButtons();

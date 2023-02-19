@@ -4,6 +4,7 @@ set(SOURCES
     ButtonTests.cpp
     ButtonBuilderTests.cpp
     ButtonMenuTests.cpp
+    ButtonMenuBuilderTests.cpp
     MenuGuiTests.cpp
     EditorGuiTests.cpp
     GameGuiTests.cpp
@@ -25,6 +26,7 @@ target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
     Gui
+    Types
     Mocks
     mainUT
     gtest 

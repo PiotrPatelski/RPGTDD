@@ -2,7 +2,11 @@
 
 #include <ConfigManager.hpp>
 #include <AssetsManager.hpp>
-#include <Window.hpp>
+
+namespace Types
+{
+class IWindow;
+}
 namespace States
 {
 
@@ -19,8 +23,8 @@ public:
     virtual std::unique_ptr<IState> getNextState() = 0;
     virtual std::shared_ptr<Core::IConfigManager> getConfig() = 0;
 
-    virtual void update(const Core::IWindow&, const float) = 0;
-    virtual void drawOutput(Core::IWindow&) = 0;
+    virtual void update(const Types::IWindow&, const float) = 0;
+    virtual void drawOutput(Types::IWindow&) = 0;
 };
 
 class State : public IState

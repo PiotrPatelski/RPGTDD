@@ -26,6 +26,8 @@ struct SettingsGuiManagerTest : public GuiManagerFixture
         resolutionList = std::make_unique<NiceMock<ButtonListMock>>();
         ON_CALL(*applyButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
         ON_CALL(*backButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
+        ON_CALL(*applyButton, getBackground()).WillByDefault(Return(dummyBackground));
+        ON_CALL(*backButton, getBackground()).WillByDefault(Return(dummyBackground));
     }
 
     std::unique_ptr<NiceMock<ButtonMock>> applyButton;
@@ -41,7 +43,7 @@ struct SettingsGuiManagerTest : public GuiManagerFixture
     }
     void setupButtonList()
     {
-        EXPECT_CALL(*dropDownListBuilder, build(_))
+        EXPECT_CALL(*dropDownListBuilder, build())
             .WillOnce(Return(ByMove(std::move(resolutionList))));
     }
 };
@@ -51,6 +53,7 @@ TEST_F(SettingsGuiManagerTest, uiWillDrawTwoButtonsCreatedBySettingsGuiManager)
     setupSettingsButtons();
     setupButtonList();
     auto guiManager = std::make_unique<SettingsGuiManager>(
+        resolution,
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
     sut = guiManager->createGui(sf::Font{});
@@ -64,6 +67,7 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterApplyButtonHa
     setupSettingsButtons();
     setupButtonList();
     auto guiManager = std::make_unique<SettingsGuiManager>(
+        resolution,
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
     sut = guiManager->createGui(sf::Font{});
@@ -78,6 +82,7 @@ TEST_F(SettingsGuiManagerTest, uiWillNotThrowWhenGettingActionAfterBackButtonHas
     setupSettingsButtons();
     setupButtonList();
     auto guiManager = std::make_unique<SettingsGuiManager>(
+        resolution,
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
     sut = guiManager->createGui(sf::Font{});
@@ -92,6 +97,7 @@ TEST_F(SettingsGuiManagerTest, uiWillReturnValidActionWhenButtonListHasOneAvaila
     setupSettingsButtons();
     setupButtonList();
     auto guiManager = std::make_unique<SettingsGuiManager>(
+        resolution,
         std::move(buttonBuilder),
         std::move(dropDownListBuilder));
     sut = guiManager->createGui(sf::Font{});

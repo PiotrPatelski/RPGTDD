@@ -91,10 +91,10 @@ TEST_F(SettingsStateTest, settingsStateStateInitializesBackgroundTextureProperly
 
 TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
 
     std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
-    gui->addButton(std::move(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+    gui->addButton(std::move(Gui::MenuButtonBuilder().
         withTextContent(sf::Text("testButton1", font)).build()), Events::ToMainMenuState());
 
     EXPECT_CALL(*settingsGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
@@ -109,7 +109,7 @@ TEST_F(SettingsStateTest, settingsStateDrawsOutputProperly)
 
 TEST_F(SettingsStateTest, settingsStateUpdatesGuiProperly)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
     EXPECT_CALL(*window, getMousePosition()).WillOnce(Return(sf::Vector2i{0, 0}));
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
     EXPECT_CALL(*gui, update(A<const sf::Vector2i&>()));
@@ -127,7 +127,7 @@ TEST_F(SettingsStateTest, settingsStateUpdatesGuiProperly)
 
 TEST_F(SettingsStateTest, settingsStateCallsActionReturnedByGui)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
 
     MockFunction<void(States::MenuState&)> callback;
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
@@ -147,7 +147,7 @@ TEST_F(SettingsStateTest, settingsStateCallsActionReturnedByGui)
 
 TEST_F(SettingsStateTest, settingsStateWontChangeStateIfNulloptIsReturnedByGui)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
 
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
     EXPECT_CALL(*gui, update(A<const sf::Vector2i&>()));
@@ -167,7 +167,7 @@ TEST_F(SettingsStateTest, settingsStateWontChangeStateIfNulloptIsReturnedByGui)
 
 TEST_F(SettingsStateTest, settingsStateCallsActionReturnedByInputListener)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
 
     MockFunction<void(States::MenuState&)> callback;
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();

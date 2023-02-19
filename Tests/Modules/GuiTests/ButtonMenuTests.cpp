@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <ButtonMenu.hpp>
+#include <Background.hpp>
 #include <ButtonMock.hpp>
 #include <WindowMock.hpp>
 #include <ButtonBuilderMock.hpp>
@@ -10,237 +11,158 @@ namespace Gui
 
 using namespace ::testing;
 
-struct ButtonMenuCreationTest : public testing::Test
+struct ButtonMenuTest : public testing::Test
 {
-
-};
-
-TEST_F(ButtonMenuCreationTest, buttonMenuPositionsTextWithinBoundsOfContainer)
-{
-    const sf::VideoMode resolution{1920, 1080};
-    const sf::Vector2f size{30.f, 70.f};
-    const sf::Vector2f position{480.f, 480.f};
-    auto buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
-
-    auto sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
-    const auto result = sut->getTextContent().getPosition();
-    EXPECT_GT(result.x, position.x);
-    EXPECT_LT(result.x, position.x + size.x);
-    EXPECT_GT(result.y, position.y);
-    EXPECT_LT(result.y, position.y + size.y);
-}
-
-TEST_F(ButtonMenuCreationTest, buttonMenuWillAddButtonWithPositionWithinBoundsOfContainer)
-{
-    const sf::VideoMode resolution{1920, 1080};
-    const sf::Vector2f size{30.f, 70.f};
-    const sf::Vector2f position{480.f, 480.f};
-    auto buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
-    auto dummyCallback = [](States::MapState&){};
-    EXPECT_CALL(*buttonBuilder, withTextContent(Property(&sf::Text::getString, StrEq("test")))).WillOnce(ReturnRef(*buttonBuilder));
-    EXPECT_CALL(*buttonBuilder, atPosition(FloatNear(480.f, 1), FloatNear(503.f, 1))).WillOnce(ReturnRef(*buttonBuilder));
-    EXPECT_CALL(*buttonBuilder, withSize(FloatNear(15.f, 1), FloatNear(11.f, 1))).WillOnce(ReturnRef(*buttonBuilder));
-    EXPECT_CALL(*buttonBuilder, build())
-            .WillOnce(Return(ByMove(std::make_unique<NiceMock<ButtonMock>>())));
-    auto sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
-    sut->addSection(sf::Text("test", sf::Font{}), dummyCallback);
-    const auto result = sut->getTextContent().getPosition();
-}
-
-struct ButtonMenuBehaviourTest : public testing::Test
-{
-    ButtonMenuBehaviourTest()
+    ButtonMenuTest()
     {
-        buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
-        ON_CALL(*buttonBuilder, withTextContent(_)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, atPosition(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, withSize(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
+        button1 = std::make_unique<NiceMock<ButtonMock>>();
+        button2 = std::make_unique<NiceMock<ButtonMock>>();
+        button3 = std::make_unique<NiceMock<ButtonMock>>();
+        ON_CALL(*button1, getBackground()).WillByDefault(Return(background));
+        ON_CALL(*button1, getTextContent()).WillByDefault(Return(buttonText));
+        ON_CALL(*button2, getBackground()).WillByDefault(Return(background));
+        ON_CALL(*button2, getTextContent()).WillByDefault(Return(buttonText));
+        ON_CALL(*button3, getBackground()).WillByDefault(Return(background));
+        ON_CALL(*button3, getTextContent()).WillByDefault(Return(buttonText));
     }
     const sf::VideoMode resolution{1920, 1080};
-    const sf::Vector2f size{30.f, 70.f};
-    const sf::Vector2f position{480.f, 480.f};
-    std::unique_ptr<NiceMock<ButtonBuilderMock>> buttonBuilder;
-    std::unique_ptr<ButtonMenu> sut;
-    NiceMock<Core::WindowMock> window;
+    const VectorMath::ScreenPercentagePoint size{resolution, sf::Vector2f{30.f, 70.f}};
+    const VectorMath::ScreenPercentagePoint position{resolution, sf::Vector2f{480.f, 480.f}};
+    std::unique_ptr<NiceMock<ButtonMock>> button1;
+    std::unique_ptr<NiceMock<ButtonMock>> button2;
+    std::unique_ptr<NiceMock<ButtonMock>> button3;
+    NiceMock<::Types::WindowMock> window;
+    ::Types::Background background{position, size};
+    const sf::Text buttonText{"test", sf::Font{}};
 };
 
-TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionParamsToCreateNewSectionWhenAddingOverOneSection)
+TEST_F(ButtonMenuTest, buttonMenuWillUpdateAllAddedActionButtonsWithMousePosition)
 {
-    const sf::Vector2f lastAddedButtonPosition{3.f, 3.f};
-    auto testButton1 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton1, getPosition())
-        .WillOnce(Return(lastAddedButtonPosition))
-        .WillOnce(Return(lastAddedButtonPosition));
-    auto testButton2 = std::make_unique<NiceMock<ButtonMock>>();
+    const auto mousePosition = sf::Vector2i{3, 3};
+    EXPECT_CALL(*button1, update(Eq(mousePosition)));
+    EXPECT_CALL(*button2, update(Eq(mousePosition)));
+    EXPECT_CALL(*button3, update(Eq(mousePosition)));
 
-    EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(ByMove(std::move(testButton1))))
-        .WillOnce(Return(ByMove(std::move(testButton2))));
-    sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    buttons.push_back({std::move(button2), std::monostate{}});
+    buttons.push_back({std::move(button3), std::monostate{}});
 
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
-}
-
-TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionAndNewestSectionParamsToCreateNewSectionWhenAddingOverTwoSections)
-{
-    const sf::Vector2f firstAddedButtonPosition{3.f, 3.f};
-    const sf::Vector2f lastAddedButtonPosition{3.f, 13.f};
-    auto testButton1 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton1, getPosition())
-        .WillOnce(Return(lastAddedButtonPosition))
-        .WillOnce(Return(lastAddedButtonPosition))
-        .WillOnce(Return(lastAddedButtonPosition));
-    auto testButton2 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton2, getPosition())
-        .WillOnce(Return(lastAddedButtonPosition));
-    auto testButton3 = std::make_unique<NiceMock<ButtonMock>>();
-
-    EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(ByMove(std::move(testButton1))))
-        .WillOnce(Return(ByMove(std::move(testButton2))))
-        .WillOnce(Return(ByMove(std::move(testButton3))));
-    sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
-
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
-    sut->addSection(sf::Text("test3", sf::Font{}), [](States::MapState&){});
-}
-
-TEST_F(ButtonMenuBehaviourTest, buttonMenuWillUpdateItsButtonsWithGivenPosition)
-{
-    const sf::Vector2i mousePosition{3, 3};
-    auto testButton1 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton1, update(Eq(mousePosition)));
-    auto testButton2 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton2, update(Eq(mousePosition)));
-    auto testButton3 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton3, update(Eq(mousePosition)));
-    EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(ByMove(std::move(testButton1))))
-        .WillOnce(Return(ByMove(std::move(testButton2))))
-        .WillOnce(Return(ByMove(std::move(testButton3))));
-    sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
-
-
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
-    sut->addSection(sf::Text("test3", sf::Font{}), [](States::MapState&){});
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
     sut->update(mousePosition);
 }
 
-TEST_F(ButtonMenuBehaviourTest, buttonMenuWillRenderButtonsAndContainerAndTextAndBackgroundIntoWindow)
+TEST_F(ButtonMenuTest, buttonMenuWillDrawBackgroundsOfAllAddedActionButtons)
 {
-    auto testButton1 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton1, getBackground())
-        .WillOnce(Return(sf::RectangleShape{}));
-    EXPECT_CALL(*testButton1, getTextContent())
-        .WillOnce(Return(sf::Text{}));
+    EXPECT_CALL(*button1, getBackground()).WillOnce(Return(background));
+    EXPECT_CALL(*button2, getBackground()).WillOnce(Return(background));
+    EXPECT_CALL(*button3, getBackground()).WillOnce(Return(background));
 
-    auto testButton2 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton2, getBackground())
-        .WillOnce(Return(sf::RectangleShape{}));
-    EXPECT_CALL(*testButton2, getTextContent())
-        .WillOnce(Return(sf::Text{}));
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    buttons.push_back({std::move(button2), std::monostate{}});
+    buttons.push_back({std::move(button3), std::monostate{}});
 
-    EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(ByMove(std::move(testButton1))))
-        .WillOnce(Return(ByMove(std::move(testButton2))));
-    sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
-
-    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(7);
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
     sut->drawTo(window);
 }
 
-
-TEST_F(ButtonMenuBehaviourTest, buttonMenuWillReturnAStateActionOnceWhenSectionIsPressedOnce)
+TEST_F(ButtonMenuTest, buttonMenuWillDrawTextsOfAllAddedActionButtons)
 {
-    auto testButton1 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton1, update(Eq(sf::Vector2i{3, 3}))).Times(2);
-    EXPECT_CALL(*testButton1, isPressed())
-        .WillOnce(Return(true))
-        .WillOnce(Return(false));
+    EXPECT_CALL(*button1, getTextContent()).WillOnce(Return(buttonText));
+    EXPECT_CALL(*button2, getTextContent()).WillOnce(Return(buttonText));
+    EXPECT_CALL(*button3, getTextContent()).WillOnce(Return(buttonText));
 
-    EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(ByMove(std::move(testButton1))));
-    sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    buttons.push_back({std::move(button2), std::monostate{}});
+    buttons.push_back({std::move(button3), std::monostate{}});
 
-    std::function<void(States::MapState&)> dummyCallback = [](States::MapState&){};
-    sut->addSection(sf::Text("FirstSection", sf::Font{}), dummyCallback);
-    sut->update(sf::Vector2i{3, 3});
-    auto result = sut->getActiveAction();
-    ASSERT_NE(result, std::nullopt);
-    EXPECT_TRUE(std::holds_alternative<Events::GameAction>(result.value()));
-    sut->update(sf::Vector2i{3, 3});
-    ASSERT_EQ(sut->getActiveAction(), std::nullopt);
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
+    sut->drawTo(window);
 }
 
-TEST_F(ButtonMenuBehaviourTest, buttonMenuWillReturnNulloptWhenNoSectionIsPressed)
+TEST_F(ButtonMenuTest, windowWillDrawButtonMenuBackgroundAndText)
 {
-    auto testButton1 = std::make_unique<NiceMock<ButtonMock>>();
-    EXPECT_CALL(*testButton1, update(Eq(sf::Vector2i{3, 3})));
-    EXPECT_CALL(*testButton1, isPressed())
-        .WillOnce(Return(false));
-
-    EXPECT_CALL(*buttonBuilder, build())
-        .WillOnce(Return(ByMove(std::move(testButton1))));
-    sut = std::make_unique<ButtonMenu>(
-        "test",
-        sf::Font{},
-        resolution,
-        size,
-        position,
-        std::move(buttonBuilder));
-
-    std::function<void(States::MapState&)> dummyCallback = [](States::MapState&){};
-    sut->addSection(sf::Text("FirstSection", sf::Font{}), dummyCallback);
-    sut->update(sf::Vector2i{3, 3});
-    ASSERT_EQ(sut->getActiveAction(), std::nullopt);
+    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(2);
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::vector<ActionButton>{});
+    sut->drawTo(window);
 }
 
+TEST_F(ButtonMenuTest, windowWillDrawButtonMenuBackgroundTextAndSectionBackgroundWhenNoTextIsReturnedFromSection)
+{
+    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(3);
+    EXPECT_CALL(*button1, getTextContent()).WillOnce(Return(std::nullopt));
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
+    sut->drawTo(window);
+}
+
+TEST_F(ButtonMenuTest, windowWillDrawButtonMenuBackgroundTextSectionBackgroundAndSectionTextWhenTextIsReturnedFromSection)
+{
+    EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(4);
+    EXPECT_CALL(*button1, getTextContent()).WillOnce(Return(buttonText));
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
+    sut->drawTo(window);
+}
+
+TEST_F(ButtonMenuTest, buttonMenuWillGetNulloptWhenNoSectionsArePressed)
+{
+    EXPECT_CALL(*button1, isPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*button2, isPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*button3, isPressed()).WillOnce(Return(false));
+
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    buttons.push_back({std::move(button2), std::monostate{}});
+    buttons.push_back({std::move(button3), std::monostate{}});
+
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
+
+    EXPECT_EQ(sut->getActiveAction(), std::nullopt);
+}
+
+TEST_F(ButtonMenuTest, buttonMenuWillReturnActionOfFirstPressedSection)
+{
+    EXPECT_CALL(*button1, isPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*button2, isPressed()).WillOnce(Return(true));
+    EXPECT_CALL(*button3, isPressed()).Times(0);
+
+    std::vector<ActionButton> buttons;
+    buttons.push_back({std::move(button1), std::monostate{}});
+    buttons.push_back({std::move(button2), std::monostate{}});
+    buttons.push_back({std::move(button3), std::monostate{}});
+
+    auto sut = std::make_unique<ButtonMenu>(
+        sf::Text("test", sf::Font{}),
+        background,
+        std::move(buttons));
+
+    EXPECT_NE(sut->getActiveAction(), std::nullopt);
+}
 
 }

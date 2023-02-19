@@ -11,7 +11,7 @@ namespace Core
 class ICoreBuilder
 {
 public:
-    virtual std::unique_ptr<IWindow> createWindow() const = 0;
+    virtual std::unique_ptr<Types::IWindow> createWindow() const = 0;
     virtual std::unique_ptr<IClock> createClock() const = 0;
     virtual std::unique_ptr<IStateMachine> createStateMachine() const = 0;
 };
@@ -19,8 +19,8 @@ public:
 class CoreBuilder : public ICoreBuilder
 {
 public:
-    virtual std::unique_ptr<IWindow> createWindow() const override 
-    {return std::make_unique<Window>();}
+    virtual std::unique_ptr<Types::IWindow> createWindow() const override
+    {return std::make_unique<Types::Window>();}
     virtual std::unique_ptr<IClock> createClock() const override
     {return std::make_unique<Clock>();}
     virtual std::unique_ptr<IStateMachine> createStateMachine() const override

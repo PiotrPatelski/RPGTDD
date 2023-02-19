@@ -3,7 +3,7 @@
 #include <SFML/Window.hpp>
 #include <Window.hpp>
 
-namespace Core
+namespace Types
 {
 
 struct WindowTest : public testing::Test

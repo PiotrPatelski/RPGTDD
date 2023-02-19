@@ -18,7 +18,7 @@ EditorState::EditorState(
     gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
 }
 
-void EditorState::update(const Core::IWindow& window, const float deltaTime)
+void EditorState::update(const Types::IWindow& window, const float deltaTime)
 {
     gui->update(window.getMousePosition());
     auto action = inputListener->getActiveAction();
@@ -26,7 +26,7 @@ void EditorState::update(const Core::IWindow& window, const float deltaTime)
         get<Events::GameAction>(action.value())(*this);
 }
 
-void EditorState::drawOutput(Core::IWindow& window)
+void EditorState::drawOutput(Types::IWindow& window)
 {
     gui->drawTo(window);
 }

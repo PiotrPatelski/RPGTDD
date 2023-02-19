@@ -21,8 +21,8 @@ public:
         std::unique_ptr<Events::InputListener>);
     virtual ~SettingsState() = default;
 
-    virtual void update(const Core::IWindow& window, const float) override;
-    virtual void drawOutput(Core::IWindow&) override;
+    virtual void update(const Types::IWindow& window, const float) override;
+    virtual void drawOutput(Types::IWindow&) override;
     inline std::shared_ptr<sf::RectangleShape> getBackground() const {return background;}
 private:
     void initBackground();

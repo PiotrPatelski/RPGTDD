@@ -9,7 +9,7 @@ StateMachine::StateMachine()
 
 }
 
-void StateMachine::update(const IWindow& window, const float deltaTime)
+void StateMachine::update(const Types::IWindow& window, const float deltaTime)
 {
     activeState->update(window, deltaTime);
     if(activeState->isReadyToChange())

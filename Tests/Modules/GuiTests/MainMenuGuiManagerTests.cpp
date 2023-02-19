@@ -27,13 +27,17 @@ struct MainMenuGuiManagerTest : public GuiManagerFixture
         ON_CALL(*toSettingsButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
         ON_CALL(*toEditorButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
         ON_CALL(*toExitButton, getTextContent()).WillByDefault(Return(sf::Text("", sf::Font{})));
+        ON_CALL(*toGameButton, getBackground()).WillByDefault(Return(dummyBackground));
+        ON_CALL(*toSettingsButton, getBackground()).WillByDefault(Return(dummyBackground));
+        ON_CALL(*toEditorButton, getBackground()).WillByDefault(Return(dummyBackground));
+        ON_CALL(*toExitButton, getBackground()).WillByDefault(Return(dummyBackground));
     }
     std::unique_ptr<NiceMock<ButtonMock>> toGameButton;
     std::unique_ptr<NiceMock<ButtonMock>> toSettingsButton;
     std::unique_ptr<NiceMock<ButtonMock>> toEditorButton;
     std::unique_ptr<NiceMock<ButtonMock>> toExitButton;
-    NiceMock<Core::WindowMock> window;
-
+    NiceMock<::Types::WindowMock> window;
+    const sf::VideoMode resolution{480, 480};
     void setupMainMenuButtons()
     {
         EXPECT_CALL(*buttonBuilder, build())
@@ -48,6 +52,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillDrawFourButtonsCreatedByMainMenuGuiManager)
 {
     setupMainMenuButtons();
     auto guiManager = std::make_unique<MainMenuGuiManager>(
+        resolution,
         std::move(buttonBuilder));
     sut = guiManager->createGui(sf::Font{});
     EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(8);
@@ -63,6 +68,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillUpdateAllFourMainMenuButtons)
     EXPECT_CALL(*toExitButton, update(Eq(mousePosition)));
     setupMainMenuButtons();
     auto guiManager = std::make_unique<MainMenuGuiManager>(
+        resolution,
         std::move(buttonBuilder));
     sut = guiManager->createGui(sf::Font{});
     sut->update(mousePosition);
@@ -73,6 +79,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToGameButtonH
     EXPECT_CALL(*toGameButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
     auto guiManager = std::make_unique<MainMenuGuiManager>(
+        resolution,
         std::move(buttonBuilder));
     sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();
@@ -85,6 +92,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToSettingsBut
     EXPECT_CALL(*toSettingsButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
     auto guiManager = std::make_unique<MainMenuGuiManager>(
+        resolution,
         std::move(buttonBuilder));
     sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();
@@ -97,6 +105,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToEditorButto
     EXPECT_CALL(*toEditorButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
     auto guiManager = std::make_unique<MainMenuGuiManager>(
+        resolution,
         std::move(buttonBuilder));
     sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();
@@ -109,6 +118,7 @@ TEST_F(MainMenuGuiManagerTest, uiWillNotThrowWhenGettingActionAfterToExitButtonH
     EXPECT_CALL(*toExitButton, isPressed()).WillOnce(Return(true));
     setupMainMenuButtons();
     auto guiManager = std::make_unique<MainMenuGuiManager>(
+        resolution,
         std::move(buttonBuilder));
     sut = guiManager->createGui(sf::Font{});
     auto result = sut->getActiveAction();

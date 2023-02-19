@@ -3,7 +3,6 @@ set(MODULE_NAME Core)
 set(SOURCES
     Source/Game.cpp
     Source/GameLoop.cpp
-    Source/Window.cpp
     Source/Clock.cpp
     Source/StateMachine.cpp
     Source/Engine.cpp
@@ -13,7 +12,6 @@ set(SOURCES
 set(HEADERS
     Headers/Game.hpp
     Headers/GameLoop.hpp
-    Headers/Window.hpp
     Headers/Clock.hpp
     Headers/StateMachine.hpp
     Headers/Engine.hpp
@@ -29,6 +27,7 @@ target_include_directories(${MODULE_NAME} PUBLIC Headers Source)
 target_link_libraries(${MODULE_NAME} 
 PUBLIC 
     States
+    Types
     FileMgmt
     ${SFML_LIBS})
 

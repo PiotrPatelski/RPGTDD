@@ -19,7 +19,7 @@ using namespace ::testing;
 struct MenuGuiTest : public testing::Test
 {
     std::unique_ptr<UserInterface> sut;
-    NiceMock<Core::WindowMock> window;
+    NiceMock<::Types::WindowMock> window;
 };
 
 TEST_F(MenuGuiTest, uiWillUpdateAddedButtonWithMousePositionOnWindow)
@@ -48,7 +48,7 @@ TEST_F(MenuGuiTest, uiWillGetEmptyActionIfNoButtonsWerePressed)
 TEST_F(MenuGuiTest, uiWillDrawAddedButtonListToPassedWindow)
 {
     auto dropDownList = std::make_unique<NiceMock<ButtonListMock>>();
-    EXPECT_CALL(*dropDownList, drawTo(A<Core::IWindow&>()));
+    EXPECT_CALL(*dropDownList, drawTo(A<::Types::IWindow&>()));
 
     sut = std::make_unique<MenuGui>();
     sut->addButtonList(std::move(dropDownList));

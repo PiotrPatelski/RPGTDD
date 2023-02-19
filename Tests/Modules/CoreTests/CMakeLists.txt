@@ -23,6 +23,7 @@ target_link_libraries(
     Mocks
     Core
     States
+    Types
     mainUT
     gtest 
     gmock_main

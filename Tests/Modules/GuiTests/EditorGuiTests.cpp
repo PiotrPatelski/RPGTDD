@@ -30,7 +30,7 @@ TEST_F(EditorGuiTest, EditorGuiDoesNotUpdateAddedPauseMenuWhenNotPaused)
     const sf::Vector2i currentMousePosition{30, 30};
     EXPECT_CALL(*pauseMenu, update(_)).Times(0);
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(std::move(pauseMenu));
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
     sut->update(currentMousePosition);
 }
 
@@ -40,7 +40,7 @@ TEST_F(EditorGuiTest, EditorGuiUpdatesAddedPauseMenuWhenPaused)
     const sf::Vector2i currentMousePosition{30, 30};
     EXPECT_CALL(*pauseMenu, update(Eq(currentMousePosition)));
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(std::move(pauseMenu));
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
     sut->togglePause();
     sut->update(currentMousePosition);
 }
@@ -48,21 +48,21 @@ TEST_F(EditorGuiTest, EditorGuiUpdatesAddedPauseMenuWhenPaused)
 TEST_F(EditorGuiTest, EditorGuiDrawsAddedPauseMenuWhenPaused)
 {
     auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    EXPECT_CALL(*pauseMenu, drawTo(A<Core::IWindow&>()));
+    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::IWindow&>()));
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(std::move(pauseMenu));
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
     sut->togglePause();
-    NiceMock<Core::WindowMock> window;
+    NiceMock<::Types::WindowMock> window;
     sut->drawTo(window);
 }
 
 TEST_F(EditorGuiTest, EditorGuiDoesNotDrawAddedPauseMenuWhenNotPaused)
 {
     auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    EXPECT_CALL(*pauseMenu, drawTo(A<Core::IWindow&>())).Times(0);
+    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::IWindow&>())).Times(0);
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(std::move(pauseMenu));
-    NiceMock<Core::WindowMock> window;
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
+    NiceMock<::Types::WindowMock> window;
     sut->drawTo(window);
 }
 

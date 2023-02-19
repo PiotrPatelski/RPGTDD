@@ -25,8 +25,8 @@ public:
         std::unique_ptr<Events::InputListener>);
     virtual ~EditorState() = default;
 
-    virtual void update(const Core::IWindow&, const float) override;
-    virtual void drawOutput(Core::IWindow&) override;
+    virtual void update(const Types::IWindow&, const float) override;
+    virtual void drawOutput(Types::IWindow&) override;
     virtual void togglePause() override;
 private:
     std::unique_ptr<Gui::UserInterface> gui;

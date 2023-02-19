@@ -31,7 +31,7 @@ TEST_F(EditorAssetsManagerTest, editorAssetsManagerGetsValidFontWhenValidPathIsP
 {
     AssetsManager::setBuildPath(TEST_PATH);
     auto sut = std::make_unique<EditorAssetsManager>();
-    ASSERT_EQ(sut->getFont("MENU_BUTTON").getInfo().family, "xBONES"); //TODO CHANGE THIS FONT TO STH DEDICATED WHEN ACTUALLY MORE WOULD BE NEEDED
+    ASSERT_EQ(sut->getFont("MENU_BUTTON").getInfo().family, "xBONES");
 }
 
 }

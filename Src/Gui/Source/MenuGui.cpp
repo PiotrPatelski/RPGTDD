@@ -29,11 +29,11 @@ std::optional<Events::StateAction> MenuGui::getActiveAction()
     return action;
 }
 
-void MenuGui::drawTo(Core::IWindow& window)
+void MenuGui::drawTo(Types::IWindow& window)
 {
     for(const auto& button : buttons)
     {
-        window.draw(button.object->getBackground());
+        button.object->getBackground().drawTo(window);
         const auto buttonText = button.object->getTextContent();
         if(buttonText)
             window.draw(*buttonText);

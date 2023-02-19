@@ -3,6 +3,9 @@
 #include <Button.hpp>
 #include <ButtonEventHandlerMock.hpp>
 #include <State.hpp>
+#include <ScreenPercentagePoint.hpp>
+#include <PixelsPoint.hpp>
+#include <ButtonTextCalculations.hpp>
 
 namespace Gui
 {
@@ -28,8 +31,9 @@ EventColor TEST_ACTIVE_COLORS = EventColor{
 
 struct MainMenuButtonTest : public testing::Test
 {
-    const sf::Vector2f position{50, 50};
-    const sf::Vector2f size{50, 50};
+    const sf::VideoMode resolution{480, 480};
+    const VectorMath::ScreenPercentagePoint position{resolution, sf::Vector2f(50, 50)};
+    const VectorMath::ScreenPercentagePoint size{resolution, sf::Vector2f(50, 50)};
     const std::string name{"test"};
     const uint characterSize{50};
 
@@ -60,7 +64,8 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsSize)
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
-    ASSERT_EQ(sut->getSize(), size);
+    ASSERT_FLOAT_EQ(sut->getSize().value().x, size.value().x);
+    ASSERT_FLOAT_EQ(sut->getSize().value().y, size.value().y);
 }
 
 TEST_F(MainMenuButtonTest, buttonWillReturnItsPosition)
@@ -73,7 +78,8 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsPosition)
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
-    ASSERT_EQ(sut->getPosition(), position);
+    ASSERT_FLOAT_EQ(sut->getPosition().value().x, position.value().x);
+    ASSERT_FLOAT_EQ(sut->getPosition().value().y, position.value().y);
 }
 
 TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersectWithBackground)
@@ -86,7 +92,8 @@ TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersect
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
-    sut->update(sf::Vector2i{280, 280});
+    const auto omittingPosition = static_cast<sf::Vector2i>(position.toPixels() - sf::Vector2f(20.f, 20.f));
+    sut->update(omittingPosition);
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_IDLE_COLORS.background);
 }
 
@@ -102,7 +109,8 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::move(eventHandler));
-    sut->update(sf::Vector2i{55, 55});
+    const auto intersectingPosition = static_cast<sf::Vector2i>(position.toPixels() + sf::Vector2f(10.f, 10.f));
+    sut->update(intersectingPosition);
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_HOVER_COLORS.background);
 }
 
@@ -118,23 +126,9 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWi
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::move(eventHandler));
-    sut->update(sf::Vector2i{55, 55});
+    const auto intersectingPosition = static_cast<sf::Vector2i>(position.toPixels() + sf::Vector2f(10.f, 10.f));
+    sut->update(intersectingPosition);
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_ACTIVE_COLORS.background);
-}
-
-TEST_F(MainMenuButtonTest, buttonIndicatesThatIsPressedWhenEventHandlerReceivesSfMouseSignal)
-{
-    std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
-    EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(true));
-    std::unique_ptr<Button> sut = std::make_unique<MainMenuButton>(
-        position,
-        size,
-        sf::Text(name, sf::Font{}, characterSize),
-        TEST_IDLE_COLORS,
-        TEST_HOVER_COLORS,
-        TEST_ACTIVE_COLORS,
-        std::move(eventHandler));
-    sut->update(sf::Vector2i{55, 55});
     ASSERT_TRUE(sut->isPressed());
 }
 
@@ -148,11 +142,11 @@ TEST_F(MainMenuButtonTest, clonedButtonWillHaveTheSamePropertiesAsOriginalExcept
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
-    auto result = sut->clone(sf::Text("clonedButton", sf::Font{}), sf::Vector2f(100, 100));
+    auto result = sut->clone(sf::Text("clonedButton", sf::Font{}), VectorMath::ScreenPercentagePoint(sf::VideoMode(480, 480), sf::Vector2f(100, 100)));
     ASSERT_NE(result->getTextContent(), std::nullopt);
     ASSERT_EQ(result->getTextContent()->getString().toAnsiString(), "clonedButton");
-    ASSERT_EQ(result->getPosition(), sf::Vector2f(100, 100));
-    ASSERT_EQ(result->getSize(), size);
+    ASSERT_EQ(result->getPosition().value(), sf::Vector2f(100, 100));
+    ASSERT_EQ(result->getSize().value(), size.value());
 }
 
 TEST_F(MainMenuButtonTest, clonedButtonWillHaveNulloptTextWhenNoneWasGiven)
@@ -165,20 +159,9 @@ TEST_F(MainMenuButtonTest, clonedButtonWillHaveNulloptTextWhenNoneWasGiven)
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
         std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
-    auto result = sut->clone(std::nullopt, sf::Vector2f(100, 100));
+    auto result = sut->clone(std::nullopt, VectorMath::ScreenPercentagePoint(sf::VideoMode(480, 480), sf::Vector2f(100, 100)));
     ASSERT_EQ(result->getTextContent(), std::nullopt);
     ASSERT_EQ(result->getFont(), std::nullopt);
-}
-
-TEST(MainMenuButtonHelperFunctionTest, calculateTextPosOnGivenBackground)
-{
-    sf::RectangleShape background;
-    background.setPosition(15.6f, 40);
-    background.setSize(sf::Vector2f(13.f, 6.f));
-    sf::Text text;
-    text.setCharacterSize(50);
-    ASSERT_EQ(calculateTextPosOnBackground(background, text).x, 22.1f);
-    ASSERT_EQ(calculateTextPosOnBackground(background, text).y, 40.f);
 }
 
 }

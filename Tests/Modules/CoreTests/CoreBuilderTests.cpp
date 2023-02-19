@@ -17,7 +17,7 @@ TEST_F(CoreBuilderTest, coreBuilderCreatesWindow)
 {
     auto window = sut->createWindow();
     ASSERT_NE(nullptr, window);
-    EXPECT_EQ(typeid(std::unique_ptr<IWindow>), typeid(window));
+    EXPECT_EQ(typeid(::Types::Window), typeid(*window));
 }
 
 TEST_F(CoreBuilderTest, coreBuilderCreatesClock)

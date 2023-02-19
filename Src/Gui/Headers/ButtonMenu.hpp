@@ -1,6 +1,7 @@
 #pragma once
 #include <ButtonList.hpp>
 #include <ButtonBuilder.hpp>
+#include <Background.hpp>
 
 namespace Core
 {
@@ -14,25 +15,23 @@ class ButtonMenu : public ButtonList
 {
 public:
     ButtonMenu(
-        const std::string&,
-        const sf::Font&,
-        const sf::VideoMode&,
-        const sf::Vector2f&,
-        const sf::Vector2f&,
-        std::unique_ptr<ButtonBuilder>);
+        const sf::Text&,
+        const Types::Background&,
+        std::vector<ActionButton>&&);
     virtual ~ButtonMenu(){}
 
     virtual std::optional<Events::StateAction> getActiveAction() override;
-    virtual void addSection(const std::optional<sf::Text>, Events::StateAction) override;
+    virtual inline VectorMath::ScreenPercentagePoint getPosition() const override {return background.getPosition();}
+    virtual inline VectorMath::ScreenPercentagePoint getSize() const override {return background.getSize();}
     virtual void update(const sf::Vector2i&) override;
-    virtual void drawTo(Core::IWindow&) override;
+    virtual void drawTo(Types::IWindow&) override;
 private:
-    sf::Vector2f calculateTextPosition(const sf::VideoMode&);
-    sf::Vector2f calculateNextSectionPosition();
-    sf::Vector2f calculatePositionRelativeToLastButton();
-    sf::Vector2f calculatePositionWithNoButtons();
-    sf::RectangleShape background;
-	sf::RectangleShape container;
+    sf::Vector2f calculateTextPosition();
+    uint calculateTextSize(const VectorMath::ScreenPercentagePoint&);
+    VectorMath::ScreenPercentagePoint calculateNextSectionPosition();
+    VectorMath::ScreenPercentagePoint calculatePositionRelativeToLastButton();
+    VectorMath::ScreenPercentagePoint calculatePositionWithNoButtons();
+	Types::Background background;
     std::unique_ptr<ButtonBuilder> buttonBuilder;
     std::vector<ActionButton> sections;
 };

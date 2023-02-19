@@ -8,11 +8,13 @@ set(SFML_LIBS
         sfml-system
         sfml-window)
 
+add_subdirectory(Types)
 add_subdirectory(Core)
 add_subdirectory(States)
 add_subdirectory(Gui)
 add_subdirectory(FileMgmt)
 add_subdirectory(Events)
+add_subdirectory(VectorMath)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -22,6 +24,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC States)
 target_include_directories(${PROJECT_NAME} PUBLIC Gui)
 target_include_directories(${PROJECT_NAME} PUBLIC FileMgmt)
 target_include_directories(${PROJECT_NAME} PUBLIC Events)
+target_include_directories(${PROJECT_NAME} PUBLIC VectorMath)
+target_include_directories(${PROJECT_NAME} PUBLIC Types)
 target_include_directories(${PROJECT_NAME} PUBLIC ${SFML_INCLUDE_DIR})
 message(${SFML_INCLUDE_DIR} " FOUND!! ${SFML_INCLUDE_DIR}")
 
@@ -29,11 +33,13 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE PrecompiledHeaders/stdafx.h)
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE
+    Types
     Core
     States
     Gui
     FileMgmt
     Events
+    VectorMath
     ${SFML_LIBS}
 )
 

@@ -39,7 +39,6 @@ TEST_F(StateActionsTest, toGameStateActionWillFinishCurrentStateAndCreateGameSta
 {
     auto state = NiceMock<States::MenuStateMock>();
     EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
-    EXPECT_CALL(*configManager, getGraphics()).WillOnce(ReturnRef(graphicsConfig));
     EXPECT_CALL(state, setNextState(NotNull()));
     EXPECT_CALL(state, finishState());
     ASSERT_NO_THROW(Events::ToGameState()(state));

@@ -48,7 +48,7 @@ TEST_F(EditorStateTest, editorStateInitializesGuiWithManager)
 TEST_F(EditorStateTest, editorStateUpdatesCreatedGuiWithMousePosition)
 {
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
-    NiceMock<Core::WindowMock> window;
+    NiceMock<::Types::WindowMock> window;
     const float deltaTimme = 0.f;
     const sf::Vector2i mousePosition{30, 30};
     EXPECT_CALL(window, getMousePosition()).WillOnce(Return(mousePosition));
@@ -66,8 +66,8 @@ TEST_F(EditorStateTest, editorStateUpdatesCreatedGuiWithMousePosition)
 TEST_F(EditorStateTest, editorStateDrawsCreatedGuiWithWindow)
 {
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
-    NiceMock<Core::WindowMock> window;
-    EXPECT_CALL(*gui, drawTo(A<Core::IWindow&>()));
+    NiceMock<::Types::WindowMock> window;
+    EXPECT_CALL(*gui, drawTo(A<::Types::IWindow&>()));
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
     EditorState sut(
@@ -94,7 +94,7 @@ TEST_F(EditorStateTest, editorStateCallsGuiWhenPaused)
 
 TEST_F(EditorStateTest, editorStateCallsActionReturnedByInputListener)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
 
     MockFunction<void(States::MapState&)> callback;
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();

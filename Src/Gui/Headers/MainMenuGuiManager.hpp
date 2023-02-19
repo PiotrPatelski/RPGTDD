@@ -13,8 +13,9 @@ class UserInterface;
 class MainMenuGuiManager : public GuiManager
 {
 public:
-    MainMenuGuiManager(std::unique_ptr<ButtonBuilder> buttonBuilder)
-        : buttonBuilder(std::move(buttonBuilder)){std::cout<<"MainMenuGuiManager"<<std::endl;}
+    MainMenuGuiManager(const sf::VideoMode& resolution, std::unique_ptr<ButtonBuilder> buttonBuilder)
+        : buttonBuilder(std::move(buttonBuilder)),
+          resolution(resolution){std::cout<<"MainMenuGuiManager"<<std::endl;}
     virtual ~MainMenuGuiManager(){}
 
     virtual std::unique_ptr<Gui::UserInterface> createGui(const sf::Font&) override;
@@ -25,6 +26,7 @@ private:
     void addExitButton(const sf::Font&);
     std::unique_ptr<ButtonBuilder> buttonBuilder;
     std::unique_ptr<UserInterface> gui;
+    sf::VideoMode resolution;
 };
 
 }

@@ -24,7 +24,7 @@ std::optional<Events::StateAction> GameGui::getActiveAction()
     return std::nullopt;
 }
 
-void GameGui::drawTo(Core::IWindow& window)
+void GameGui::drawTo(Types::IWindow& window)
 {
 
 }

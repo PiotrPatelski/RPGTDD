@@ -7,6 +7,8 @@ set(HEADERS
     EngineMock.hpp
     CoreBuilderMock.hpp
     ButtonBuilderMock.hpp
+    ButtonListBuilderMock.hpp
+    ButtonMenuBuilderMock.hpp
     AssetsManagerMock.hpp
     GuiManagerMock.hpp
     GuiActionMock.hpp

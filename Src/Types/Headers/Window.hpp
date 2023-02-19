@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <Config.hpp>
 
-namespace Core
+namespace Types
 {
 
 class IWindow

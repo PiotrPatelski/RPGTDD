@@ -1,45 +1,19 @@
 #include <DropDownList.hpp>
 #include <Window.hpp>
+#include <PixelsPoint.hpp>
+#include <ScreenPercentagePoint.hpp>
 
 namespace Gui
 {
 
 DropDownList::DropDownList(
     const sf::Text& textContent,
-    std::unique_ptr<Button> initiatingButton)
+    std::unique_ptr<Button> initiatingButton,
+    std::vector<ActionButton>&& sections)
 : ButtonList(textContent),
-  initiatingButton(ActionButton{std::move(initiatingButton), std::monostate{}})
-{
-    setTextPosition();
-}
-
-void DropDownList::setTextPosition()
-{
-    const auto listPosition = this->initiatingButton.object->getPosition();
-    const float xOffset = 13.0f;
-    const float yOffset = -40.f;
-    auto textPosition = listPosition + sf::Vector2f{xOffset, yOffset};
-    if(textPosition.y < 0)
-        textPosition.y = 0;
-    ButtonList::textContent.setPosition(textPosition);
-}
-
-void DropDownList::addSection(const std::optional<sf::Text> name, Events::StateAction action)
-{
-    sf::Vector2f sectionPosition = calculateNextSectionPosition();
-    sections.push_back(
-        ActionButton{
-            initiatingButton.object->clone(name, sectionPosition),
-            action});
-}
-
-sf::Vector2f DropDownList::calculateNextSectionPosition()
-{
-   if(sections.empty())
-        return initiatingButton.object->getPosition() + sf::Vector2f{0, initiatingButton.object->getSize().y};
-    else
-        return sections.back().object->getPosition() + sf::Vector2f{0, sections.back().object->getSize().y};
-}
+  initiatingButton(ActionButton{std::move(initiatingButton), std::monostate{}}),
+  sections(std::move(sections))
+{}
 
 void DropDownList::update(const sf::Vector2i& currentMousePosition)
 {
@@ -47,42 +21,49 @@ void DropDownList::update(const sf::Vector2i& currentMousePosition)
     if(initiatingButton.object->isPressed())
         active = not active;
     if(active)
-        initiatingButton.action = findActiveAction(currentMousePosition);
-}
-
-void DropDownList::drawTo(Core::IWindow& window)
-{
-    window.draw(textContent);
-    window.draw(initiatingButton.object->getBackground());
-    const auto& buttonText = initiatingButton.object->getTextContent();
-    if(buttonText)
-        window.draw(*buttonText);
-    if(active)
     {
-        drawSections(window);
+        updateSections(currentMousePosition);
+        onAction();
     }
 }
 
-void DropDownList::drawSections(Core::IWindow& window)
-{
-    for(const auto& section : sections)
-    {
-        window.draw(section.object->getBackground());
-        const auto& sectionText = section.object->getTextContent();
-        if(sectionText)
-            window.draw(*sectionText);
-    }
-}
-
-Events::StateAction DropDownList::findActiveAction(const sf::Vector2i& currentMousePosition)
+void DropDownList::updateSections(const sf::Vector2i& currentMousePosition)
 {
     for (auto& section : sections)
     {
         section.object->update(currentMousePosition);
     }
+}
+
+void DropDownList::onAction()
+{
     auto pressedSection = std::find_if(begin(sections), end(sections),
         [](const Gui::ActionButton& button){return button.object->isPressed();});
-    return (pressedSection != std::end(sections)) ? pressedSection->action : std::monostate{};
+    applyActiveSectionAction(pressedSection);
+    applyActiveSectionText(pressedSection);
+}
+
+void DropDownList::applyActiveSectionAction(std::vector<ActionButton>::iterator pressedSection)
+{
+    if (pressedSection != std::end(sections))
+    {
+        initiatingButton.action = pressedSection->action;
+    }
+    else
+        initiatingButton.action = std::monostate{};
+}
+
+void DropDownList::applyActiveSectionText(std::vector<ActionButton>::iterator pressedSection)
+{
+    if (pressedSection != std::end(sections))
+    {
+        auto sectionText = pressedSection->object->getTextContent();
+        if(sectionText)
+        {
+            sectionText->setPosition(initiatingButton.object->getTextContent()->getPosition());
+            initiatingButton.object->setTextContent(*sectionText);
+        }
+    }
 }
 
 std::optional<Events::StateAction> DropDownList::getActiveAction()
@@ -90,6 +71,32 @@ std::optional<Events::StateAction> DropDownList::getActiveAction()
     if(std::holds_alternative<std::monostate>(initiatingButton.action))
         return std::nullopt;
     return std::make_optional<Events::StateAction>(initiatingButton.action);
+}
+
+void DropDownList::drawTo(Types::IWindow& window)
+{
+    window.draw(textContent);
+    drawInitButton(window);
+    if(active)
+        drawSections(window);
+}
+
+void DropDownList::drawInitButton(Types::IWindow& window)
+{
+    initiatingButton.object->getBackground().drawTo(window);
+    const auto& buttonText = initiatingButton.object->getTextContent();
+    if(buttonText)
+        window.draw(*buttonText);
+}
+void DropDownList::drawSections(Types::IWindow& window)
+{
+    for(const auto& section : sections)
+    {
+        section.object->getBackground().drawTo(window);
+        const auto& sectionText = section.object->getTextContent();
+        if(sectionText)
+            window.draw(*sectionText);
+    }
 }
 
 }

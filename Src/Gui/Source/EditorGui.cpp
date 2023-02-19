@@ -1,5 +1,6 @@
 #include <EditorGui.hpp>
 #include <GuiActions.hpp>
+#include <Window.hpp>
 
 namespace Gui
 {
@@ -19,7 +20,7 @@ void EditorGui::addButtonList(std::unique_ptr<ButtonList> list)
 
 }
 
-void EditorGui::addPauseMenu(std::unique_ptr<ButtonList> list)
+void EditorGui::addPauseMenu(PauseMenu&& list)
 {
     pauseMenu = std::move(list);
 }
@@ -29,16 +30,19 @@ std::optional<Events::StateAction> EditorGui::getActiveAction()
     return std::nullopt;
 }
 
-void EditorGui::drawTo(Core::IWindow& window)
+void EditorGui::drawTo(Types::IWindow& window)
 {
-    if(paused)
-        pauseMenu->drawTo(window);
+    if(pauseMenu.paused)
+    {
+        window.draw(pauseMenu.backgroundShade);
+        pauseMenu.impl->drawTo(window);
+    }
 }
 
 void EditorGui::update(const sf::Vector2i& currentMousePos)
 {
-    if(paused)
-        pauseMenu->update(currentMousePos);
+    if(pauseMenu.paused)
+        pauseMenu.impl->update(currentMousePos);
 }
 
 std::optional<Events::StateAction> EditorGui::pollActionFromButtons()

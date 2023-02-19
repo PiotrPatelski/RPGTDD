@@ -2,11 +2,16 @@
 #include <SFML/Graphics.hpp>
 #include <ButtonEventHandler.hpp>
 #include <StateActions.hpp>
+#include <PixelsPoint.hpp>
+#include <Background.hpp>
+
+namespace VectorMath
+{
+class ScreenPercentagePoint;
+}
 
 namespace Gui
 {
-
-sf::Vector2f calculateTextPosOnBackground(const sf::Shape&, const sf::Text&);
 
 struct EventColor
 {
@@ -25,19 +30,20 @@ public:
     virtual void update(const sf::Vector2i&) = 0;
 
     virtual std::optional<sf::Text> getTextContent() const = 0;
-    virtual sf::Vector2f getPosition() const = 0;
-    virtual sf::Vector2f getSize() const = 0;
+    virtual void setTextContent(const sf::Text&) = 0;
+    virtual VectorMath::ScreenPercentagePoint getPosition() const = 0;
+    virtual VectorMath::ScreenPercentagePoint getSize() const = 0;
     virtual std::optional<sf::Font> getFont() const = 0;
-    virtual sf::RectangleShape getBackground() const = 0;
-    virtual std::unique_ptr<Button> clone(const std::optional<sf::Text>, const sf::Vector2f&) = 0;
+    virtual Types::Background getBackground() const = 0;
+    virtual std::unique_ptr<Button> clone(const std::optional<sf::Text>, const VectorMath::ScreenPercentagePoint&) = 0;
 };
 
 class MainMenuButton : public Button
 {
 public:
     MainMenuButton(
-        const sf::Vector2f&,
-        const sf::Vector2f&,
+        const VectorMath::ScreenPercentagePoint&,
+        const VectorMath::ScreenPercentagePoint&,
         const std::optional<sf::Text>,
         const EventColor&,
         const EventColor&,
@@ -49,12 +55,13 @@ public:
     virtual inline const bool isPressed() const override {return active;}
     virtual void update(const sf::Vector2i&) override;
 
+    virtual void setTextContent(const sf::Text& text) override;
     virtual inline std::optional<sf::Text> getTextContent() const override {return textContent;}
-    virtual inline sf::Vector2f getPosition() const override {return position;}
-    virtual inline sf::Vector2f getSize() const override {return size;}
+    virtual inline VectorMath::ScreenPercentagePoint getPosition() const override;
+    virtual inline VectorMath::ScreenPercentagePoint getSize() const override;
     virtual std::optional<sf::Font> getFont() const override;
-    virtual inline sf::RectangleShape getBackground() const override {return background;}
-    virtual std::unique_ptr<Button> clone(const std::optional<sf::Text>, const sf::Vector2f&) override;
+    virtual inline Types::Background getBackground() const override {return background;}
+    virtual std::unique_ptr<Button> clone(const std::optional<sf::Text>, const VectorMath::ScreenPercentagePoint&) override;
 
 private:
     void initText();
@@ -63,9 +70,7 @@ private:
 
     bool active{false};
 
-    sf::RectangleShape background;
-    sf::Vector2f position;
-    sf::Vector2f size;
+    Types::Background background;
     std::optional<sf::Text> textContent;
     EventColor idleColors;
     EventColor hoverColors;

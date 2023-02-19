@@ -1,7 +1,7 @@
 #include <Window.hpp>
 
 
-namespace Core
+namespace Types
 {
 
 Window::Window()

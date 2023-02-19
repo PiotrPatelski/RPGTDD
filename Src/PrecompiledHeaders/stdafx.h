@@ -26,5 +26,6 @@
 #include <filesystem>
 #include <variant>
 #include <optional>
+#include <cassert>
 
 #endif

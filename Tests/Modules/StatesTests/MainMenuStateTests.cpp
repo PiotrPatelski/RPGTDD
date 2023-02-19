@@ -41,7 +41,7 @@ struct MainMenuStateTest : public testing::Test
     std::shared_ptr<Core::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> mainMenuAssetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> mainMenuGuiManager;
-    NiceMock<Core::WindowMock> window;
+    NiceMock<::Types::WindowMock> window;
     FileMgmt::GraphicsConfig dummyConfig;
     FileMgmt::KeyboardConfig keyboard;
 };
@@ -94,17 +94,17 @@ TEST_F(MainMenuStateTest, mainMenuStateInitializesBackgroundTextureProperly)
 
 TEST_F(MainMenuStateTest, mainMenuStateDrawsOutputProperly)
 {
-    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+    auto window = std::make_unique<NiceMock<::Types::WindowMock>>();
 
     std::unique_ptr<Gui::UserInterface> gui = std::make_unique<Gui::MenuGui>();
     auto callback = [](States::MenuState&){};
-    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+    gui->addButton(Gui::MenuButtonBuilder().
             withTextContent(sf::Text("testButton1", font)).build(), callback);
-    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+    gui->addButton(Gui::MenuButtonBuilder().
             withTextContent(sf::Text("testButton2", font)).build(), callback);
-    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+    gui->addButton(Gui::MenuButtonBuilder().
             withTextContent(sf::Text("testButton3", font)).build(), callback);
-    gui->addButton(Gui::MenuButtonBuilder(sf::VideoMode(100, 100)).
+    gui->addButton(Gui::MenuButtonBuilder().
             withTextContent(sf::Text("testButton4", font)).build(), callback);
 
     EXPECT_CALL(*mainMenuGuiManager, createGui(_)).WillOnce(Return(ByMove(std::move(gui))));
@@ -207,8 +207,8 @@ struct MenuStateButtonActionsTest : public MainMenuStateTest
     {
         buttonBuilder = std::make_unique<NiceMock<Gui::ButtonBuilderMock>>();
         ON_CALL(*buttonBuilder, withTextContent(_)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, atPosition(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
-        ON_CALL(*buttonBuilder, withSize(_, _)).WillByDefault(ReturnRef(*buttonBuilder));
+        ON_CALL(*buttonBuilder, atPosition(_)).WillByDefault(ReturnRef(*buttonBuilder));
+        ON_CALL(*buttonBuilder, withSize(_)).WillByDefault(ReturnRef(*buttonBuilder));
         toGameButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
         toSettingsButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
         toEditorButton = std::make_unique<NiceMock<Gui::ButtonMock>>();
@@ -236,6 +236,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameButton
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
+            sf::VideoMode(0, 0),
             std::move(buttonBuilder)
         ));
     sut->update(window, 0.f);
@@ -256,6 +257,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsSettingsStateWhenToSettin
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
+            sf::VideoMode(0, 0),
             std::move(buttonBuilder)
         ));
     sut->update(window, 0.f);
@@ -276,6 +278,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsEditorStateWhenToEditorBu
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
+            sf::VideoMode(0, 0),
             std::move(buttonBuilder)
         ));
     sut->update(window, 0.f);
@@ -296,6 +299,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsNullptrWhenToExitButtonIs
         std::make_shared<Core::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
+            sf::VideoMode(0, 0),
             std::move(buttonBuilder)
         ));
     sut->update(window, 0.f);

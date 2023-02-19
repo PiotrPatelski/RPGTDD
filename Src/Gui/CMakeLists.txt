@@ -4,6 +4,7 @@ set(SOURCES
     Source/Button.cpp
     Source/ButtonBuilder.cpp
     Source/ButtonMenu.cpp
+    Source/ButtonMenuBuilder.cpp
     Source/MainMenuGuiManager.cpp
     Source/SettingsGuiManager.cpp
     Source/EditorGuiManager.cpp
@@ -42,6 +43,7 @@ target_include_directories(${MODULE_NAME} PUBLIC Headers Source)
 target_link_libraries(${MODULE_NAME} 
 PUBLIC
     Events
+    VectorMath
     ${SFML_LIBS})
 
 set(GUI_EXCLUDES

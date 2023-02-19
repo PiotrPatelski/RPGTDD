@@ -12,7 +12,7 @@ using ::testing::Test;
 class CoreBuilderMock : public ICoreBuilder
 {
 public:
-    MOCK_METHOD(std::unique_ptr<IWindow>, createWindow, (), (const, override));
+    MOCK_METHOD(std::unique_ptr<::Types::IWindow>, createWindow, (), (const, override));
     MOCK_METHOD(std::unique_ptr<IClock>, createClock, (), (const, override));
     MOCK_METHOD(std::unique_ptr<IStateMachine>, createStateMachine, (), (const, override));
 };

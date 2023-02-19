@@ -21,7 +21,8 @@ void MainMenuGuiManager::addToGameButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
             withTextContent(sf::Text("New Game", font)).
-            atPosition(15.6f, 30.f).withSize(13.f, 6.f).
+            atPosition(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(15.6f, 30.f))).
+            withSize(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(13.f, 6.f))).
             build(),
         Events::ToGameState());
 }
@@ -30,7 +31,8 @@ void MainMenuGuiManager::addToSettingsButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
             withTextContent(sf::Text("Settings", font)).
-            atPosition(15.6f, 40.f).withSize(13.f, 6.f).
+            atPosition(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(15.6f, 40.f))).
+            withSize(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(13.f, 6.f))).
             build(),
         Events::ToSettingsState());
 }
@@ -39,7 +41,8 @@ void MainMenuGuiManager::addToEditorButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
             withTextContent(sf::Text("Editor", font)).
-            atPosition(15.6f, 50.f).withSize(13.f, 6.f).
+            atPosition(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(15.6f, 50.f))).
+            withSize(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(13.f, 6.f))).
             build(),
         Events::ToEditorState());
 }
@@ -48,7 +51,8 @@ void MainMenuGuiManager::addExitButton(const sf::Font& font)
 {
     gui->addButton(buttonBuilder->
             withTextContent(sf::Text("Exit", font)).
-            atPosition(15.6f, 65.5f).withSize(13.f, 6.f).
+            atPosition(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(15.6f, 65.5f))).
+            withSize(VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(13.f, 6.f))).
             build(), 
         Events::ToExitState());
 }

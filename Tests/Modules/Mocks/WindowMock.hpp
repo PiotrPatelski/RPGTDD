@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 #include <Window.hpp>
 
-namespace Core
+namespace Types
 {
 
 using ::testing::Test;

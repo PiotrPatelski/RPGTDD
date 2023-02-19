@@ -38,7 +38,7 @@ public:
     virtual void runInitialState(std::shared_ptr<ConfigManager>);
     virtual void displayRenderedFrame();
 private:
-    std::unique_ptr<IWindow> window;
+    std::unique_ptr<Types::IWindow> window;
     std::unique_ptr<IClock> clock;
     std::unique_ptr<IStateMachine> stateMachine;
     sf::Event sfmlEvent;

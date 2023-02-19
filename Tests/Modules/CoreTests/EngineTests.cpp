@@ -25,13 +25,13 @@ struct EngineTest : public testing::Test
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
         configManager = std::make_shared<ConfigManager>();
-        window = std::make_unique<NiceMock<WindowMock>>();
+        window = std::make_unique<NiceMock<::Types::WindowMock>>();
         clock = std::make_unique<NiceMock<ClockMock>>();
         stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
         assetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
     }
     std::shared_ptr<ConfigManager> configManager;
-    std::unique_ptr<NiceMock<WindowMock>> window;
+    std::unique_ptr<NiceMock<::Types::WindowMock>> window;
     std::unique_ptr<NiceMock<ClockMock>> clock;
     std::unique_ptr<NiceMock<StateMachineMock>> stateMachine;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> assetsManager;
@@ -148,11 +148,10 @@ TEST_F(EngineTest, windowClearsAndDisplaysButDoesNotDrawStateOutputWhenDisplayRe
 TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFrameWithActiveState)
 {
     std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
-    auto background = std::make_shared<sf::RectangleShape>(sf::Vector2f(480, 480));
     EXPECT_CALL(*window, clear());
     EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*stateMachine, getCurrentState()).WillOnce(Return(activeState));
-    EXPECT_CALL(*activeState, drawOutput(A<IWindow&>()));
+    EXPECT_CALL(*activeState, drawOutput(A<::Types::IWindow&>()));
     EXPECT_CALL(*window, display());
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));

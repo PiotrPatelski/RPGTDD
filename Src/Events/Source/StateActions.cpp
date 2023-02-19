@@ -15,19 +15,19 @@ void ToMainMenuState::operator()(States::MenuState& state)
         config,
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
-            std::make_unique<Gui::MenuButtonBuilder>(config->getGraphics().resolution)
+            config->getGraphics().resolution,
+            std::make_unique<Gui::MenuButtonBuilder>()
         )));
     state.finishState();
 }
 
 void ToGameState::operator()(States::MenuState& state)
 {
-    auto config = state.getConfig();
     state.setNextState(std::make_unique<States::GameState>(
-        config,
+        state.getConfig(),
         std::make_unique<FileMgmt::GameAssetsManager>(),
         std::make_unique<Gui::GameGuiManager>(
-            std::make_unique<Gui::MenuButtonBuilder>(config->getGraphics().resolution)
+            std::make_unique<Gui::MenuButtonBuilder>()
         )));
     state.finishState();
 }
@@ -39,7 +39,8 @@ void ToSettingsState::operator()(States::MenuState& state)
         config,
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
-            std::make_unique<Gui::MenuButtonBuilder>(config->getGraphics().resolution),
+            config->getGraphics().resolution,
+            std::make_unique<Gui::MenuButtonBuilder>(),
             std::make_unique<Gui::DropDownListBuilder>()),
         std::make_unique<Events::MenuInputListener>(config->getKeyboard())));
     state.finishState();
@@ -48,13 +49,13 @@ void ToSettingsState::operator()(States::MenuState& state)
 void ToEditorState::operator()(States::MenuState& state)
 {
     auto config = state.getConfig();
-    auto resolution = config->getGraphics().resolution;
     state.setNextState(std::make_unique<States::EditorState>(
         config,
         std::make_unique<FileMgmt::EditorAssetsManager>(),
         std::make_unique<Gui::EditorGuiManager>(
-            std::make_unique<Gui::MenuButtonBuilder>(resolution),
-            resolution),
+            config->getGraphics().resolution,
+            std::make_unique<Gui::MenuButtonBuilder>(),
+            std::make_unique<Gui::ButtonMenuBuilder>()),
         std::make_unique<Events::EditorInputListener>(config->getKeyboard())));
     state.finishState();
 }
@@ -73,7 +74,8 @@ void ApplySettings::operator()(States::MenuState& state)
         config,
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::SettingsGuiManager>(
-            std::make_unique<Gui::MenuButtonBuilder>(config->getGraphics().resolution),
+            config->getGraphics().resolution,
+            std::make_unique<Gui::MenuButtonBuilder>(),
             std::make_unique<Gui::DropDownListBuilder>()),
         std::make_unique<Events::MenuInputListener>(config->getKeyboard())));
     state.finishState();

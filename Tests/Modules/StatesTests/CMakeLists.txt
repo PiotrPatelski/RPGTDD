@@ -17,6 +17,7 @@ target_link_libraries(
     PUBLIC
     Mocks
     States
+    Types
     Core
     mainUT
     gtest 

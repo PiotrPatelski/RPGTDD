@@ -16,7 +16,7 @@ struct StateMachineTest : public testing::Test
     std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
     std::unique_ptr<NiceMock<States::StateMock>> nextState = std::make_unique<NiceMock<States::StateMock>>();
     std::unique_ptr<IStateMachine> sut = std::make_unique<StateMachine>();
-    NiceMock<WindowMock> window;
+    NiceMock<::Types::WindowMock> window;
 };
 
 TEST_F(StateMachineTest, stateMachineHasFinishedItsWorkWhenNoStatesAreToHandle)
@@ -32,7 +32,7 @@ TEST_F(StateMachineTest, stateMachineHasNotFinishedItsWorkWhenStateIsActive)
 
 TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
 {
-    EXPECT_CALL(*activeState, update(A<const Core::IWindow&>(), A<float>()));
+    EXPECT_CALL(*activeState, update(A<const ::Types::IWindow&>(), A<float>()));
     sut->setState(activeState);
     sut->update(window, 0.f);
 }

@@ -29,6 +29,7 @@ PUBLIC
     Core
     Gui
     Events
+    Types
     ${SFML_LIBS})
 
 set(STATES_EXCLUDES
