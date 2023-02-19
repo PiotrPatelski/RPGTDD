@@ -4,15 +4,13 @@
 namespace States
 {
 class MenuState;
-class GameState;
+class MapState;
 }
 
 namespace Events
 {
 using MenuAction = std::function<void(States::MenuState&)>;
-using GameAction = std::function<void(States::GameState&)>;
-// using SettingsAction = std::function<void(States::SettingsState&)>;
-// using EditorAction = std::function<void(States::EditorState&)>;
+using GameAction = std::function<void(States::MapState&)>;
 
 using StateAction = std::variant<
     std::monostate,
@@ -55,6 +53,11 @@ struct SetResolutionTo
     void operator()(States::MenuState&);
 private:
     sf::VideoMode value;
+};
+
+struct Pause
+{
+    void operator()(States::MapState&);
 };
 
 }

@@ -88,6 +88,19 @@ TEST_F(IniParserTest, iniParserThrowsWhenMainMenuKeysFilePathIsInvalid)
     ASSERT_THROW(sut->getMainMenuKeys(*supportedKeys), std::runtime_error);
 }
 
+TEST_F(IniParserTest, iniParserFillsEditorKeysWithDataParsedFromTestConfigFile)
+{
+    ASSERT_NO_THROW(supportedKeys = sut->getKeyboardConfig());
+    ASSERT_NO_THROW(mainMenuKeys = sut->getEditorKeys(*supportedKeys));
+    ASSERT_EQ(mainMenuKeys->getKey("PAUSE"), 36);
+}
+
+TEST_F(IniParserTest, iniParserThrowsWhenEditorKeysKeysFilePathIsInvalid)
+{
+    IniParser::setBuildPath("invalidPath");
+    ASSERT_THROW(sut->getEditorKeys(*supportedKeys), std::runtime_error);
+}
+
 TEST_F(IniParserTest, iniParserOverwritesGraphicsIniWithNoThrow)
 {
     GraphicsConfig configToOverwrite

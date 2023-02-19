@@ -61,6 +61,7 @@ TEST_F(StateActionsTest, toEditorStateActionWillFinishCurrentStateAndCreateEdito
     auto state = NiceMock<States::MenuStateMock>();
     EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
     EXPECT_CALL(*configManager, getGraphics()).WillOnce(ReturnRef(graphicsConfig));
+    EXPECT_CALL(*configManager, getKeyboard()).WillOnce(ReturnRef(keyboardConfig));
     EXPECT_CALL(state, setNextState(NotNull()));
     EXPECT_CALL(state, finishState());
     ASSERT_NO_THROW(Events::ToEditorState()(state));
@@ -94,6 +95,13 @@ TEST_F(StateActionsTest, setResolutionToActionWillQueueConfigsRequest)
     EXPECT_CALL(*configManager, queueGraphicsRequest(A<std::function<void(FileMgmt::GraphicsConfig&)>>()));
     EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
     ASSERT_NO_THROW(Events::SetResolutionTo{resolution}(state));
+}
+
+TEST_F(StateActionsTest, pauseActionWillPauseState)
+{
+    auto state = NiceMock<States::MapStateMock>();
+    EXPECT_CALL(state, togglePause());
+    Events::Pause()(state);
 }
 
 }

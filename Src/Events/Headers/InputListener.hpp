@@ -27,4 +27,17 @@ private:
     const FileMgmt::KeyMap& keyboard;
 };
 
+class EditorInputListener : public InputListener
+{
+public:
+    EditorInputListener(const FileMgmt::KeyboardConfig& config)
+    : keyboard(config.getEditorKeyboard())
+    {}
+    virtual ~EditorInputListener(){}
+
+    virtual std::optional<Events::StateAction> getActiveAction() const override;
+private:
+    const FileMgmt::KeyMap& keyboard;
+};
+
 }

@@ -33,7 +33,7 @@ std::ofstream IniParser::openFileForPush(const std::string& path)
 
 void IniParser::setGraphicsConfig(const GraphicsConfig& config)
 {
-    auto sourceFile = std::move(openFileForPush("/Config/graphics.ini"));
+    auto sourceFile = openFileForPush("/Config/graphics.ini");
 
     sourceFile << config.gameTitle << "\n";
     sourceFile << config.resolution.width
@@ -48,7 +48,7 @@ void IniParser::setGraphicsConfig(const GraphicsConfig& config)
 
 GraphicsConfig IniParser::getGraphicsConfig()
 {
-    auto sourceFile = std::move(openFileForPull("/Config/graphics.ini"));
+    auto sourceFile = openFileForPull("/Config/graphics.ini");
     GraphicsConfig config;
 
     sourceFile >> config.gameTitle;
@@ -65,7 +65,7 @@ GraphicsConfig IniParser::getGraphicsConfig()
 
 std::unique_ptr<KeyMap> IniParser::getKeyboardConfig()
 {
-    auto sourceFile = std::move(openFileForPull("/Config/keyboard.ini"));
+    auto sourceFile = openFileForPull("/Config/keyboard.ini");
     auto target = std::make_unique<KeyboardMap>();
 
     std::string key = "";
@@ -79,15 +79,30 @@ std::unique_ptr<KeyMap> IniParser::getKeyboardConfig()
 
 std::unique_ptr<KeyMap> IniParser::getMainMenuKeys(const KeyMap& availableKeys)
 {
-    auto sourceFile = std::move(openFileForPull("/Config/mainmenu_keybinds.ini"));
+    auto sourceFile = openFileForPull("/Config/mainmenu_keybinds.ini");
+    auto keyboard = parseWithValidation(sourceFile, availableKeys);
+
+    sourceFile.close();
+    return std::move(keyboard);
+}
+
+std::unique_ptr<KeyMap> IniParser::getEditorKeys(const KeyMap& availableKeys)
+{
+    auto sourceFile = openFileForPull("/Config/editor_keybinds.ini");
+    auto keyboard = parseWithValidation(sourceFile, availableKeys);
+
+    sourceFile.close();
+    return std::move(keyboard);
+}
+
+std::unique_ptr<KeyMap> IniParser::parseWithValidation(std::ifstream& file, const KeyMap& availableKeys)
+{
     auto target = std::make_unique<KeyboardMap>();
 
     std::string key = "";
     std::string supportedKey = "";
-    while (sourceFile >> key >> supportedKey)
+    while (file >> key >> supportedKey)
         target->setKey(key, availableKeys.getKey(supportedKey));
-
-    sourceFile.close();
     return std::move(target);
 }
 

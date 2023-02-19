@@ -37,42 +37,4 @@ protected:
     std::map<std::string, File<sf::Texture>> textures;
 };
 
-class MainMenuAssetsManager : public AssetsManager
-{
-public:
-    MainMenuAssetsManager();
-    virtual ~MainMenuAssetsManager(){}
-    virtual const sf::Font& getFont(const std::string&) const override;
-    virtual const sf::Texture* getTexture(const std::string&) const override;
-private:
-    virtual void fetchFontsFromFiles();
-    virtual void fetchTexturesFromFiles();
-};
-
-class GameAssetsManager : public AssetsManager
-{
-public:
-    GameAssetsManager()
-    : AssetsManager()
-    {std::cout<<"GameAssetsManager"<<std::endl;}
-    virtual ~GameAssetsManager(){}
-    virtual const sf::Font& getFont(const std::string&) const override {return font;}
-    virtual const sf::Texture* getTexture(const std::string&) const override {return nullptr;}
-private:
-    sf::Font font;
-};
-
-class EditorAssetsManager : public AssetsManager
-{
-public:
-    EditorAssetsManager()
-    : AssetsManager()
-    {std::cout<<"EditorAssetsManager"<<std::endl;}
-    virtual ~EditorAssetsManager(){}
-    virtual const sf::Font& getFont(const std::string&) const override {return font;}
-    virtual const sf::Texture* getTexture(const std::string&) const override {return nullptr;}
-private:
-    sf::Font font;
-};
-
 }

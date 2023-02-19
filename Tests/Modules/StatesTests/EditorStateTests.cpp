@@ -11,8 +11,6 @@
 #include "UserInterfaceMock.hpp"
 #include "InputListenerMock.hpp"
 
-// #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
-
 namespace States
 {
 
@@ -25,11 +23,14 @@ struct EditorStateTest : public testing::Test
         configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
         assetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         guiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
+        inputListener = std::make_unique<NiceMock<Events::InputListenerMock>>();
         ON_CALL(*assetsManager, getFont(_)).WillByDefault(ReturnRef(font));
+        ON_CALL(*guiManager, createGui(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Gui::UserInterfaceMock>>())));
     }
     std::shared_ptr<Core::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> assetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> guiManager;
+    std::unique_ptr<NiceMock<Events::InputListenerMock>> inputListener;
     sf::Font font;
 };
 
@@ -40,7 +41,8 @@ TEST_F(EditorStateTest, editorStateInitializesGuiWithManager)
     EditorState sut(
         configManager,
         std::move(assetsManager),
-        std::move(guiManager));
+        std::move(guiManager),
+        std::move(inputListener));
 }
 
 TEST_F(EditorStateTest, editorStateUpdatesCreatedGuiWithMousePosition)
@@ -56,7 +58,8 @@ TEST_F(EditorStateTest, editorStateUpdatesCreatedGuiWithMousePosition)
     EditorState sut(
         configManager,
         std::move(assetsManager),
-        std::move(guiManager));
+        std::move(guiManager),
+        std::move(inputListener));
     sut.update(window, deltaTimme);
 }
 
@@ -70,8 +73,42 @@ TEST_F(EditorStateTest, editorStateDrawsCreatedGuiWithWindow)
     EditorState sut(
         configManager,
         std::move(assetsManager),
-        std::move(guiManager));
+        std::move(guiManager),
+        std::move(inputListener));
     sut.drawOutput(window);
+}
+
+TEST_F(EditorStateTest, editorStateCallsGuiWhenPaused)
+{
+    auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
+    EXPECT_CALL(*gui, acceptRequest(A<Events::GuiAction&>()));
+    EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
+        (Return(ByMove(std::move(gui))));
+    EditorState sut(
+        configManager,
+        std::move(assetsManager),
+        std::move(guiManager),
+        std::move(inputListener));
+    sut.togglePause();
+}
+
+TEST_F(EditorStateTest, editorStateCallsActionReturnedByInputListener)
+{
+    auto window = std::make_unique<NiceMock<Core::WindowMock>>();
+
+    MockFunction<void(States::MapState&)> callback;
+    auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
+
+    EXPECT_CALL(*inputListener, getActiveAction()).WillOnce(Return(
+        std::make_optional<Events::StateAction>(callback.AsStdFunction())));
+    FileMgmt::KeyboardConfig keyboardConfig;
+    EditorState sut(
+        configManager,
+        std::move(assetsManager),
+        std::move(guiManager),
+        std::move(inputListener));
+    EXPECT_CALL(callback, Call(A<States::MapState&>()));
+    sut.update(*window, 0.f);
 }
 
 }

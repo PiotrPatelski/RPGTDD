@@ -41,10 +41,13 @@ class KeyboardConfig
 public:
 	const KeyMap& getSupportedKeyboard() const {return *supportedKeys;}
 	const KeyMap& getMainMenuKeyboard() const {return *mainMenuKeys;}
+	const KeyMap& getEditorKeyboard() const {return *editorKeys;}
 	void setSupportedKeyboard(std::unique_ptr<KeyMap> supportedKeys) {this->supportedKeys = std::move(supportedKeys);}
 	void setMainMenuKeyboard(std::unique_ptr<KeyMap> mainMenuKeys) {this->mainMenuKeys = std::move(mainMenuKeys);}
+	void setEditorKeyboard(std::unique_ptr<KeyMap> editorKeys) {this->editorKeys = std::move(editorKeys);}
 private:
 	std::unique_ptr<KeyMap> supportedKeys;
 	std::unique_ptr<KeyMap> mainMenuKeys;
+	std::unique_ptr<KeyMap> editorKeys;
 };
 }

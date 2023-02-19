@@ -1,16 +1,16 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <State.hpp>
+#include <MapState.hpp>
 #include <ConfigManager.hpp>
-#include <AssetsManager.hpp>
+#include <GameAssetsManager.hpp>
 #include <GameGuiManager.hpp>
 #include <UserInterface.hpp>
 
 namespace States
 {
 
-class GameState : public State
+class GameState : public MapState
 {
 public:
     GameState(
@@ -21,6 +21,7 @@ public:
 
     virtual void update(const Core::IWindow& window, const float) override {}
     virtual void drawOutput(Core::IWindow&) override {}
+    virtual void togglePause() override {}
 private:
     std::unique_ptr<Gui::UserInterface> gui;
 };

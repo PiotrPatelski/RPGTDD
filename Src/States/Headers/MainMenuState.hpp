@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <MenuState.hpp>
 #include <MainMenuGuiManager.hpp>
+#include <MainMenuAssetsManager.hpp>
 #include <UserInterface.hpp>
 
 namespace States

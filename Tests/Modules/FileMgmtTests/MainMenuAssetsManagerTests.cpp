@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <AssetsManager.hpp>
+#include <MainMenuAssetsManager.hpp>
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 

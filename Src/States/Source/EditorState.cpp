@@ -1,4 +1,6 @@
 #include <EditorState.hpp>
+#include <InputListener.hpp>
+#include <GuiActions.hpp>
 
 namespace States
 {
@@ -6,10 +8,12 @@ namespace States
 EditorState::EditorState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
-    std::unique_ptr<Gui::GuiManager> guiManager)
-    : State(
+    std::unique_ptr<Gui::GuiManager> guiManager,
+    std::unique_ptr<Events::InputListener> inputListener)
+    : MapState(
         config,
-        std::move(assetsManager))
+        std::move(assetsManager)),
+      inputListener(std::move(inputListener))
 {
     gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
 }
@@ -17,11 +21,21 @@ EditorState::EditorState(
 void EditorState::update(const Core::IWindow& window, const float deltaTime)
 {
     gui->update(window.getMousePosition());
+    auto action = inputListener->getActiveAction();
+    if(action.has_value())
+        get<Events::GameAction>(action.value())(*this);
 }
 
 void EditorState::drawOutput(Core::IWindow& window)
 {
     gui->drawTo(window);
+}
+
+void EditorState::togglePause()
+{
+    paused = not paused;
+    Events::TogglePause pause;
+    gui->acceptRequest(pause);
 }
 
 }

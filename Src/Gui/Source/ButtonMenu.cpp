@@ -71,7 +71,7 @@ void ButtonMenu::addSection(const std::optional<sf::Text> name, Events::StateAct
     if(name)
         *buttonBuilder = buttonBuilder->withTextContent(*name);
     auto button = buttonBuilder
-        ->atPosition(nextSectionPosition.x, nextSectionPosition.y)
+        ->atPosition(nextSectionPosition.x, nextSectionPosition.y) //TODO CORRECT DISTANCE CALCULATION, ONLY ONE BUTTON IS RENDERED NOW!!!
         .withSize(sectionSize.x, sectionSize.y)
         .build();
     sections.push_back(ActionButton{std::move(button), action});

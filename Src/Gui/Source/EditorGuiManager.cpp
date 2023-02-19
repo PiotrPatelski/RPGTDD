@@ -6,6 +6,7 @@ namespace Gui
 {
 std::unique_ptr<Gui::UserInterface> EditorGuiManager::createGui(const sf::Font& font)
 {
+    std::cout<<"EditorGuiManager::createGui"<<std::endl;
     auto gui = std::make_unique<Gui::EditorGui>();
     auto pauseMenu = std::make_unique<ButtonMenu>(
         "Game Paused!",
@@ -15,10 +16,11 @@ std::unique_ptr<Gui::UserInterface> EditorGuiManager::createGui(const sf::Font& 
         sf::Vector2f{35.f, 15.f},
         std::move(buttonBuilder));
     pauseMenu->addSection(sf::Text("Save", font), std::monostate{});
-    pauseMenu->addSection(sf::Text("Load", font),std::monostate{});
-    pauseMenu->addSection(sf::Text("Exit", font),std::monostate{});
+    pauseMenu->addSection(sf::Text("Load", font), std::monostate{});
+    pauseMenu->addSection(sf::Text("Exit", font), std::monostate{});
     pauseMenu->addSection(sf::Text("Resume", font),std::monostate{});
     gui->addPauseMenu(std::move(pauseMenu));
+    std::cout<<"EditorGuiManager::createGui done"<<std::endl;
     return std::move(gui);
 }
 

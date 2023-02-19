@@ -15,6 +15,7 @@ public:
     MOCK_METHOD(GraphicsConfig, getGraphicsConfig, (), (override));
     MOCK_METHOD(std::unique_ptr<KeyMap>, getKeyboardConfig, (), (override));
     MOCK_METHOD(std::unique_ptr<KeyMap>, getMainMenuKeys, (const KeyMap&), (override));
+    MOCK_METHOD(std::unique_ptr<KeyMap>, getEditorKeys, (const KeyMap&), (override));
     MOCK_METHOD(void, setGraphicsConfig, (const GraphicsConfig&), (override));
 };
 

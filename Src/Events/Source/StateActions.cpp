@@ -54,8 +54,8 @@ void ToEditorState::operator()(States::MenuState& state)
         std::make_unique<FileMgmt::EditorAssetsManager>(),
         std::make_unique<Gui::EditorGuiManager>(
             std::make_unique<Gui::MenuButtonBuilder>(resolution),
-            resolution
-        )));
+            resolution),
+        std::make_unique<Events::EditorInputListener>(config->getKeyboard())));
     state.finishState();
 }
 
@@ -91,6 +91,11 @@ void SetResolutionTo::operator()(States::MenuState& state)
         {
             diff.resolution = targetResolution;
         });
+}
+
+void Pause::operator()(States::MapState& state)
+{
+    state.togglePause();
 }
 
 }

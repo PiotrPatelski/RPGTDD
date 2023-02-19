@@ -10,6 +10,7 @@ ConfigManager::ConfigManager()
     diff = graphics;
     keyboard.setSupportedKeyboard(parser.getKeyboardConfig());
     keyboard.setMainMenuKeyboard(parser.getMainMenuKeys(keyboard.getSupportedKeyboard()));
+    keyboard.setEditorKeyboard(parser.getEditorKeys(keyboard.getSupportedKeyboard()));
 }
 
 void ConfigManager::applyDiff()

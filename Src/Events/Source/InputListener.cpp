@@ -13,4 +13,13 @@ std::optional<Events::StateAction> MenuInputListener::getActiveAction() const
     return std::nullopt;
 }
 
+std::optional<Events::StateAction> EditorInputListener::getActiveAction() const
+{
+    if (keyboard.isPressedAt("PAUSE"))
+    {
+        return std::make_optional<Events::StateAction>(Pause());
+    }
+    return std::nullopt;
+}
+
 }

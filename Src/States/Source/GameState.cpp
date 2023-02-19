@@ -7,7 +7,7 @@ GameState::GameState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
     std::unique_ptr<Gui::GuiManager> guiManager)
-    : State(
+    : MapState(
         config,
         std::move(assetsManager))
 {}

@@ -3,11 +3,16 @@ set(MODULE_NAME FileMgmt)
 set(SOURCES
     Source/IniParser.cpp
     Source/AssetsManager.cpp
+    Source/MainMenuAssetsManager.cpp
+    Source/EditorAssetsManager.cpp
     )
 
 set(HEADERS
     Headers/IniParser.hpp
     Headers/AssetsManager.hpp
+    Headers/MainMenuAssetsManager.hpp
+    Headers/EditorAssetsManager.hpp
+    Headers/GameAssetsManager.hpp
     Headers/Config.hpp
     )
 

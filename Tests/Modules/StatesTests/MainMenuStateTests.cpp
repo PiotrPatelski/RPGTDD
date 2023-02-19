@@ -34,6 +34,7 @@ struct MainMenuStateTest : public testing::Test
         ON_CALL(*mainMenuAssetsManager, getFont(_)).WillByDefault(ReturnRef(font));
         dummyConfig.resolution = sf::VideoMode(480, 480);
         ON_CALL(*configManager, getGraphics).WillByDefault(ReturnRef(dummyConfig));
+        ON_CALL(*configManager, getKeyboard).WillByDefault(ReturnRef(keyboard));
     }
     sf::Texture texture;
     sf::Font font;
@@ -42,6 +43,7 @@ struct MainMenuStateTest : public testing::Test
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> mainMenuGuiManager;
     NiceMock<Core::WindowMock> window;
     FileMgmt::GraphicsConfig dummyConfig;
+    FileMgmt::KeyboardConfig keyboard;
 };
 
 TEST_F(MainMenuStateTest, stateIsDoneWhenIsReadyToChange)

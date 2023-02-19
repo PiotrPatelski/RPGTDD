@@ -42,7 +42,7 @@ TEST_F(ButtonMenuCreationTest, buttonMenuWillAddButtonWithPositionWithinBoundsOf
     const sf::Vector2f size{30.f, 70.f};
     const sf::Vector2f position{480.f, 480.f};
     auto buttonBuilder = std::make_unique<NiceMock<ButtonBuilderMock>>();
-    auto dummyCallback = [](States::GameState&){};
+    auto dummyCallback = [](States::MapState&){};
     EXPECT_CALL(*buttonBuilder, withTextContent(Property(&sf::Text::getString, StrEq("test")))).WillOnce(ReturnRef(*buttonBuilder));
     EXPECT_CALL(*buttonBuilder, atPosition(FloatNear(480.f, 1), FloatNear(503.f, 1))).WillOnce(ReturnRef(*buttonBuilder));
     EXPECT_CALL(*buttonBuilder, withSize(FloatNear(15.f, 1), FloatNear(11.f, 1))).WillOnce(ReturnRef(*buttonBuilder));
@@ -96,8 +96,8 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionParamsToCreateNewSec
         position,
         std::move(buttonBuilder));
 
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
 }
 
 TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionAndNewestSectionParamsToCreateNewSectionWhenAddingOverTwoSections)
@@ -126,9 +126,9 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillGetLastSectionAndNewestSectionPara
         position,
         std::move(buttonBuilder));
 
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
-    sut->addSection(sf::Text("test3", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
+    sut->addSection(sf::Text("test3", sf::Font{}), [](States::MapState&){});
 }
 
 TEST_F(ButtonMenuBehaviourTest, buttonMenuWillUpdateItsButtonsWithGivenPosition)
@@ -153,9 +153,9 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillUpdateItsButtonsWithGivenPosition)
         std::move(buttonBuilder));
 
 
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
-    sut->addSection(sf::Text("test3", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
+    sut->addSection(sf::Text("test3", sf::Font{}), [](States::MapState&){});
     sut->update(mousePosition);
 }
 
@@ -183,8 +183,8 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillRenderButtonsAndContainerAndTextAn
         size,
         position,
         std::move(buttonBuilder));
-    sut->addSection(sf::Text("test1", sf::Font{}), [](States::GameState&){});
-    sut->addSection(sf::Text("test2", sf::Font{}), [](States::GameState&){});
+    sut->addSection(sf::Text("test1", sf::Font{}), [](States::MapState&){});
+    sut->addSection(sf::Text("test2", sf::Font{}), [](States::MapState&){});
 
     EXPECT_CALL(window, draw(A<const sf::Drawable&>())).Times(7);
     sut->drawTo(window);
@@ -209,7 +209,7 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillReturnAStateActionOnceWhenSectionI
         position,
         std::move(buttonBuilder));
 
-    std::function<void(States::GameState&)> dummyCallback = [](States::GameState&){};
+    std::function<void(States::MapState&)> dummyCallback = [](States::MapState&){};
     sut->addSection(sf::Text("FirstSection", sf::Font{}), dummyCallback);
     sut->update(sf::Vector2i{3, 3});
     auto result = sut->getActiveAction();
@@ -236,7 +236,7 @@ TEST_F(ButtonMenuBehaviourTest, buttonMenuWillReturnNulloptWhenNoSectionIsPresse
         position,
         std::move(buttonBuilder));
 
-    std::function<void(States::GameState&)> dummyCallback = [](States::GameState&){};
+    std::function<void(States::MapState&)> dummyCallback = [](States::MapState&){};
     sut->addSection(sf::Text("FirstSection", sf::Font{}), dummyCallback);
     sut->update(sf::Vector2i{3, 3});
     ASSERT_EQ(sut->getActiveAction(), std::nullopt);

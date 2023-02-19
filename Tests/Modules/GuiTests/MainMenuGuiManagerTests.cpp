@@ -8,6 +8,7 @@
 #include <ButtonListBuilderMock.hpp>
 #include <MenuGui.hpp>
 #include "GuiManagerFixture.hpp"
+#include <MainMenuGuiManager.hpp>
 
 namespace Gui
 {
