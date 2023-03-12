@@ -127,19 +127,19 @@ INSTANTIATE_TEST_CASE_P(
     MenuSectionPositionCalculations,
     NextSectionPositionCalculationsTest,
     Values(
-        std::make_tuple(sf::Vector2f{500.f, 700.f}, sf::Vector2f{500.f, 700.f}, 
-                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 90.f}, 
+        std::make_tuple(sf::Vector2f{500.f, 700.f}, sf::Vector2f{500.f, 700.f},
+                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 90.f},
                         sf::Vector2f{200.f, 130.f}, sf::Vector2f{150.f, 245.2}),
 
-        std::make_tuple(sf::Vector2f{500.f, 700.f}, sf::Vector2f{500.f, 700.f}, 
-                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 245.2}, 
+        std::make_tuple(sf::Vector2f{500.f, 700.f}, sf::Vector2f{500.f, 700.f},
+                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 245.2},
                         sf::Vector2f{200.f, 130.f}, sf::Vector2f{150.5, 400.4}),
 
-        std::make_tuple(sf::Vector2f{632.f, 586.f}, sf::Vector2f{500.f, 700.f}, 
-                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 90.f}, 
+        std::make_tuple(sf::Vector2f{632.f, 586.f}, sf::Vector2f{500.f, 700.f},
+                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 90.f},
                         sf::Vector2f{200.f, 130.f}, sf::Vector2f{150.5, 245.2}),
 
-        std::make_tuple(sf::Vector2f{890.f, 700.f}, sf::Vector2f{500.f, 700.f}, 
-                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 90.f}, 
+        std::make_tuple(sf::Vector2f{890.f, 700.f}, sf::Vector2f{500.f, 700.f},
+                        sf::Vector2f{150.f, 90.f}, sf::Vector2f{150.f, 90.f},
                         sf::Vector2f{300.f, 260.f}, sf::Vector2f{150.5, 375.2})));
 }

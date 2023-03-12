@@ -44,7 +44,7 @@ TEST_F(StateActionsTest, toGameStateActionWillFinishCurrentStateAndCreateGameSta
     ASSERT_NO_THROW(Events::ToGameState()(state));
 }
 
-TEST_F(StateActionsTest, buttonActionWillFinishCurrentStateAndCreateSettingsStateAsNextState)
+TEST_F(StateActionsTest, toSettingsStateActionWillFinishCurrentStateAndCreateSettingsStateAsNextState)
 {
     auto state = NiceMock<States::MenuStateMock>();
     EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
@@ -101,6 +101,16 @@ TEST_F(StateActionsTest, pauseActionWillPauseState)
     auto state = NiceMock<States::MapStateMock>();
     EXPECT_CALL(state, togglePause());
     Events::Pause()(state);
+}
+
+TEST_F(StateActionsTest, toExitMapStateActionWillFinishCurrentStateAndCreateMainMenuStateAsNextState)
+{
+    auto state = NiceMock<States::MapStateMock>();
+    EXPECT_CALL(*configManager, getGraphics()).WillRepeatedly(ReturnRef(graphicsConfig));
+    EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
+    EXPECT_CALL(state, setNextState(NotNull()));
+    EXPECT_CALL(state, finishState());
+    ASSERT_NO_THROW(Events::ExitMapState()(state));
 }
 
 }

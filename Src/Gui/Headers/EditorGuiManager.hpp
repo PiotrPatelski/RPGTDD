@@ -27,6 +27,8 @@ public:
     virtual std::unique_ptr<Gui::UserInterface> createGui(const sf::Font&) override;
 private:
     PauseMenu createPauseMenu(const sf::Font&);
+    Types::Background createPauseBackgroundShade();
+    std::unique_ptr<ButtonList> createPauseMenuImpl(const sf::Font&);
     std::unique_ptr<ButtonBuilder> buttonBuilder;
     std::unique_ptr<ButtonMenuBuilder> pauseMenuBuilder;
     const sf::VideoMode resolution;

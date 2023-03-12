@@ -21,7 +21,11 @@ EditorState::EditorState(
 void EditorState::update(const Types::IWindow& window, const float deltaTime)
 {
     gui->update(window.getMousePosition());
-    auto action = inputListener->getActiveAction();
+    auto action = gui->getActiveAction();
+    if(action.has_value())
+        get<Events::GameAction>(action.value())(*this);
+
+    action = inputListener->getActiveAction();
     if(action.has_value())
         get<Events::GameAction>(action.value())(*this);
 }

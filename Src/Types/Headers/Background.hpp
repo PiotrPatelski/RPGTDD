@@ -9,6 +9,7 @@ namespace Types
 class Background
 {
 public:
+    Background(){}
     Background(
         const VectorMath::ScreenPercentagePoint& position,
         const VectorMath::ScreenPercentagePoint& size)
@@ -41,8 +42,8 @@ public:
     void drawTo(Types::IWindow& window){window.draw(object);}
 private:
     sf::RectangleShape object;
-    VectorMath::ScreenPercentagePoint objectPosition;
-    VectorMath::ScreenPercentagePoint objectSize;
+    VectorMath::ScreenPercentagePoint objectPosition{sf::VideoMode{1, 1}, {0, 0}};
+    VectorMath::ScreenPercentagePoint objectSize{sf::VideoMode{1, 1}, {0, 0}};
 };
 
 }

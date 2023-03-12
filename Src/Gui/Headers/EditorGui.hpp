@@ -20,7 +20,7 @@ namespace Gui
 struct PauseMenu
 {
     std::unique_ptr<ButtonList> impl;
-    sf::RectangleShape backgroundShade;
+    Types::Background backgroundShade;
     bool paused{false};
 };
 class EditorGui : public UserInterface
@@ -36,7 +36,7 @@ public:
     virtual void drawTo(Types::IWindow&) override;
     virtual void update(const sf::Vector2i&) override;
     virtual void addPauseMenu(PauseMenu&&);
-    virtual void togglePause() {pauseMenu.paused = not(pauseMenu.paused);}
+    virtual void togglePause();
     virtual bool isPaused() const {return pauseMenu.paused;}
 private:
     std::optional<Events::StateAction> pollActionFromButtons();

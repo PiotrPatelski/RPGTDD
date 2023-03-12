@@ -7,8 +7,7 @@
 
 namespace Events
 {
-
-void ToMainMenuState::operator()(States::MenuState& state)
+void toMainMenu(States::IState& state)
 {
     auto config = state.getConfig();
     state.setNextState(std::make_unique<States::MainMenuState>(
@@ -19,6 +18,16 @@ void ToMainMenuState::operator()(States::MenuState& state)
             std::make_unique<Gui::MenuButtonBuilder>()
         )));
     state.finishState();
+}
+
+void ToMainMenuState::operator()(States::MenuState& state)
+{
+    toMainMenu(state);
+}
+
+void ExitMapState::operator()(States::MapState& state)
+{
+    toMainMenu(state);
 }
 
 void ToGameState::operator()(States::MenuState& state)

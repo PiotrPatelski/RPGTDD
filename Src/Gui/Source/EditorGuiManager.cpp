@@ -17,24 +17,33 @@ std::unique_ptr<Gui::UserInterface> EditorGuiManager::createGui(const sf::Font& 
 
 PauseMenu EditorGuiManager::createPauseMenu(const sf::Font& font)
 {
-    sf::RectangleShape screenShade;
-    screenShade.setSize(sf::Vector2f(static_cast<float>(resolution.width),
-									static_cast<float>(resolution.height)));
+    return PauseMenu(createPauseMenuImpl(font), createPauseBackgroundShade());
+}
+
+Types::Background EditorGuiManager::createPauseBackgroundShade()
+{
+    const auto backgroundSize = VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(100.f, 100.f));
+    const auto backgroundPosition = VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(0.f, 0.f));
+
+    Types::Background screenShade(backgroundPosition, backgroundSize);
 	screenShade.setFillColor(sf::Color(20, 20, 20, 100));
+    return screenShade;
+}
 
-    const auto backgroundSize = VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(20.f, 60.f));
-    const auto backgroundPosition = VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(40.f, 15.f));
+std::unique_ptr<ButtonList> EditorGuiManager::createPauseMenuImpl(const sf::Font& font)
+{
+    const auto menuSize = VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(20.f, 60.f));
+    const auto menuPosition = VectorMath::ScreenPercentagePoint(resolution, sf::Vector2f(40.f, 15.f));
 
-    auto menuImpl = pauseMenuBuilder->
+    return pauseMenuBuilder->
         withTextContent(sf::Text("Game Paused!", font)).
-        atPosition(backgroundPosition).
-        withSize(backgroundSize).
+        atPosition(menuPosition).
+        withSize(menuSize).
         withSection(sf::Text("Save", font), std::monostate{}).
         withSection(sf::Text("Load", font), std::monostate{}).
-        withSection(sf::Text("Exit", font), std::monostate{}).
-        withSection(sf::Text("Resume", font), std::monostate{}).
+        withSection(sf::Text("Exit", font), Events::ExitMapState()).
+        withSection(sf::Text("Resume", font), Events::Pause()).
         build();
-    return PauseMenu(std::move(menuImpl), screenShade);
 }
 
 }

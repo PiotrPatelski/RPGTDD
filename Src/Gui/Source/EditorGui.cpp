@@ -27,6 +27,10 @@ void EditorGui::addPauseMenu(PauseMenu&& list)
 
 std::optional<Events::StateAction> EditorGui::getActiveAction()
 {
+    if(pauseMenu.paused)
+    {
+        return pauseMenu.impl->getActiveAction();
+    }
     return std::nullopt;
 }
 
@@ -34,9 +38,14 @@ void EditorGui::drawTo(Types::IWindow& window)
 {
     if(pauseMenu.paused)
     {
-        window.draw(pauseMenu.backgroundShade);
+        pauseMenu.backgroundShade.drawTo(window);
         pauseMenu.impl->drawTo(window);
     }
+}
+
+void EditorGui::togglePause()
+{
+    pauseMenu.paused = not(pauseMenu.paused);
 }
 
 void EditorGui::update(const sf::Vector2i& currentMousePos)

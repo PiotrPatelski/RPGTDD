@@ -60,4 +60,9 @@ struct Pause
     void operator()(States::MapState&);
 };
 
+struct ExitMapState
+{
+    void operator()(States::MapState&);
+};
+
 }

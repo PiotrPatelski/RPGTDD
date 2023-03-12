@@ -30,7 +30,7 @@ TEST_F(EditorGuiTest, EditorGuiDoesNotUpdateAddedPauseMenuWhenNotPaused)
     const sf::Vector2i currentMousePosition{30, 30};
     EXPECT_CALL(*pauseMenu, update(_)).Times(0);
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
     sut->update(currentMousePosition);
 }
 
@@ -40,7 +40,7 @@ TEST_F(EditorGuiTest, EditorGuiUpdatesAddedPauseMenuWhenPaused)
     const sf::Vector2i currentMousePosition{30, 30};
     EXPECT_CALL(*pauseMenu, update(Eq(currentMousePosition)));
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
     sut->togglePause();
     sut->update(currentMousePosition);
 }
@@ -50,7 +50,7 @@ TEST_F(EditorGuiTest, EditorGuiDrawsAddedPauseMenuWhenPaused)
     auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
     EXPECT_CALL(*pauseMenu, drawTo(A<::Types::IWindow&>()));
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
     sut->togglePause();
     NiceMock<::Types::WindowMock> window;
     sut->drawTo(window);
@@ -61,7 +61,7 @@ TEST_F(EditorGuiTest, EditorGuiDoesNotDrawAddedPauseMenuWhenNotPaused)
     auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
     EXPECT_CALL(*pauseMenu, drawTo(A<::Types::IWindow&>())).Times(0);
     sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), sf::RectangleShape{}});
+    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
     NiceMock<::Types::WindowMock> window;
     sut->drawTo(window);
 }
