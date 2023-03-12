@@ -15,6 +15,7 @@ add_subdirectory(Gui)
 add_subdirectory(FileMgmt)
 add_subdirectory(Events)
 add_subdirectory(VectorMath)
+add_subdirectory(Tiles)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -25,6 +26,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC Gui)
 target_include_directories(${PROJECT_NAME} PUBLIC FileMgmt)
 target_include_directories(${PROJECT_NAME} PUBLIC Events)
 target_include_directories(${PROJECT_NAME} PUBLIC VectorMath)
+target_include_directories(${PROJECT_NAME} PUBLIC Tiles)
 target_include_directories(${PROJECT_NAME} PUBLIC Types)
 target_include_directories(${PROJECT_NAME} PUBLIC ${SFML_INCLUDE_DIR})
 message(${SFML_INCLUDE_DIR} " FOUND!! ${SFML_INCLUDE_DIR}")
@@ -39,6 +41,7 @@ PRIVATE
     Gui
     FileMgmt
     Events
+    Tiles
     VectorMath
     ${SFML_LIBS}
 )

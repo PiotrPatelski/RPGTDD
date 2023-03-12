@@ -5,7 +5,13 @@
 #include <ConfigManager.hpp>
 #include <EditorAssetsManager.hpp>
 #include <EditorGuiManager.hpp>
+#include <TileMap.hpp>
 #include <UserInterface.hpp>
+
+namespace Tiles
+{
+class TileMapManager;
+}
 
 namespace Events
 {
@@ -22,6 +28,7 @@ public:
         std::shared_ptr<Core::IConfigManager>,
         std::unique_ptr<FileMgmt::AssetsManager>,
         std::unique_ptr<Gui::GuiManager>,
+        std::unique_ptr<Tiles::TileMapManager>,
         std::unique_ptr<Events::InputListener>);
     virtual ~EditorState() = default;
 
@@ -30,6 +37,7 @@ public:
     virtual void togglePause() override;
 private:
     std::unique_ptr<Gui::UserInterface> gui;
+    std::unique_ptr<Tiles::TileMap> tileMap;
     std::unique_ptr<Events::InputListener> inputListener;
 };
 

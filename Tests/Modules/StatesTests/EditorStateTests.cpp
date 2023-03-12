@@ -10,6 +10,8 @@
 #include "ButtonMock.hpp"
 #include "UserInterfaceMock.hpp"
 #include "InputListenerMock.hpp"
+#include "TileMapManagerMock.hpp"
+#include "TileMapMock.hpp"
 
 namespace States
 {
@@ -23,13 +25,24 @@ struct EditorStateTest : public testing::Test
         configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
         assetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         guiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
+        tileMapManager = std::make_unique<NiceMock<Tiles::TileMapManagerMock>>();
         inputListener = std::make_unique<NiceMock<Events::InputListenerMock>>();
         ON_CALL(*assetsManager, getFont(_)).WillByDefault(ReturnRef(font));
         ON_CALL(*guiManager, createGui(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Gui::UserInterfaceMock>>())));
     }
+    EditorState createSut()
+    {
+        return EditorState(
+            configManager,
+            std::move(assetsManager),
+            std::move(guiManager),
+            std::move(tileMapManager),
+            std::move(inputListener));
+    }
     std::shared_ptr<Core::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> assetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> guiManager;
+    std::unique_ptr<NiceMock<Tiles::TileMapManagerMock>> tileMapManager;
     std::unique_ptr<NiceMock<Events::InputListenerMock>> inputListener;
     NiceMock<::Types::WindowMock> window;
     sf::Font font;
@@ -39,11 +52,7 @@ TEST_F(EditorStateTest, editorStateInitializesGuiWithManager)
 {
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::make_unique<NiceMock<Gui::UserInterfaceMock>>())));
-    EditorState sut(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputListener));
+    auto sut = createSut();
 }
 
 TEST_F(EditorStateTest, editorStateUpdatesCreatedGuiWithMousePosition)
@@ -56,11 +65,8 @@ TEST_F(EditorStateTest, editorStateUpdatesCreatedGuiWithMousePosition)
     EXPECT_CALL(*gui, update(Eq(mousePosition)));
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
-    EditorState sut(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputListener));
+
+    auto sut = createSut();
     sut.update(window, deltaTimme);
 }
 
@@ -71,11 +77,8 @@ TEST_F(EditorStateTest, editorStateDrawsCreatedGuiWithWindow)
     EXPECT_CALL(*gui, drawTo(A<::Types::IWindow&>()));
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
-    EditorState sut(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputListener));
+
+    auto sut = createSut();
     sut.drawOutput(window);
 }
 
@@ -85,11 +88,8 @@ TEST_F(EditorStateTest, editorStateCallsGuiWhenPaused)
     EXPECT_CALL(*gui, acceptRequest(A<Events::GuiAction&>()));
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
-    EditorState sut(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputListener));
+
+    auto sut = createSut();
     sut.togglePause();
 }
 
@@ -101,12 +101,7 @@ TEST_F(EditorStateTest, editorStateCallsActionReturnedByInputListener)
     EXPECT_CALL(callback, Call(A<States::MapState&>()));
     FileMgmt::KeyboardConfig keyboardConfig;
     
-    EditorState sut(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputListener));
-
+    auto sut = createSut();
     sut.update(window, 0.f);
 }
 
@@ -121,13 +116,16 @@ TEST_F(EditorStateTest, editorStateCallsActionReturnedByGui)
     EXPECT_CALL(callback, Call(A<States::MapState&>()));
     FileMgmt::KeyboardConfig keyboardConfig;
 
-    EditorState sut(
-        configManager,
-        std::move(assetsManager),
-        std::move(guiManager),
-        std::move(inputListener));
-
+    auto sut = createSut();
     sut.update(window, 0.f);
+}
+
+TEST_F(EditorStateTest, editorStateInitializesTileMapWithManager)
+{
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::make_unique<NiceMock<Tiles::TileMapMock>>())));
+
+    auto sut = createSut();
 }
 
 }

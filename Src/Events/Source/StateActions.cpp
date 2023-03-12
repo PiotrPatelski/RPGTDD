@@ -4,6 +4,7 @@
 #include <SettingsState.hpp>
 #include <MainMenuState.hpp>
 #include <DropDownListBuilder.hpp>
+#include <GameMapManager.hpp>
 
 namespace Events
 {
@@ -65,6 +66,7 @@ void ToEditorState::operator()(States::MenuState& state)
             config->getGraphics().resolution,
             std::make_unique<Gui::MenuButtonBuilder>(),
             std::make_unique<Gui::ButtonMenuBuilder>()),
+        std::make_unique<Tiles::GameMapManager>(),
         std::make_unique<Events::EditorInputListener>(config->getKeyboard())));
     state.finishState();
 }

@@ -53,7 +53,8 @@ set(COMPONENT_PATHS
     "${PROJECT_SOURCE_DIR}/Src/FileMgmt/*"
     "${PROJECT_SOURCE_DIR}/Src/VectorMath/*"
     "${PROJECT_SOURCE_DIR}/Src/Events/*"
-    "${PROJECT_SOURCE_DIR}/Src/Types/*")
+    "${PROJECT_SOURCE_DIR}/Src/Types/*"
+    "${PROJECT_SOURCE_DIR}/Src/Tiles/*")
 
 add_subdirectory(Src)
 

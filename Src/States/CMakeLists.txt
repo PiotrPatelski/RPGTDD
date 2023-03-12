@@ -29,6 +29,7 @@ PUBLIC
     Core
     Gui
     Events
+    Tiles
     Types
     ${SFML_LIBS})
 

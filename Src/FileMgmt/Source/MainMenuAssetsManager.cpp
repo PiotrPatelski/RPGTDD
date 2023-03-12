@@ -12,7 +12,7 @@ MainMenuAssetsManager::MainMenuAssetsManager()
 
 void MainMenuAssetsManager::fetchTexturesFromFiles()
 {
-    textures.emplace("MENU_BACKGROUND", File<sf::Texture>(buildPath + "/Assets/Textures/MainMenu/menu.jpg"));
+    textures.emplace("MENU_BACKGROUND", File<sf::Texture>(buildPath + "/Assets/Textures/Backgrounds/menu.jpg"));
     std::cout << "Initialized MainMenu Textures..." << std::endl;
 }
 

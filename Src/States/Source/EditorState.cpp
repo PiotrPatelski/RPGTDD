@@ -1,6 +1,7 @@
 #include <EditorState.hpp>
 #include <InputListener.hpp>
 #include <GuiActions.hpp>
+#include <TileMapManager.hpp>
 
 namespace States
 {
@@ -9,6 +10,7 @@ EditorState::EditorState(
     std::shared_ptr<Core::IConfigManager> config,
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
     std::unique_ptr<Gui::GuiManager> guiManager,
+    std::unique_ptr<Tiles::TileMapManager> tileMapManager,
     std::unique_ptr<Events::InputListener> inputListener)
     : MapState(
         config,
@@ -16,6 +18,7 @@ EditorState::EditorState(
       inputListener(std::move(inputListener))
 {
     gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
+    tileMap = tileMapManager->createTileMap(*State::assetsManager);
 }
 
 void EditorState::update(const Types::IWindow& window, const float deltaTime)
