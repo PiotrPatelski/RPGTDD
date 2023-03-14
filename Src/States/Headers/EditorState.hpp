@@ -36,6 +36,7 @@ public:
     virtual void drawOutput(Types::IWindow&) override;
     virtual void togglePause() override;
 private:
+    void handleAction(std::optional<Events::StateAction>);
     std::unique_ptr<Gui::UserInterface> gui;
     std::unique_ptr<Tiles::TileMap> tileMap;
     std::unique_ptr<Events::InputListener> inputListener;

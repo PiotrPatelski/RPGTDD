@@ -93,14 +93,37 @@ TEST_F(EditorStateTest, editorStateCallsGuiWhenPaused)
     sut.togglePause();
 }
 
-TEST_F(EditorStateTest, editorStateCallsActionReturnedByInputListener)
+TEST_F(EditorStateTest, editorStateCallsKeyActionReturnedByInputListener)
 {
     MockFunction<void(States::MapState&)> callback;
-    EXPECT_CALL(*inputListener, getActiveAction()).WillOnce(Return(
+    EXPECT_CALL(*inputListener, getKeyboardAction()).WillOnce(Return(
         std::make_optional<Events::StateAction>(callback.AsStdFunction())));
     EXPECT_CALL(callback, Call(A<States::MapState&>()));
-    FileMgmt::KeyboardConfig keyboardConfig;
-    
+
+    auto sut = createSut();
+    sut.update(window, 0.f);
+}
+
+TEST_F(EditorStateTest, editorStateDoesNotCallMouseActionWhenPaused)
+{
+    const sf::Vector2i mousePosition{30, 30};
+    EXPECT_CALL(window, getMousePosition()).WillOnce(Return(mousePosition));
+    EXPECT_CALL(*inputListener, getMouseAction(Eq(mousePosition))).Times(0);
+
+    auto sut = createSut();
+    sut.togglePause();
+    sut.update(window, 0.f);
+}
+
+TEST_F(EditorStateTest, editorStateCallsMouseActionReturnedByInputListenerWhenNotPaused)
+{
+    MockFunction<void(States::MapState&)> callback;
+    const sf::Vector2i mousePosition{30, 30};
+    EXPECT_CALL(window, getMousePosition()).WillOnce(Return(mousePosition));
+    EXPECT_CALL(*inputListener, getMouseAction(Eq(mousePosition))).WillOnce(Return(
+        std::make_optional<Events::StateAction>(callback.AsStdFunction())));
+    EXPECT_CALL(callback, Call(A<States::MapState&>()));
+
     auto sut = createSut();
     sut.update(window, 0.f);
 }
@@ -114,7 +137,6 @@ TEST_F(EditorStateTest, editorStateCallsActionReturnedByGui)
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
     EXPECT_CALL(callback, Call(A<States::MapState&>()));
-    FileMgmt::KeyboardConfig keyboardConfig;
 
     auto sut = createSut();
     sut.update(window, 0.f);

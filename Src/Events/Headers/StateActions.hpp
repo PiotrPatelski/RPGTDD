@@ -65,4 +65,15 @@ struct ExitMapState
     void operator()(States::MapState&);
 };
 
+class MousePressedAtPosition
+{
+public:
+    MousePressedAtPosition(const sf::Vector2i& currentMousePosition)
+    : mousePosition(currentMousePosition)
+    {}
+    void operator()(States::MapState&){}
+private:
+    const sf::Vector2i mousePosition;
+};
+
 }

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <Button.hpp>
-#include <ButtonEventHandlerMock.hpp>
+#include <MouseEventListenerMock.hpp>
 #include <State.hpp>
 #include <ScreenPercentagePoint.hpp>
 #include <PixelsPoint.hpp>
@@ -48,7 +48,7 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsTextContent)
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+        std::make_unique<NiceMock<Events::MouseEventListenerMock>>());
     const auto buttonText = sut->getTextContent();
     ASSERT_NE(buttonText, std::nullopt);
     ASSERT_EQ(buttonText->getString(), name);
@@ -63,7 +63,7 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsSize)
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+        std::make_unique<NiceMock<Events::MouseEventListenerMock>>());
     ASSERT_FLOAT_EQ(sut->getSize().value().x, size.value().x);
     ASSERT_FLOAT_EQ(sut->getSize().value().y, size.value().y);
 }
@@ -77,7 +77,7 @@ TEST_F(MainMenuButtonTest, buttonWillReturnItsPosition)
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+        std::make_unique<NiceMock<Events::MouseEventListenerMock>>());
     ASSERT_FLOAT_EQ(sut->getPosition().value().x, position.value().x);
     ASSERT_FLOAT_EQ(sut->getPosition().value().y, position.value().y);
 }
@@ -91,7 +91,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersect
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+        std::make_unique<NiceMock<Events::MouseEventListenerMock>>());
     const auto omittingPosition = static_cast<sf::Vector2i>(position.toPixels() - sf::Vector2f(20.f, 20.f));
     sut->update(omittingPosition);
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_IDLE_COLORS.background);
@@ -99,8 +99,8 @@ TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersect
 
 TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWithBackground)
 {
-    std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
-    EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(false));
+    std::unique_ptr<NiceMock<Events::MouseEventListenerMock>> EventListener = std::make_unique<NiceMock<Events::MouseEventListenerMock>>();
+    EXPECT_CALL(*EventListener, isPressed()).WillOnce(Return(false));
     std::unique_ptr<Button> sut = std::make_unique<MainMenuButton>(
         position,
         size,
@@ -108,7 +108,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler));
+        std::move(EventListener));
     const auto intersectingPosition = static_cast<sf::Vector2i>(position.toPixels() + sf::Vector2f(10.f, 10.f));
     sut->update(intersectingPosition);
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_HOVER_COLORS.background);
@@ -116,8 +116,8 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
 
 TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWithBackgroundAndIsPressed)
 {
-    std::unique_ptr<NiceMock<Events::ButtonEventHandlerMock>> eventHandler = std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>();
-    EXPECT_CALL(*eventHandler, isPressed()).WillOnce(Return(true));
+    std::unique_ptr<NiceMock<Events::MouseEventListenerMock>> EventListener = std::make_unique<NiceMock<Events::MouseEventListenerMock>>();
+    EXPECT_CALL(*EventListener, isPressed()).WillOnce(Return(true));
     std::unique_ptr<Button> sut = std::make_unique<MainMenuButton>(
         position,
         size,
@@ -125,7 +125,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWi
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::move(eventHandler));
+        std::move(EventListener));
     const auto intersectingPosition = static_cast<sf::Vector2i>(position.toPixels() + sf::Vector2f(10.f, 10.f));
     sut->update(intersectingPosition);
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_ACTIVE_COLORS.background);
@@ -141,7 +141,7 @@ TEST_F(MainMenuButtonTest, clonedButtonWillHaveTheSamePropertiesAsOriginalExcept
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+        std::make_unique<NiceMock<Events::MouseEventListenerMock>>());
     auto result = sut->clone(sf::Text("clonedButton", sf::Font{}), VectorMath::ScreenPercentagePoint(sf::VideoMode(480, 480), sf::Vector2f(100, 100)));
     ASSERT_NE(result->getTextContent(), std::nullopt);
     ASSERT_EQ(result->getTextContent()->getString().toAnsiString(), "clonedButton");
@@ -158,7 +158,7 @@ TEST_F(MainMenuButtonTest, clonedButtonWillHaveNulloptTextWhenNoneWasGiven)
         TEST_IDLE_COLORS,
         TEST_HOVER_COLORS,
         TEST_ACTIVE_COLORS,
-        std::make_unique<NiceMock<Events::ButtonEventHandlerMock>>());
+        std::make_unique<NiceMock<Events::MouseEventListenerMock>>());
     auto result = sut->clone(std::nullopt, VectorMath::ScreenPercentagePoint(sf::VideoMode(480, 480), sf::Vector2f(100, 100)));
     ASSERT_EQ(result->getTextContent(), std::nullopt);
     ASSERT_EQ(result->getFont(), std::nullopt);

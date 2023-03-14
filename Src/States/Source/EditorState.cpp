@@ -23,12 +23,19 @@ EditorState::EditorState(
 
 void EditorState::update(const Types::IWindow& window, const float deltaTime)
 {
-    gui->update(window.getMousePosition());
-    auto action = gui->getActiveAction();
-    if(action.has_value())
-        get<Events::GameAction>(action.value())(*this);
+    const auto currentMousePosition = window.getMousePosition();
 
-    action = inputListener->getActiveAction();
+    gui->update(currentMousePosition);
+    handleAction(gui->getActiveAction());
+    handleAction(inputListener->getKeyboardAction());
+    if(not paused)
+    {
+        handleAction(inputListener->getMouseAction(currentMousePosition));
+    }
+}
+
+void EditorState::handleAction(std::optional<Events::StateAction> action)
+{
     if(action.has_value())
         get<Events::GameAction>(action.value())(*this);
 }

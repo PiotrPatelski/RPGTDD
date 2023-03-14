@@ -16,7 +16,7 @@ set(HEADERS
     UserInterfaceMock.hpp
     InputListenerMock.hpp
     KeyboardMapMock.hpp
-    ButtonEventHandlerMock.hpp
+    MouseEventListenerMock.hpp
     ButtonListMock.hpp
     TileMapManagerMock.hpp)
 

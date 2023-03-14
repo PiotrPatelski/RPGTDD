@@ -12,7 +12,8 @@ using ::testing::Test;
 class InputListenerMock : public InputListener
 {
 public:
-    MOCK_METHOD(std::optional<Events::StateAction>, getActiveAction, (), (const, override));
+    MOCK_METHOD(std::optional<Events::StateAction>, getKeyboardAction, (), (const, override));
+    MOCK_METHOD(std::optional<Events::StateAction>, getMouseAction, (const sf::Vector2i&), (const, override));
 };
 
 }

@@ -34,7 +34,7 @@ void SettingsState::update(const Types::IWindow& window, const float deltaTime)
     if(action.has_value())
         get<Events::MenuAction>(action.value())(*this);
 
-    action = inputListener->getActiveAction();
+    action = inputListener->getKeyboardAction();
     if(action.has_value())
         get<Events::MenuAction>(action.value())(*this);
 }

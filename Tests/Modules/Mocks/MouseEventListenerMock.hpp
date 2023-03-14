@@ -2,14 +2,14 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <ButtonEventHandler.hpp>
+#include <MouseEventListener.hpp>
 
 namespace Events
 {
 
 using ::testing::Test;
 
-class ButtonEventHandlerMock : public IButtonEventHandler
+class MouseEventListenerMock : public MouseEventListener
 {
 public:
    MOCK_METHOD(bool, isPressed, (), (const, override));

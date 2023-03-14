@@ -35,7 +35,7 @@ std::unique_ptr<Button> MenuButtonBuilder::build()
         idleColors,
         hoverColors,
         activeColors,
-        std::make_unique<Events::ButtonEventHandler>());
+        std::make_unique<Events::SimpleMouseEventListener>());
 }
 
 MenuButtonBuilder& MenuButtonBuilder::withTextContent(const sf::Text& text)

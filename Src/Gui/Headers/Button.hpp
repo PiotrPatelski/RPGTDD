@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <ButtonEventHandler.hpp>
+#include <MouseEventListener.hpp>
 #include <StateActions.hpp>
 #include <PixelsPoint.hpp>
 #include <Background.hpp>
@@ -48,7 +48,7 @@ public:
         const EventColor&,
         const EventColor&,
         const EventColor&,
-        std::unique_ptr<Events::IButtonEventHandler>);
+        std::unique_ptr<Events::MouseEventListener>);
 
     virtual ~MainMenuButton(){}
 
@@ -75,7 +75,7 @@ private:
     EventColor idleColors;
     EventColor hoverColors;
     EventColor activeColors;
-    std::unique_ptr<Events::IButtonEventHandler> eventHandler;
+    std::unique_ptr<Events::MouseEventListener> EventListener;
 };
 
 struct ActionButton

@@ -6,7 +6,7 @@ set(SOURCES
     )
 
 set(HEADERS
-    Headers/ButtonEventHandler.hpp
+    Headers/MouseEventListener.hpp
     Headers/StateActions.hpp
     Headers/InputListener.hpp
     Headers/GuiActions.hpp

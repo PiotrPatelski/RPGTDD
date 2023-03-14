@@ -175,7 +175,7 @@ TEST_F(SettingsStateTest, settingsStateCallsActionReturnedByInputListener)
         std::make_unique<NiceMock<Gui::UserInterfaceMock>>())));
 
     auto inputListener = std::make_unique<NiceMock<Events::InputListenerMock>>();
-    EXPECT_CALL(*inputListener, getActiveAction()).WillOnce(Return(
+    EXPECT_CALL(*inputListener, getKeyboardAction()).WillOnce(Return(
         std::make_optional<Events::StateAction>(callback.AsStdFunction())));
     FileMgmt::KeyboardConfig keyboardConfig;
 

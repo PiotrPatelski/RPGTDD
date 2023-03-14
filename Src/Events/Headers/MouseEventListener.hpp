@@ -4,20 +4,20 @@
 namespace Events
 {
 
-class IButtonEventHandler
+class MouseEventListener
 {
 public:
-    IButtonEventHandler(){}
-    virtual ~IButtonEventHandler(){}
+    MouseEventListener(){}
+    virtual ~MouseEventListener(){}
 
     virtual bool isPressed() const = 0;
 };
 
-class ButtonEventHandler : public IButtonEventHandler
+class SimpleMouseEventListener : public MouseEventListener
 {
 public:
-    ButtonEventHandler(){}
-    virtual ~ButtonEventHandler(){}
+    SimpleMouseEventListener(){}
+    virtual ~SimpleMouseEventListener(){}
 
     virtual bool isPressed() const override {return sf::Mouse::isButtonPressed(sf::Mouse::Left);}
 };
