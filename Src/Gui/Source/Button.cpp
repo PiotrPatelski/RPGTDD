@@ -77,7 +77,7 @@ void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
         static_cast<sf::Vector2f>(mousePosOnWindow)))
     {
         setColor(hoverColors);
-        if(EventListener->isPressed())
+        if(EventListener->isLeftPressed())
         {
             setColor(activeColors);
             active = true;
@@ -89,7 +89,7 @@ void MainMenuButton::update(const sf::Vector2i& mousePosOnWindow)
 
 std::unique_ptr<Button> MainMenuButton::clone(const std::optional<sf::Text> targetTextContent, const VectorMath::ScreenPercentagePoint& targetPosition)
 {
-    auto EventListener = std::make_unique<Events::SimpleMouseEventListener>();
+    auto EventListener = std::make_unique<Events::ButtonMouseEventListener>();
     const auto targetText = targetTextContent ? targetTextContent : std::nullopt;
     return std::make_unique<MainMenuButton>(
         targetPosition,

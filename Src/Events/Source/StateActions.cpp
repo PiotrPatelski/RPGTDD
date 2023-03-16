@@ -69,7 +69,7 @@ void ToEditorState::operator()(States::MenuState& state)
         std::make_unique<Tiles::GameMapManager>(),
         std::make_unique<Events::EditorInputListener>(
             config->getKeyboard(),
-            std::make_unique<Events::SimpleMouseEventListener>())));
+            std::make_unique<Events::ButtonMouseEventListener>())));
     state.finishState();
 }
 

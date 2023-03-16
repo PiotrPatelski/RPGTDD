@@ -100,7 +100,7 @@ TEST_F(MainMenuButtonTest, buttonStateWillRemainIdleWhenMousePosDoesNotIntersect
 TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWithBackground)
 {
     std::unique_ptr<NiceMock<Events::MouseEventListenerMock>> EventListener = std::make_unique<NiceMock<Events::MouseEventListenerMock>>();
-    EXPECT_CALL(*EventListener, isPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*EventListener, isLeftPressed()).WillOnce(Return(false));
     std::unique_ptr<Button> sut = std::make_unique<MainMenuButton>(
         position,
         size,
@@ -114,10 +114,10 @@ TEST_F(MainMenuButtonTest, buttonStateWillChangeToHoverWhenMousePosIntersectsWit
     ASSERT_EQ(sut->getBackground().getFillColor(), TEST_HOVER_COLORS.background);
 }
 
-TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWithBackgroundAndIsPressed)
+TEST_F(MainMenuButtonTest, buttonStateWillChangeToActiveWhenMousePosIntersectsWithBackgroundAndisLeftPressed)
 {
     std::unique_ptr<NiceMock<Events::MouseEventListenerMock>> EventListener = std::make_unique<NiceMock<Events::MouseEventListenerMock>>();
-    EXPECT_CALL(*EventListener, isPressed()).WillOnce(Return(true));
+    EXPECT_CALL(*EventListener, isLeftPressed()).WillOnce(Return(true));
     std::unique_ptr<Button> sut = std::make_unique<MainMenuButton>(
         position,
         size,

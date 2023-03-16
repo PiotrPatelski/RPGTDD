@@ -65,10 +65,21 @@ struct ExitMapState
     void operator()(States::MapState&);
 };
 
-class MousePressedAtPosition
+class AddTile
 {
 public:
-    MousePressedAtPosition(const sf::Vector2i& currentMousePosition)
+    AddTile(const sf::Vector2i& currentMousePosition)
+    : mousePosition(currentMousePosition)
+    {}
+    void operator()(States::MapState&){}
+private:
+    const sf::Vector2i mousePosition;
+};
+
+class RemoveTile
+{
+public:
+    RemoveTile(const sf::Vector2i& currentMousePosition)
     : mousePosition(currentMousePosition)
     {}
     void operator()(States::MapState&){}

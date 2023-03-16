@@ -20,8 +20,10 @@ std::optional<Events::StateAction> EditorInputListener::getKeyboardAction() cons
 
 std::optional<Events::StateAction> EditorInputListener::getMouseAction(const sf::Vector2i& mousePosition) const
 {
-    if(mouse->isPressed())
-        return std::make_optional<StateAction>(MousePressedAtPosition(mousePosition));
+    if(mouse->isLeftPressed())
+        return std::make_optional<StateAction>(AddTile(mousePosition));
+    else if(mouse->isRightPressed())
+        return std::make_optional<StateAction>(RemoveTile(mousePosition));
     return std::nullopt;
 }
 

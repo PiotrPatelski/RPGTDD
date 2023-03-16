@@ -12,7 +12,8 @@ using ::testing::Test;
 class MouseEventListenerMock : public MouseEventListener
 {
 public:
-   MOCK_METHOD(bool, isPressed, (), (const, override));
+   MOCK_METHOD(bool, isLeftPressed, (), (const, override));
+   MOCK_METHOD(bool, isRightPressed, (), (const, override));
 };
 
 }

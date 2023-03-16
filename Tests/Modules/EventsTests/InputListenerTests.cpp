@@ -61,22 +61,36 @@ TEST_F(EditorInputListenerTest, inputListenerReturnsNulloptOngetKeyboardActionWh
     EXPECT_EQ(sut.getKeyboardAction(), std::nullopt);
 }
 
-TEST_F(EditorInputListenerTest, inputListenerGetsMouseActionWhenMouseIsPressed)
+TEST_F(EditorInputListenerTest, inputListenerGetsMouseActionWhenMouseLeftIsPressed)
 {
     const sf::Vector2i currentMousePos{0, 0};
 
-    EXPECT_CALL(*mouseListener, isPressed()).WillOnce(Return(true));
+    EXPECT_CALL(*mouseListener, isLeftPressed()).WillOnce(Return(true));
+    EXPECT_CALL(*mouseListener, isRightPressed()).Times(0);
     EditorInputListener sut(config, std::move(mouseListener));
     auto result = sut.getMouseAction(currentMousePos);
     ASSERT_NE(result, std::nullopt);
     EXPECT_TRUE(std::holds_alternative<Events::GameAction>(result.value()));
 }
 
-TEST_F(EditorInputListenerTest, inputListenerGetsNulloptWhenMouseIsNotPressed)
+TEST_F(EditorInputListenerTest, inputListenerGetsMouseActionWhenMouseRightIsPressed)
 {
     const sf::Vector2i currentMousePos{0, 0};
 
-    EXPECT_CALL(*mouseListener, isPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*mouseListener, isLeftPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*mouseListener, isRightPressed()).WillOnce(Return(true));
+    EditorInputListener sut(config, std::move(mouseListener));
+    auto result = sut.getMouseAction(currentMousePos);
+    ASSERT_NE(result, std::nullopt);
+    EXPECT_TRUE(std::holds_alternative<Events::GameAction>(result.value()));
+}
+
+TEST_F(EditorInputListenerTest, inputListenerGetsNulloptWhenNoMouseButtonIsPressed)
+{
+    const sf::Vector2i currentMousePos{0, 0};
+
+    EXPECT_CALL(*mouseListener, isLeftPressed()).WillOnce(Return(false));
+    EXPECT_CALL(*mouseListener, isRightPressed()).WillOnce(Return(false));
     EditorInputListener sut(config, std::move(mouseListener));
     EXPECT_EQ(sut.getMouseAction(currentMousePos), std::nullopt);
 }
