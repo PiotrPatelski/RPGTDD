@@ -175,4 +175,15 @@ TEST_F(EditorStateTest, editorStateAddsTilesWithTileBuilderAtGivenPosition)
     sut.addTileAt(targetTilePosition);
 }
 
+TEST_F(EditorStateTest, editorStateRemovesTilesAtGivenPosition)
+{
+    const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, removeTile(Eq(targetTilePosition)));
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+
+    auto sut = createSut();
+    sut.removeTileAt(targetTilePosition);
+}
+
 }

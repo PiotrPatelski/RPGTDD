@@ -60,7 +60,7 @@ void EditorState::addTileAt(const sf::Vector2i& position)
 
 void EditorState::removeTileAt(const sf::Vector2i& position)
 {
-
+    tileMap->removeTile(position);
 }
 
 }

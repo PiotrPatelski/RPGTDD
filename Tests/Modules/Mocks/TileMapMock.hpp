@@ -14,6 +14,7 @@ class TileMapMock : public TileMap
 {
 public:
     MOCK_METHOD(void, addTile, (std::unique_ptr<Tile>), (override));
+    MOCK_METHOD(void, removeTile, (const sf::Vector2i&), (override));
 };
 
 }
