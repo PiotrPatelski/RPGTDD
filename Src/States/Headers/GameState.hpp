@@ -22,6 +22,8 @@ public:
     virtual void update(const Types::IWindow& window, const float) override {}
     virtual void drawOutput(Types::IWindow&) override {}
     virtual void togglePause() override {}
+    virtual void addTileAt(const sf::Vector2i&) override {}
+    virtual void removeTileAt(const sf::Vector2i&) override {}
 private:
     std::unique_ptr<Gui::UserInterface> gui;
 };

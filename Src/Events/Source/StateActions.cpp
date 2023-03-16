@@ -113,4 +113,14 @@ void Pause::operator()(States::MapState& state)
     state.togglePause();
 }
 
+void AddTile::operator()(States::MapState& state)
+{
+    state.addTileAt(mousePosition);
+}
+
+void RemoveTile::operator()(States::MapState& state)
+{
+    state.removeTileAt(mousePosition);
+}
+
 }

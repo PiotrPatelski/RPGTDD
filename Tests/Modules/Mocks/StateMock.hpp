@@ -60,6 +60,8 @@ public:
     MOCK_METHOD(void, drawOutput, (::Types::IWindow&), (override));
     MOCK_METHOD(void, update, (const ::Types::IWindow&, const float), (override));
     MOCK_METHOD(void, togglePause, (), (override));
+    MOCK_METHOD(void, addTileAt, (const sf::Vector2i&), (override));
+    MOCK_METHOD(void, removeTileAt, (const sf::Vector2i&), (override));
 };
 
 }

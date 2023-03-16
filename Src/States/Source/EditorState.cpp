@@ -52,4 +52,14 @@ void EditorState::togglePause()
     gui->acceptRequest(pause);
 }
 
+void EditorState::addTileAt(const sf::Vector2i& position)
+{
+
+}
+
+void EditorState::removeTileAt(const sf::Vector2i& position)
+{
+
+}
+
 }

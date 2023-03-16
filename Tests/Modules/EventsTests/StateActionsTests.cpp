@@ -113,4 +113,20 @@ TEST_F(StateActionsTest, toExitMapStateActionWillFinishCurrentStateAndCreateMain
     ASSERT_NO_THROW(Events::ExitMapState()(state));
 }
 
+TEST_F(StateActionsTest, addTileActionWillForwardTaskWtihGivenPositionToState)
+{
+    const sf::Vector2i position{56, 67};
+    auto state = NiceMock<States::MapStateMock>();
+    EXPECT_CALL(state, addTileAt(Eq(position)));
+    ASSERT_NO_THROW(Events::AddTile{position}(state));
+}
+
+TEST_F(StateActionsTest, removeTileActionWillForwardTaskWtihGivenPositionToState)
+{
+    const sf::Vector2i position{56, 67};
+    auto state = NiceMock<States::MapStateMock>();
+    EXPECT_CALL(state, removeTileAt(Eq(position)));
+    ASSERT_NO_THROW(Events::RemoveTile{position}(state));
+}
+
 }

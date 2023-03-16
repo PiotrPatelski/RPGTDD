@@ -71,7 +71,7 @@ public:
     AddTile(const sf::Vector2i& currentMousePosition)
     : mousePosition(currentMousePosition)
     {}
-    void operator()(States::MapState&){}
+    void operator()(States::MapState&);
 private:
     const sf::Vector2i mousePosition;
 };
@@ -82,7 +82,7 @@ public:
     RemoveTile(const sf::Vector2i& currentMousePosition)
     : mousePosition(currentMousePosition)
     {}
-    void operator()(States::MapState&){}
+    void operator()(States::MapState&);
 private:
     const sf::Vector2i mousePosition;
 };
