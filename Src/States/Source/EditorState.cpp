@@ -19,6 +19,7 @@ EditorState::EditorState(
 {
     gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
     tileMap = tileMapManager->createTileMap(*State::assetsManager);
+    currentTileBuilder = tileMapManager->moveTileBuilder();
 }
 
 void EditorState::update(const Types::IWindow& window, const float deltaTime)
@@ -54,7 +55,7 @@ void EditorState::togglePause()
 
 void EditorState::addTileAt(const sf::Vector2i& position)
 {
-
+    tileMap->addTile(currentTileBuilder->atPosition(position).build());
 }
 
 void EditorState::removeTileAt(const sf::Vector2i& position)

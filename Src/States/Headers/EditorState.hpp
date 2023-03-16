@@ -6,6 +6,7 @@
 #include <EditorAssetsManager.hpp>
 #include <EditorGuiManager.hpp>
 #include <TileMap.hpp>
+#include <TileBuilder.hpp>
 #include <UserInterface.hpp>
 
 namespace Tiles
@@ -41,6 +42,7 @@ private:
     void handleAction(std::optional<Events::StateAction>);
     std::unique_ptr<Gui::UserInterface> gui;
     std::unique_ptr<Tiles::TileMap> tileMap;
+    std::unique_ptr<Tiles::TileBuilder> currentTileBuilder;
     std::unique_ptr<Events::InputListener> inputListener;
 };
 

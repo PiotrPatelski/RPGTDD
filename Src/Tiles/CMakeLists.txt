@@ -6,6 +6,9 @@ set(SOURCES
 
 set(HEADERS
     Headers/TileMapManager.hpp
+    Headers/TileBuilder.hpp
+    Headers/TileMap.hpp
+    Headers/Tile.hpp
     Headers/GameMapManager.hpp
     )
 

@@ -18,7 +18,9 @@ set(HEADERS
     KeyboardMapMock.hpp
     MouseEventListenerMock.hpp
     ButtonListMock.hpp
-    TileMapManagerMock.hpp)
+    TileMapManagerMock.hpp
+    TileBuilderMock.hpp
+    TileMock.hpp)
 
 add_library(Mocks ${HEADERS})
 set_target_properties(Mocks PROPERTIES LINKER_LANGUAGE CXX)
