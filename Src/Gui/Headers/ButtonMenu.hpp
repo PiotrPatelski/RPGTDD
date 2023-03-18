@@ -5,7 +5,7 @@
 
 namespace Core
 {
-class IWindow;
+class Window;
 }
 
 namespace Gui
@@ -24,7 +24,7 @@ public:
     virtual inline VectorMath::ScreenPercentagePoint getPosition() const override {return background.getPosition();}
     virtual inline VectorMath::ScreenPercentagePoint getSize() const override {return background.getSize();}
     virtual void update(const sf::Vector2i&) override;
-    virtual void drawTo(Types::IWindow&) override;
+    virtual void drawTo(Types::Window&) override;
 private:
     sf::Vector2f calculateTextPosition();
     uint calculateTextSize(const VectorMath::ScreenPercentagePoint&);

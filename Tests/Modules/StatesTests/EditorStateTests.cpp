@@ -82,7 +82,7 @@ TEST_F(EditorStateTest, editorStateDrawsCreatedGuiWithWindow)
 {
     auto gui = std::make_unique<NiceMock<Gui::UserInterfaceMock>>();
 
-    EXPECT_CALL(*gui, drawTo(A<::Types::IWindow&>()));
+    EXPECT_CALL(*gui, drawTo(A<::Types::Window&>()));
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
 
@@ -145,6 +145,27 @@ TEST_F(EditorStateTest, editorStateCallsActionReturnedByGui)
     EXPECT_CALL(*guiManager, createGui(A<const sf::Font&>())).WillOnce
         (Return(ByMove(std::move(gui))));
     EXPECT_CALL(callback, Call(A<States::MapState&>()));
+
+    auto sut = createSut();
+    sut.update(window, 0.f);
+}
+
+TEST_F(EditorStateTest, editorStateDoesNotUpdateTileMapWhenPaused)
+{
+    EXPECT_CALL(*tileMap, update()).Times(0);
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+
+    auto sut = createSut();
+    sut.togglePause();
+    sut.update(window, 0.f);
+}
+
+TEST_F(EditorStateTest, editorStateUpdatesTileMapWhenNotPaused)
+{
+    EXPECT_CALL(*tileMap, update());
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
     sut.update(window, 0.f);
@@ -246,6 +267,16 @@ TEST_F(EditorStateTest, editorStateDoesNotRemoveAnyTileWhenPositionIsInvalid)
 
     auto sut = createSut();
     sut.tryTileRemovalAt(targetTilePosition);
+}
+
+TEST_F(EditorStateTest, editorStateDrawsCreatedTileMapWithWindow)
+{
+    EXPECT_CALL(*tileMap, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+
+    auto sut = createSut();
+    sut.drawOutput(window);
 }
 
 }

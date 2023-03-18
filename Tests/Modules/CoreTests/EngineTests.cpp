@@ -151,7 +151,7 @@ TEST_F(EngineTest, windowClearsDrawsStateOutputAndDisplaysWhenDisplayRenderedFra
     EXPECT_CALL(*window, clear());
     EXPECT_CALL(*stateMachine, isAnyStateActive()).WillOnce(Return(true));
     EXPECT_CALL(*stateMachine, getCurrentState()).WillOnce(Return(activeState));
-    EXPECT_CALL(*activeState, drawOutput(A<::Types::IWindow&>()));
+    EXPECT_CALL(*activeState, drawOutput(A<::Types::Window&>()));
     EXPECT_CALL(*window, display());
 
     ON_CALL(coreBuilder, createWindow()).WillByDefault(Return(ByMove(std::move(window))));

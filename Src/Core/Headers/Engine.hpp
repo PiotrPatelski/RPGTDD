@@ -28,7 +28,7 @@ private:
 class Engine : public IEngine
 {
 public:
-    Engine(const ICoreBuilder&);
+    Engine(const CoreBuilder&);
     virtual ~Engine(){}
     virtual void updateDeltaTime();
     virtual bool isWindowOpen();
@@ -38,9 +38,9 @@ public:
     virtual void runInitialState(std::shared_ptr<ConfigManager>);
     virtual void displayRenderedFrame();
 private:
-    std::unique_ptr<Types::IWindow> window;
-    std::unique_ptr<IClock> clock;
-    std::unique_ptr<IStateMachine> stateMachine;
+    std::unique_ptr<Types::Window> window;
+    std::unique_ptr<Clock> clock;
+    std::unique_ptr<StateMachine> stateMachine;
     sf::Event sfmlEvent;
 };
 

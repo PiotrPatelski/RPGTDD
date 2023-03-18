@@ -7,7 +7,7 @@ namespace Core
 
 struct ClockTest : public testing::Test
 {
-    std::unique_ptr<IClock> sut = std::make_unique<Clock>();
+    std::unique_ptr<Clock> sut = std::make_unique<Clock>();
 };
 
 TEST_F(ClockTest, deltaTimeIsUpdated)

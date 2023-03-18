@@ -10,7 +10,7 @@ namespace Types
 using ::testing::Test;
 using testing::Return;
 
-class WindowMock : public IWindow
+class WindowMock : public Window
 {
 public:
     MOCK_METHOD(bool, isActive, (), (const, override));

@@ -33,8 +33,8 @@ public:
         std::unique_ptr<Events::InputListener>);
     virtual ~EditorState() = default;
 
-    virtual void update(const Types::IWindow&, const float) override;
-    virtual void drawOutput(Types::IWindow&) override;
+    virtual void update(const Types::Window&, const float) override;
+    virtual void drawOutput(Types::Window&) override;
     virtual void togglePause() override;
     virtual void tryTileAdditionAt(const sf::Vector2i&) override;
     virtual void tryTileRemovalAt(const sf::Vector2i&) override;

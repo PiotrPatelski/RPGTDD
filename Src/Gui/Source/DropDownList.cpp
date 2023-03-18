@@ -73,7 +73,7 @@ std::optional<Events::StateAction> DropDownList::getActiveAction()
     return std::make_optional<Events::StateAction>(initiatingButton.action);
 }
 
-void DropDownList::drawTo(Types::IWindow& window)
+void DropDownList::drawTo(Types::Window& window)
 {
     window.draw(textContent);
     drawInitButton(window);
@@ -81,7 +81,7 @@ void DropDownList::drawTo(Types::IWindow& window)
         drawSections(window);
 }
 
-void DropDownList::drawInitButton(Types::IWindow& window)
+void DropDownList::drawInitButton(Types::Window& window)
 {
     initiatingButton.object->getBackground().drawTo(window);
     const auto& buttonText = initiatingButton.object->getTextContent();
@@ -89,7 +89,7 @@ void DropDownList::drawInitButton(Types::IWindow& window)
         window.draw(*buttonText);
 }
 
-void DropDownList::drawSections(Types::IWindow& window)
+void DropDownList::drawSections(Types::Window& window)
 {
     for(const auto& section : sections)
     {

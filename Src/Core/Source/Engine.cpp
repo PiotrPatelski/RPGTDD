@@ -4,7 +4,7 @@
 namespace Core
 {
 
-Engine::Engine(const ICoreBuilder& builder)
+Engine::Engine(const CoreBuilder& builder)
 : 
 window(builder.createWindow()),
 clock(builder.createClock()),

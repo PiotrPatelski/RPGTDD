@@ -10,7 +10,7 @@ namespace Core
 
 struct CoreBuilderTest : public testing::Test
 {
-    std::unique_ptr<ICoreBuilder> sut = std::make_unique<CoreBuilder>();
+    std::unique_ptr<CoreBuilder> sut = std::make_unique<CoreBuilder>();
 };
 
 TEST_F(CoreBuilderTest, coreBuilderCreatesWindow)
@@ -24,14 +24,14 @@ TEST_F(CoreBuilderTest, coreBuilderCreatesClock)
 {
     auto clock = sut->createClock();
     ASSERT_NE(nullptr, clock);
-    EXPECT_EQ(typeid(std::unique_ptr<IClock>), typeid(clock));
+    EXPECT_EQ(typeid(std::unique_ptr<Clock>), typeid(clock));
 }
 
 TEST_F(CoreBuilderTest, coreBuilderCreatesStateMachine)
 {
     auto stateMachine = sut->createStateMachine();
     ASSERT_NE(nullptr, stateMachine);
-    EXPECT_EQ(typeid(std::unique_ptr<IStateMachine>), typeid(stateMachine));
+    EXPECT_EQ(typeid(std::unique_ptr<StateMachine>), typeid(stateMachine));
 }
 
 }

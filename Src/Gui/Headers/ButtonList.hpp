@@ -3,7 +3,7 @@
 
 namespace Core
 {
-class IWindow;
+class Window;
 }
 
 namespace Gui
@@ -24,7 +24,7 @@ public:
     virtual VectorMath::ScreenPercentagePoint getPosition() const = 0;
     virtual VectorMath::ScreenPercentagePoint getSize() const = 0;
     virtual void update(const sf::Vector2i&) = 0;
-    virtual void drawTo(Types::IWindow&) = 0;
+    virtual void drawTo(Types::Window&) = 0;
 protected:
     sf::Text textContent;
     bool active;

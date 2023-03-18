@@ -48,7 +48,7 @@ TEST_F(EditorGuiTest, EditorGuiUpdatesAddedPauseMenuWhenPaused)
 TEST_F(EditorGuiTest, EditorGuiDrawsAddedPauseMenuWhenPaused)
 {
     auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::IWindow&>()));
+    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::Window&>()));
     sut = std::make_unique<EditorGui>();
     sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
     sut->togglePause();
@@ -59,7 +59,7 @@ TEST_F(EditorGuiTest, EditorGuiDrawsAddedPauseMenuWhenPaused)
 TEST_F(EditorGuiTest, EditorGuiDoesNotDrawAddedPauseMenuWhenNotPaused)
 {
     auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::IWindow&>())).Times(0);
+    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::Window&>())).Times(0);
     sut = std::make_unique<EditorGui>();
     sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
     NiceMock<::Types::WindowMock> window;

@@ -48,7 +48,7 @@ TEST_F(MenuGuiTest, uiWillGetEmptyActionIfNoButtonsWerePressed)
 TEST_F(MenuGuiTest, uiWillDrawAddedButtonListToPassedWindow)
 {
     auto dropDownList = std::make_unique<NiceMock<ButtonListMock>>();
-    EXPECT_CALL(*dropDownList, drawTo(A<::Types::IWindow&>()));
+    EXPECT_CALL(*dropDownList, drawTo(A<::Types::Window&>()));
 
     sut = std::make_unique<MenuGui>();
     sut->addButtonList(std::move(dropDownList));

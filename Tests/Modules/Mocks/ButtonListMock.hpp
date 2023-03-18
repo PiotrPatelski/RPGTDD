@@ -20,7 +20,7 @@ public:
     MOCK_METHOD((VectorMath::ScreenPercentagePoint), getPosition, (), (const, override));
     MOCK_METHOD((VectorMath::ScreenPercentagePoint), getSize, (), (const, override));
     MOCK_METHOD(void, update, (const sf::Vector2i&), (override));
-    MOCK_METHOD(void, drawTo, (Types::IWindow&), (override));
+    MOCK_METHOD(void, drawTo, (Types::Window&), (override));
 };
 
 }

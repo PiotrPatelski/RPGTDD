@@ -39,7 +39,7 @@ public:
     }
     void setFillColor(const sf::Color& color){object.setFillColor(color);}
     void setOutlineColor(const sf::Color& color){object.setOutlineColor(color);}
-    void drawTo(Types::IWindow& window){window.draw(object);}
+    void drawTo(Types::Window& window){window.draw(object);}
 private:
     sf::RectangleShape object;
     VectorMath::ScreenPercentagePoint objectPosition{sf::VideoMode{1, 1}, {0, 0}};

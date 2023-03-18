@@ -5,7 +5,7 @@
 
 namespace Types
 {
-class IWindow;
+class Window;
 }
 namespace States
 {
@@ -23,8 +23,8 @@ public:
     virtual std::unique_ptr<IState> getNextState() = 0;
     virtual std::shared_ptr<Core::IConfigManager> getConfig() = 0;
 
-    virtual void update(const Types::IWindow&, const float) = 0;
-    virtual void drawOutput(Types::IWindow&) = 0;
+    virtual void update(const Types::Window&, const float) = 0;
+    virtual void drawOutput(Types::Window&) = 0;
 };
 
 class State : public IState

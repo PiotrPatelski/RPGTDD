@@ -5,17 +5,7 @@
 namespace Core
 {
 
-class IClock
-{
-public:
-    IClock(){}
-    virtual ~IClock(){}
-
-    virtual void updateDeltaTime() = 0;
-    virtual const float getDeltaTime() const = 0;
-};
-
-class Clock : public IClock
+class Clock
 {
 private:
     float deltaTime;
@@ -24,8 +14,8 @@ public:
     Clock();
     virtual ~Clock(){}
 
-    virtual void updateDeltaTime() override;
-    virtual inline const float getDeltaTime() const override {return deltaTime;}
+    virtual void updateDeltaTime();
+    virtual inline const float getDeltaTime() const {return deltaTime;}
 };
     
 }

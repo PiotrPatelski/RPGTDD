@@ -47,4 +47,21 @@ uint TileMap::calculateIndex(const uint pixelPos) const
     return static_cast<uint>(std::floor(pixelPos / tileBoxSize));
 }
 
+void TileMap::update()
+{
+
+}
+
+void TileMap::drawTo(Types::Window& window)
+{
+    for(auto& fieldX : map)
+    {
+        for(auto& fieldY : fieldX)
+        {
+            if(fieldY)
+                fieldY->drawTo(window);
+        }
+    }
+}
+
 }

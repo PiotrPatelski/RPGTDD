@@ -34,7 +34,7 @@ std::optional<Events::StateAction> EditorGui::getActiveAction()
     return std::nullopt;
 }
 
-void EditorGui::drawTo(Types::IWindow& window)
+void EditorGui::drawTo(Types::Window& window)
 {
     if(pauseMenu.paused)
     {

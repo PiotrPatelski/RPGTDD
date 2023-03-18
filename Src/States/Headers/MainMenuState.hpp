@@ -18,8 +18,8 @@ public:
         std::unique_ptr<Gui::GuiManager>);
     virtual ~MainMenuState() = default;
 
-    virtual void update(const Types::IWindow& window, const float) override;
-    virtual void drawOutput(Types::IWindow&) override;
+    virtual void update(const Types::Window& window, const float) override;
+    virtual void drawOutput(Types::Window&) override;
     inline std::shared_ptr<sf::RectangleShape> getBackground() const {return background;}
 private:
     void initBackground();

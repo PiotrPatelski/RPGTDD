@@ -22,7 +22,7 @@ EditorState::EditorState(
     currentTileBuilder = tileMapManager->moveTileBuilder();
 }
 
-void EditorState::update(const Types::IWindow& window, const float deltaTime)
+void EditorState::update(const Types::Window& window, const float deltaTime)
 {
     const auto currentMousePosition = window.getMousePosition();
 
@@ -32,6 +32,7 @@ void EditorState::update(const Types::IWindow& window, const float deltaTime)
     if(not paused)
     {
         handleAction(inputListener->getMouseAction(currentMousePosition));
+        tileMap->update();
     }
 }
 
@@ -41,8 +42,9 @@ void EditorState::handleAction(std::optional<Events::StateAction> action)
         get<Events::GameAction>(action.value())(*this);
 }
 
-void EditorState::drawOutput(Types::IWindow& window)
+void EditorState::drawOutput(Types::Window& window)
 {
+    tileMap->drawTo(window);
     gui->drawTo(window);
 }
 

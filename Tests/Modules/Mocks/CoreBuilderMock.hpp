@@ -9,12 +9,12 @@ namespace Core
 
 using ::testing::Test;
 
-class CoreBuilderMock : public ICoreBuilder
+class CoreBuilderMock : public CoreBuilder
 {
 public:
-    MOCK_METHOD(std::unique_ptr<::Types::IWindow>, createWindow, (), (const, override));
-    MOCK_METHOD(std::unique_ptr<IClock>, createClock, (), (const, override));
-    MOCK_METHOD(std::unique_ptr<IStateMachine>, createStateMachine, (), (const, override));
+    MOCK_METHOD(std::unique_ptr<::Types::Window>, createWindow, (), (const, override));
+    MOCK_METHOD(std::unique_ptr<Clock>, createClock, (), (const, override));
+    MOCK_METHOD(std::unique_ptr<StateMachine>, createStateMachine, (), (const, override));
 };
 
 }

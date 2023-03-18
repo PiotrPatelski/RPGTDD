@@ -15,7 +15,7 @@ target_link_libraries(
     ${MODULE_NAME}
     PUBLIC
     Mocks
-    FileMgmt
+    Types
     Tiles
     mainUT
     gtest

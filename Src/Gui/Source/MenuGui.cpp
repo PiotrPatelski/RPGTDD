@@ -29,7 +29,7 @@ std::optional<Events::StateAction> MenuGui::getActiveAction()
     return action;
 }
 
-void MenuGui::drawTo(Types::IWindow& window)
+void MenuGui::drawTo(Types::Window& window)
 {
     for(const auto& button : buttons)
     {

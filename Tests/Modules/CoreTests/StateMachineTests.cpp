@@ -15,7 +15,7 @@ struct StateMachineTest : public testing::Test
     sf::Vector2i dummyMousePos{0,0};
     std::shared_ptr<NiceMock<States::StateMock>> activeState = std::make_shared<NiceMock<States::StateMock>>();
     std::unique_ptr<NiceMock<States::StateMock>> nextState = std::make_unique<NiceMock<States::StateMock>>();
-    std::unique_ptr<IStateMachine> sut = std::make_unique<StateMachine>();
+    std::unique_ptr<StateMachine> sut = std::make_unique<StateMachine>();
     NiceMock<::Types::WindowMock> window;
 };
 
@@ -32,7 +32,7 @@ TEST_F(StateMachineTest, stateMachineHasNotFinishedItsWorkWhenStateIsActive)
 
 TEST_F(StateMachineTest, currentStateIsUpdatedWhenStateMachineUpdates)
 {
-    EXPECT_CALL(*activeState, update(A<const ::Types::IWindow&>(), A<float>()));
+    EXPECT_CALL(*activeState, update(A<const ::Types::Window&>(), A<float>()));
     sut->setState(activeState);
     sut->update(window, 0.f);
 }

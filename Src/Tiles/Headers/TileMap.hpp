@@ -1,6 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+namespace Types
+{
+class Window;
+}
+
 namespace Tiles
 {
 
@@ -15,6 +20,8 @@ public:
     virtual bool isValidPosition(const sf::Vector2i&) const;
     virtual void addTile(std::unique_ptr<Tile>);
     virtual void removeTile (const sf::Vector2i&);
+    virtual void update();
+    virtual void drawTo(Types::Window&);
 private:
     const uint tileBoxSize;
 	std::vector<

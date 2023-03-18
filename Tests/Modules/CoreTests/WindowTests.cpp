@@ -8,7 +8,7 @@ namespace Types
 
 struct WindowTest : public testing::Test
 {    
-    std::unique_ptr<IWindow> sut = std::make_unique<Window>();
+    std::unique_ptr<Window> sut = std::make_unique<Window>();
     FileMgmt::GraphicsConfig graphicsConfig{"TEST", {21,37}, 0, 0, 0, sf::ContextSettings{}};
 };
 

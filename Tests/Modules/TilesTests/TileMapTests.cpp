@@ -3,6 +3,7 @@
 #include <TileBuilder.hpp>
 #include <TileMap.hpp>
 #include <TileMock.hpp>
+#include <WindowMock.hpp>
 
 namespace Tiles
 {
@@ -17,6 +18,7 @@ struct TileMapTest : public testing::Test
     const sf::Vector2i validPosition{325, 325};
     const sf::Vector2i invalidPosition{720, 720};
     const sf::Vector2i negativePosition{-10, -10};
+    NiceMock<::Types::WindowMock> window;
     TileBuilder builder;
 };
 
@@ -86,6 +88,26 @@ TEST_F(TileMapTest, tileMapEmptyAtPositionWhereTileWasRemoved)
 
     sut.removeTile(notRandomTilePosition);
     EXPECT_TRUE(sut.isEmptyAt(notRandomTilePosition));
+}
+
+TEST_F(TileMapTest, tileMapDrawsEveryAddedTileToWindow)
+{
+    auto tile1 = std::make_unique<NiceMock<TileMock>>();
+    auto tile2 = std::make_unique<NiceMock<TileMock>>();
+    auto tile3 = std::make_unique<NiceMock<TileMock>>();
+    auto tile4 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile1, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile2, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile3, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile4, drawTo(A<::Types::Window&>()));
+
+    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
+    sut.addTile(std::move(tile1));
+    sut.addTile(std::move(tile2));
+    sut.addTile(std::move(tile3));
+    sut.addTile(std::move(tile4));
+
+    sut.drawTo(window);
 }
 
 }

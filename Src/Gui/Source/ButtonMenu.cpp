@@ -23,7 +23,7 @@ void ButtonMenu::update(const sf::Vector2i& currentMousePosition)
     }
 }
 
-void ButtonMenu::drawTo(Types::IWindow& window)
+void ButtonMenu::drawTo(Types::Window& window)
 {
     background.drawTo(window);
     window.draw(textContent);

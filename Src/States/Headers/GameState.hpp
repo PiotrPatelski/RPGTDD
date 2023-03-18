@@ -19,8 +19,8 @@ public:
         std::unique_ptr<Gui::GuiManager>);
     virtual ~GameState() = default;
 
-    virtual void update(const Types::IWindow& window, const float) override {}
-    virtual void drawOutput(Types::IWindow&) override {}
+    virtual void update(const Types::Window& window, const float) override {}
+    virtual void drawOutput(Types::Window&) override {}
     virtual void togglePause() override {}
     virtual void tryTileAdditionAt(const sf::Vector2i&) override {}
     virtual void tryTileRemovalAt(const sf::Vector2i&) override {}

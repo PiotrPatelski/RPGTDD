@@ -30,7 +30,7 @@ void MainMenuState::initBackground()
     background->setTexture(State::assetsManager->getTexture("MENU_BACKGROUND"));
 }
 
-void MainMenuState::update(const Types::IWindow& window, const float deltaTime)
+void MainMenuState::update(const Types::Window& window, const float deltaTime)
 {
     gui->update(window.getMousePosition());
     auto action = gui->getActiveAction();
@@ -38,7 +38,7 @@ void MainMenuState::update(const Types::IWindow& window, const float deltaTime)
         get<Events::MenuAction>(action.value())(*this);
 }
 
-void MainMenuState::drawOutput(Types::IWindow& window)
+void MainMenuState::drawOutput(Types::Window& window)
 {
     window.draw(*background);
     gui->drawTo(window);

@@ -9,7 +9,7 @@ namespace Core
 
 using ::testing::Test;
 
-class ClockMock : public IClock
+class ClockMock : public Clock
 {
 public:
     MOCK_METHOD(void, updateDeltaTime, (), (override));
