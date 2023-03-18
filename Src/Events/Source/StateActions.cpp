@@ -115,12 +115,12 @@ void Pause::operator()(States::MapState& state)
 
 void AddTile::operator()(States::MapState& state)
 {
-    state.addTileAt(mousePosition);
+    state.tryTileAdditionAt(mousePosition);
 }
 
 void RemoveTile::operator()(States::MapState& state)
 {
-    state.removeTileAt(mousePosition);
+    state.tryTileRemovalAt(mousePosition);
 }
 
 }

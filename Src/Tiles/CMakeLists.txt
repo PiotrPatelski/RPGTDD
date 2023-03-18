@@ -2,6 +2,7 @@ set(MODULE_NAME Tiles)
 
 set(SOURCES
     Source/GameMapManager.cpp
+    Source/TileMap.cpp
     )
 
 set(HEADERS

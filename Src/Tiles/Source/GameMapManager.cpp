@@ -6,7 +6,10 @@ namespace Tiles
 
 std::unique_ptr<TileMap> GameMapManager::createTileMap(const FileMgmt::AssetsManager&)
 {
-    return std::make_unique<TileMap>();
+    const float tileBoxSize = 64.f;
+    const uint amountOfTilesOnX = 10;
+    const uint amountOfTilesOnY = 10;
+    return std::make_unique<TileMap>(tileBoxSize, amountOfTilesOnX, amountOfTilesOnY);
 }
 
 std::unique_ptr<TileBuilder> GameMapManager::moveTileBuilder()

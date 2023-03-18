@@ -160,9 +160,27 @@ TEST_F(EditorStateTest, editorStateInitializesTileMapWithManager)
     auto sut = createSut();
 }
 
-TEST_F(EditorStateTest, editorStateAddsTilesWithTileBuilderAtGivenPosition)
+TEST_F(EditorStateTest, editorStateDoesNotAddTileWhenGivenPositionIsInvalid)
 {
     const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(false));
+    EXPECT_CALL(*tileMap, isEmptyAt(_)).Times(0);
+    EXPECT_CALL(*tileMap, addTile(_)).Times(0);
+    EXPECT_CALL(*tileBuilder, build()).Times(0);
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+    EXPECT_CALL(*tileMapManager, moveTileBuilder()).WillOnce
+        (Return(ByMove(std::move(tileBuilder))));
+
+    auto sut = createSut();
+    sut.tryTileAdditionAt(targetTilePosition);
+}
+
+TEST_F(EditorStateTest, editorStateAddsTilesWithTileBuilderAtGivenPositionWhenThereWasNoTilePlacedHereYet)
+{
+    const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(true));
+    EXPECT_CALL(*tileMap, isEmptyAt(Eq(targetTilePosition))).WillOnce(Return(true));
     EXPECT_CALL(*tileMap, addTile(A<std::unique_ptr<Tiles::Tile>>()));
     EXPECT_CALL(*tileBuilder, atPosition(Eq(targetTilePosition))).WillOnce(ReturnRef(*tileBuilder));
     EXPECT_CALL(*tileBuilder, build()).WillOnce(Return(ByMove(std::make_unique<NiceMock<Tiles::TileMock>>())));
@@ -172,18 +190,62 @@ TEST_F(EditorStateTest, editorStateAddsTilesWithTileBuilderAtGivenPosition)
         (Return(ByMove(std::move(tileBuilder))));
 
     auto sut = createSut();
-    sut.addTileAt(targetTilePosition);
+    sut.tryTileAdditionAt(targetTilePosition);
 }
 
-TEST_F(EditorStateTest, editorStateRemovesTilesAtGivenPosition)
+TEST_F(EditorStateTest, editorStateDoesNotAddTilesAtGivenPositionWhenThereWasTilePlacedHereAlready)
 {
     const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(true));
+    EXPECT_CALL(*tileMap, isEmptyAt(Eq(targetTilePosition))).WillOnce(Return(false));
+    EXPECT_CALL(*tileMap, addTile(_)).Times(0);
+    EXPECT_CALL(*tileBuilder, build()).Times(0);
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+    EXPECT_CALL(*tileMapManager, moveTileBuilder()).WillOnce
+        (Return(ByMove(std::move(tileBuilder))));
+
+    auto sut = createSut();
+    sut.tryTileAdditionAt(targetTilePosition);
+}
+
+TEST_F(EditorStateTest, editorStateRemovesTilesAtGivenPositionWhenTileIsPresent)
+{
+    const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(true));
+    EXPECT_CALL(*tileMap, isEmptyAt(Eq(targetTilePosition))).WillOnce(Return(false));
     EXPECT_CALL(*tileMap, removeTile(Eq(targetTilePosition)));
     EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
-    sut.removeTileAt(targetTilePosition);
+    sut.tryTileRemovalAt(targetTilePosition);
+}
+
+TEST_F(EditorStateTest, editorStateDoesNotRemoveAnyTileWhenNoTileIsPresent)
+{
+    const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(true));
+    EXPECT_CALL(*tileMap, isEmptyAt(Eq(targetTilePosition))).WillOnce(Return(true));
+    EXPECT_CALL(*tileMap, removeTile(_)).Times(0);
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+
+    auto sut = createSut();
+    sut.tryTileRemovalAt(targetTilePosition);
+}
+
+TEST_F(EditorStateTest, editorStateDoesNotRemoveAnyTileWhenPositionIsInvalid)
+{
+    const sf::Vector2i targetTilePosition{21, 37};
+    EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(false));
+    EXPECT_CALL(*tileMap, isEmptyAt(_)).Times(0);
+    EXPECT_CALL(*tileMap, removeTile(_)).Times(0);
+    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+        (Return(ByMove(std::move(tileMap))));
+
+    auto sut = createSut();
+    sut.tryTileRemovalAt(targetTilePosition);
 }
 
 }

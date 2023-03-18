@@ -53,14 +53,16 @@ void EditorState::togglePause()
     gui->acceptRequest(pause);
 }
 
-void EditorState::addTileAt(const sf::Vector2i& position)
+void EditorState::tryTileAdditionAt(const sf::Vector2i& position)
 {
-    tileMap->addTile(currentTileBuilder->atPosition(position).build());
+    if(tileMap->isValidPosition(position) and tileMap->isEmptyAt(position))
+        tileMap->addTile(currentTileBuilder->atPosition(position).build());
 }
 
-void EditorState::removeTileAt(const sf::Vector2i& position)
+void EditorState::tryTileRemovalAt(const sf::Vector2i& position)
 {
-    tileMap->removeTile(position);
+    if(tileMap->isValidPosition(position) and not tileMap->isEmptyAt(position))
+        tileMap->removeTile(position);
 }
 
 }

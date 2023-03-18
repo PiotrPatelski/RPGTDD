@@ -17,8 +17,8 @@ public:
       paused{false}{}
     virtual ~MapState(){}
     virtual void togglePause() = 0;
-    virtual void addTileAt(const sf::Vector2i&) = 0;
-    virtual void removeTileAt(const sf::Vector2i&) = 0;
+    virtual void tryTileAdditionAt(const sf::Vector2i&) = 0;
+    virtual void tryTileRemovalAt(const sf::Vector2i&) = 0;
 protected:
     bool paused;
 };
