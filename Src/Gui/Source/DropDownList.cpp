@@ -88,6 +88,7 @@ void DropDownList::drawInitButton(Types::IWindow& window)
     if(buttonText)
         window.draw(*buttonText);
 }
+
 void DropDownList::drawSections(Types::IWindow& window)
 {
     for(const auto& section : sections)

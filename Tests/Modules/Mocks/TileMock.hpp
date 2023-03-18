@@ -12,7 +12,7 @@ using namespace ::testing;
 class TileMock : public Tile
 {
 public:
-
+    MOCK_METHOD(sf::Vector2i, getPosition, (), (const, override));
 };
 
 }

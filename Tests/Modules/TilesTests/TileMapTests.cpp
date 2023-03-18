@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include <TileBuilder.hpp>
 #include <TileMap.hpp>
+#include <TileMock.hpp>
 
 namespace Tiles
 {
@@ -49,6 +50,42 @@ TEST_F(TileMapTest, tileMapEmptyAtPositionWhereNoTileWasAdded)
     TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     const sf::Vector2i someRandomTilePosition{0, 0};
     EXPECT_TRUE(sut.isEmptyAt(someRandomTilePosition));
+}
+
+TEST_F(TileMapTest, tileMapAdditionThrowsWhenPositionIsInvalid)
+{
+    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
+    auto tile1 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile1, getPosition()).WillOnce(Return(invalidPosition));
+    auto tile2 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile2, getPosition()).WillOnce(Return(negativePosition));
+    EXPECT_THROW(sut.addTile(std::move(tile1)), std::out_of_range);
+    EXPECT_THROW(sut.addTile(std::move(tile2)), std::out_of_range);
+}
+
+TEST_F(TileMapTest, tileMapNotEmptyAtPositionWhereTileWasAdded)
+{
+    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
+    const sf::Vector2i notRandomTilePosition{72, 72};
+    auto tile = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile, getPosition()).WillOnce(Return(sf::Vector2i(64, 64)));
+
+    sut.addTile(std::move(tile));
+    EXPECT_FALSE(sut.isEmptyAt(notRandomTilePosition));
+}
+
+TEST_F(TileMapTest, tileMapEmptyAtPositionWhereTileWasRemoved)
+{
+    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
+    const sf::Vector2i notRandomTilePosition{72, 72};
+    auto tile = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile, getPosition()).WillOnce(Return(sf::Vector2i(64, 64)));
+
+    sut.addTile(std::move(tile));
+    EXPECT_FALSE(sut.isEmptyAt(notRandomTilePosition));
+
+    sut.removeTile(notRandomTilePosition);
+    EXPECT_TRUE(sut.isEmptyAt(notRandomTilePosition));
 }
 
 }
