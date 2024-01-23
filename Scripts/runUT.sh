@@ -4,7 +4,7 @@ if test -d "$dirname";
 then
     echo "$dirname has been found";
     cd $dirname;
-    ctest -C Debug --output-on-failure;
+    LIBGL_ALWAYS_SOFTWARE=1 ctest -C Debug --output-on-failure;
 else
     echo "$dirname has not been found";
 fi
