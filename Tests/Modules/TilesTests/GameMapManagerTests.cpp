@@ -13,9 +13,10 @@ struct GameMapManagerTest : public testing::Test
 
 };
 
-TEST_F(GameMapManagerTest, createdObject)
+TEST_F(GameMapManagerTest, gameMapManagerReturnsValidMapBuilder)
 {
     GameMapManager sut;
+    ASSERT_NE(sut.moveTileBuilder(), nullptr);
 }
 
 }

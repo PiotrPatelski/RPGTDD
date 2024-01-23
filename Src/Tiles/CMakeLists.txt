@@ -2,12 +2,15 @@ set(MODULE_NAME Tiles)
 
 set(SOURCES
     Source/GameMapManager.cpp
+    Source/TilePositionGenerator.cpp
+    Source/TileField.cpp
     Source/TileMap.cpp
     )
 
 set(HEADERS
     Headers/TileMapManager.hpp
     Headers/TileBuilder.hpp
+    Headers/TileField.hpp
     Headers/TileMap.hpp
     Headers/Tile.hpp
     Headers/GameMapManager.hpp

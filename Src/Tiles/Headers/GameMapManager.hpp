@@ -10,7 +10,7 @@ class TileMap;
 class GameMapManager : public TileMapManager
 {
 public:
-    GameMapManager() = default;
+    GameMapManager();
     virtual ~GameMapManager() = default;
     virtual std::unique_ptr<TileMap> createTileMap(const FileMgmt::AssetsManager&) override;
     virtual std::unique_ptr<TileBuilder> moveTileBuilder() override;

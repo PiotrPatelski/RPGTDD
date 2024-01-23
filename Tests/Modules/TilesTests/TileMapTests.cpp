@@ -12,7 +12,7 @@ using namespace ::testing;
 
 struct TileMapTest : public testing::Test
 {
-    const float tileBoxSize{64.f};
+    const uint tileBoxSize{64};
     const uint tileAmountOnX{10};
     const uint tileAmountOnY{10};
     const sf::Vector2i validPosition{325, 325};
@@ -20,77 +20,86 @@ struct TileMapTest : public testing::Test
     const sf::Vector2i negativePosition{-10, -10};
     NiceMock<::Types::WindowMock> window;
     TileBuilder builder;
+    TileMap sut{tileBoxSize, tileAmountOnX, tileAmountOnY};
 };
 
 TEST_F(TileMapTest, tileMapValidatesPositionWithinBounds)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     EXPECT_TRUE(sut.isValidPosition(validPosition));
 }
 
 TEST_F(TileMapTest, tileMapValidatesPositionOutsideBounds)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     EXPECT_FALSE(sut.isValidPosition(invalidPosition));
 }
 
 TEST_F(TileMapTest, tileMapValidatesNegativePosition)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     EXPECT_FALSE(sut.isValidPosition(negativePosition));
 }
 
 TEST_F(TileMapTest, tileMapEmptyTilePositionThrowsWhenPositionIsInvalid)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     EXPECT_THROW(sut.isEmptyAt(invalidPosition), std::out_of_range);
     EXPECT_THROW(sut.isEmptyAt(negativePosition), std::out_of_range);
 }
 
 TEST_F(TileMapTest, tileMapEmptyAtPositionWhereNoTileWasAdded)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     const sf::Vector2i someRandomTilePosition{0, 0};
     EXPECT_TRUE(sut.isEmptyAt(someRandomTilePosition));
 }
 
 TEST_F(TileMapTest, tileMapAdditionThrowsWhenPositionIsInvalid)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     auto tile1 = std::make_unique<NiceMock<TileMock>>();
-    EXPECT_CALL(*tile1, getPosition()).WillOnce(Return(invalidPosition));
     auto tile2 = std::make_unique<NiceMock<TileMock>>();
-    EXPECT_CALL(*tile2, getPosition()).WillOnce(Return(negativePosition));
-    EXPECT_THROW(sut.addTile(std::move(tile1)), std::out_of_range);
-    EXPECT_THROW(sut.addTile(std::move(tile2)), std::out_of_range);
+
+    EXPECT_THROW(sut.addTile(std::move(tile1), invalidPosition), std::out_of_range);
+    EXPECT_THROW(sut.addTile(std::move(tile2), negativePosition), std::out_of_range);
 }
 
 TEST_F(TileMapTest, tileMapNotEmptyAtPositionWhereTileWasAdded)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     const sf::Vector2i notRandomTilePosition{72, 72};
     auto tile = std::make_unique<NiceMock<TileMock>>();
-    EXPECT_CALL(*tile, getPosition()).WillOnce(Return(sf::Vector2i(64, 64)));
 
-    sut.addTile(std::move(tile));
+    sut.addTile(std::move(tile), notRandomTilePosition);
     EXPECT_FALSE(sut.isEmptyAt(notRandomTilePosition));
 }
 
 TEST_F(TileMapTest, tileMapEmptyAtPositionWhereTileWasRemoved)
 {
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
     const sf::Vector2i notRandomTilePosition{72, 72};
     auto tile = std::make_unique<NiceMock<TileMock>>();
-    EXPECT_CALL(*tile, getPosition()).WillOnce(Return(sf::Vector2i(64, 64)));
 
-    sut.addTile(std::move(tile));
+    sut.addTile(std::move(tile), notRandomTilePosition);
     EXPECT_FALSE(sut.isEmptyAt(notRandomTilePosition));
 
     sut.removeTile(notRandomTilePosition);
     EXPECT_TRUE(sut.isEmptyAt(notRandomTilePosition));
 }
 
-TEST_F(TileMapTest, tileMapDrawsEveryAddedTileToWindow)
+TEST_F(TileMapTest, tileMapCannotAddMoreThanThreeTilesToAField)
+{
+    auto tile1 = std::make_unique<NiceMock<TileMock>>();
+    auto tile2 = std::make_unique<NiceMock<TileMock>>();
+    auto tile3 = std::make_unique<NiceMock<TileMock>>();
+    auto tile4 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile1, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile2, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile3, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile4, drawTo(A<::Types::Window&>())).Times(0);
+
+    sut.addTile(std::move(tile1), validPosition);
+    sut.addTile(std::move(tile2), validPosition);
+    sut.addTile(std::move(tile3), validPosition);
+    sut.addTile(std::move(tile4), validPosition);
+
+    sut.drawTo(window);
+}
+
+TEST_F(TileMapTest, tileMapUpdatesTilesAtDifferentFields)
 {
     auto tile1 = std::make_unique<NiceMock<TileMock>>();
     auto tile2 = std::make_unique<NiceMock<TileMock>>();
@@ -101,11 +110,14 @@ TEST_F(TileMapTest, tileMapDrawsEveryAddedTileToWindow)
     EXPECT_CALL(*tile3, drawTo(A<::Types::Window&>()));
     EXPECT_CALL(*tile4, drawTo(A<::Types::Window&>()));
 
-    TileMap sut(tileBoxSize, tileAmountOnX, tileAmountOnY);
-    sut.addTile(std::move(tile1));
-    sut.addTile(std::move(tile2));
-    sut.addTile(std::move(tile3));
-    sut.addTile(std::move(tile4));
+    const sf::Vector2i position1{0, 0};
+    const sf::Vector2i position2{70, 70};
+    const sf::Vector2i position3{0, 120};
+    const sf::Vector2i position4{280, 460};
+    sut.addTile(std::move(tile1), position1);
+    sut.addTile(std::move(tile2), position2);
+    sut.addTile(std::move(tile3), position3);
+    sut.addTile(std::move(tile4), position4);
 
     sut.drawTo(window);
 }

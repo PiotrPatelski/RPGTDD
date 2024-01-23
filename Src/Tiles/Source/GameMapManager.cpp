@@ -3,6 +3,11 @@
 
 namespace Tiles
 {
+GameMapManager::GameMapManager()
+: defaultTileBuilder(std::make_unique<TileBuilder>())
+{
+
+}
 
 std::unique_ptr<TileMap> GameMapManager::createTileMap(const FileMgmt::AssetsManager&)
 {

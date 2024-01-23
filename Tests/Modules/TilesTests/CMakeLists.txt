@@ -2,7 +2,9 @@ set(MODULE_NAME TilesTests)
 
 set(SOURCES
     GameMapManagerTests.cpp
-    TileMapTests.cpp)
+    TileFieldTests.cpp
+    TileMapTests.cpp
+    TilePositionGeneratorTests.cpp)
 
 add_executable(
     ${MODULE_NAME}

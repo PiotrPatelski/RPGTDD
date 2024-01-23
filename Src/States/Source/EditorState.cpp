@@ -58,7 +58,7 @@ void EditorState::togglePause()
 void EditorState::tryTileAdditionAt(const sf::Vector2i& position)
 {
     if(tileMap->isValidPosition(position) and tileMap->isEmptyAt(position))
-        tileMap->addTile(currentTileBuilder->atPosition(position).build());
+        tileMap->addTile(currentTileBuilder->build(), position);
 }
 
 void EditorState::tryTileRemovalAt(const sf::Vector2i& position)
