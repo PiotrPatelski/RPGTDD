@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 namespace Types
 {
@@ -11,10 +12,19 @@ namespace Tiles
 class Tile
 {
 public:
-    Tile() = default;
+    Tile()
+    {
+        //TODO remove placeholder code
+        sf::Texture texture; //TMP
+        texture.create(64, 64); //TMP
+        sprite.setTexture(texture); //TMP
+        sprite.setColor(sf::Color(0, 255, 0)); //TMP
+    }
     virtual ~Tile() = default;
-    virtual sf::Vector2i getPosition() const {return {0, 0};}
-    virtual void drawTo(Types::Window&) {}
+    virtual void setPosition(const sf::Vector2i&);
+    virtual void drawTo(Types::Window&);
+private:
+    sf::Sprite sprite;
 };
 
 }

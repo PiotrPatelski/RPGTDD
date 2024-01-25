@@ -30,6 +30,14 @@ TEST_F(TileFieldTest, tileFieldNotEmptyAfterTileAddition)
     EXPECT_FALSE(sut.isFull());
 }
 
+TEST_F(TileFieldTest, tileFieldSetsIndividualTilesWithItsPosition)
+{
+    TileField sut(validPosition);
+    auto tileLayer = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tileLayer, setPosition(Eq(validPosition)));
+    sut.pushTile(std::move(tileLayer));
+}
+
 TEST_F(TileFieldTest, tileFieldFullAfterTileAddition)
 {
     TileField sut(validPosition);
@@ -49,6 +57,22 @@ TEST_F(TileFieldTest, tileFieldNotFullAfterRemovalFromFull)
     EXPECT_TRUE(sut.isFull());
     sut.popTile();
     EXPECT_FALSE(sut.isFull());
+}
+
+TEST_F(TileFieldTest, tileFieldDelegatesDrawingToLayers)
+{
+    TileField sut(validPosition);
+    auto tileLayer1 = std::make_unique<NiceMock<TileMock>>();
+    auto tileLayer2 = std::make_unique<NiceMock<TileMock>>();
+    auto tileLayer3 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tileLayer1, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tileLayer2, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tileLayer3, drawTo(A<::Types::Window&>()));
+    sut.pushTile(std::move(tileLayer1));
+    sut.pushTile(std::move(tileLayer2));
+    sut.pushTile(std::move(tileLayer3));
+
+    sut.drawTo(window);
 }
 
 }

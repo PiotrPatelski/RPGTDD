@@ -12,8 +12,8 @@ using namespace ::testing;
 class TileMock : public Tile
 {
 public:
-    MOCK_METHOD(sf::Vector2i, getPosition, (), (const, override));
     MOCK_METHOD(void, drawTo, (::Types::Window&), (override));
+    MOCK_METHOD(void, setPosition, (const sf::Vector2i&), (override));
 };
 
 }

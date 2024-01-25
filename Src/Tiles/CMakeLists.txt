@@ -5,6 +5,7 @@ set(SOURCES
     Source/TilePositionGenerator.cpp
     Source/TileField.cpp
     Source/TileMap.cpp
+    Source/Tile.cpp
     )
 
 set(HEADERS
@@ -25,6 +26,7 @@ target_include_directories(${MODULE_NAME} PUBLIC Headers Source)
 target_link_libraries(${MODULE_NAME}
 PUBLIC
     FileMgmt
+    Types
     ${SFML_LIBS})
 
 set(STATES_EXCLUDES

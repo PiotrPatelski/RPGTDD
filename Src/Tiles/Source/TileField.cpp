@@ -7,6 +7,7 @@ namespace Tiles
 constexpr uint AMOUNT_OF_LAYERS{3};
 
 TileField::TileField(const sf::Vector2i& position)
+: fieldPosition{position}
 {
     layers.resize(AMOUNT_OF_LAYERS);
 }
@@ -30,6 +31,7 @@ bool TileField::isFull() const
 
 void TileField::pushTile(std::unique_ptr<Tile> tile)
 {
+    tile->setPosition(fieldPosition);
     auto firstEmptyIndex = std::find_if(layers.begin(), layers.end(),
         [](const auto& layer){return layer == nullptr;});
     if(firstEmptyIndex != std::end(layers))
@@ -54,7 +56,8 @@ void TileField::drawTo(Types::Window& window)
 }
 
 TileField::TileField(TileField&& other)
-: layers(std::move(other.layers))
+: layers(std::move(other.layers)),
+  fieldPosition{other.fieldPosition}
 {}
 
 TileField& TileField::operator=(TileField&& other)

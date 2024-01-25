@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <TileField.hpp>
 
 namespace Types
@@ -9,8 +8,6 @@ class Window;
 
 namespace Tiles
 {
-
-class Tile;
 
 class TileMap
 {

@@ -30,6 +30,7 @@ public:
     TileField& operator=(const TileField&) = delete;
 private:
     std::vector<std::unique_ptr<Tile>> layers;
+    sf::Vector2i fieldPosition;
 };
 
 }
