@@ -1,15 +1,15 @@
 #include <GameMapManager.hpp>
 #include <TileMap.hpp>
+#include <AssetsManager.hpp>
 
 namespace Tiles
 {
 GameMapManager::GameMapManager()
-: defaultTileBuilder(std::make_unique<TileBuilder>())
 {
 
 }
 
-std::unique_ptr<TileMap> GameMapManager::createTileMap(const FileMgmt::AssetsManager&)
+std::unique_ptr<TileMap> GameMapManager::createTileMap()
 {
     const float tileBoxSize = 64.f;
     const uint amountOfTilesOnX = 10;
@@ -17,9 +17,9 @@ std::unique_ptr<TileMap> GameMapManager::createTileMap(const FileMgmt::AssetsMan
     return std::make_unique<TileMap>(tileBoxSize, amountOfTilesOnX, amountOfTilesOnY);
 }
 
-std::unique_ptr<TileBuilder> GameMapManager::moveTileBuilder()
+std::unique_ptr<TileBuilder> GameMapManager::createTileBuilder(const FileMgmt::AssetsManager& assetsManager)
 {
-    return std::move(defaultTileBuilder);
+    return std::make_unique<DefaultTileBuilder>(assetsManager.getTexture("TILESHEET"));
 }
 
 }

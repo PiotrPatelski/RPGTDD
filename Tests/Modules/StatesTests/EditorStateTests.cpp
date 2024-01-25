@@ -33,8 +33,8 @@ struct EditorStateTest : public testing::Test
         tileBuilder = std::make_unique<NiceMock<Tiles::TileBuilderMock>>();
         ON_CALL(*assetsManager, getFont(_)).WillByDefault(ReturnRef(font));
         ON_CALL(*guiManager, createGui(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Gui::UserInterfaceMock>>())));
-        ON_CALL(*tileMapManager, createTileMap(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileMapMock>>())));
-        ON_CALL(*tileMapManager, moveTileBuilder()).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileBuilderMock>>())));
+        ON_CALL(*tileMapManager, createTileMap()).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileMapMock>>())));
+        ON_CALL(*tileMapManager, createTileBuilder(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileBuilderMock>>())));
     }
     EditorState createSut()
     {
@@ -153,7 +153,7 @@ TEST_F(EditorStateTest, editorStateCallsActionReturnedByGui)
 TEST_F(EditorStateTest, editorStateDoesNotUpdateTileMapWhenPaused)
 {
     EXPECT_CALL(*tileMap, update()).Times(0);
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
@@ -164,7 +164,7 @@ TEST_F(EditorStateTest, editorStateDoesNotUpdateTileMapWhenPaused)
 TEST_F(EditorStateTest, editorStateUpdatesTileMapWhenNotPaused)
 {
     EXPECT_CALL(*tileMap, update());
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
@@ -173,9 +173,9 @@ TEST_F(EditorStateTest, editorStateUpdatesTileMapWhenNotPaused)
 
 TEST_F(EditorStateTest, editorStateInitializesTileMapWithManager)
 {
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::make_unique<NiceMock<Tiles::TileMapMock>>())));
-    EXPECT_CALL(*tileMapManager, moveTileBuilder()).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileBuilder(_)).WillOnce
         (Return(ByMove(std::make_unique<NiceMock<Tiles::TileBuilderMock>>())));
 
     auto sut = createSut();
@@ -189,9 +189,9 @@ TEST_F(EditorStateTest, editorStateDoesNotAddTileWhenGivenPositionIsInvalid)
     EXPECT_CALL(*tileMap, addTile(_)).Times(0);
     EXPECT_CALL(*tileBuilder, atPosition(_)).Times(0);
     EXPECT_CALL(*tileBuilder, build()).Times(0);
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
-    EXPECT_CALL(*tileMapManager, moveTileBuilder()).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileBuilder(_)).WillOnce
         (Return(ByMove(std::move(tileBuilder))));
 
     auto sut = createSut();
@@ -205,9 +205,9 @@ TEST_F(EditorStateTest, editorStateAddsTilesWithTileBuilderAtGivenPositionWhenTh
     EXPECT_CALL(*tileMap, addTile(A<std::unique_ptr<Tiles::Tile>>()));
     EXPECT_CALL(*tileBuilder, atPosition(Eq(targetTilePosition))).WillOnce(ReturnRef(*tileBuilder));
     EXPECT_CALL(*tileBuilder, build()).WillOnce(Return(ByMove(std::make_unique<NiceMock<Tiles::TileMock>>())));
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
-    EXPECT_CALL(*tileMapManager, moveTileBuilder()).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileBuilder(_)).WillOnce
         (Return(ByMove(std::move(tileBuilder))));
 
     auto sut = createSut();
@@ -220,7 +220,7 @@ TEST_F(EditorStateTest, editorStateRemovesTilesAtGivenPositionWhenTileIsPresent)
     EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(true));
     EXPECT_CALL(*tileMap, isEmptyAt(Eq(targetTilePosition))).WillOnce(Return(false));
     EXPECT_CALL(*tileMap, removeTile(Eq(targetTilePosition)));
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
@@ -233,7 +233,7 @@ TEST_F(EditorStateTest, editorStateDoesNotRemoveAnyTileWhenNoTileIsPresent)
     EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(true));
     EXPECT_CALL(*tileMap, isEmptyAt(Eq(targetTilePosition))).WillOnce(Return(true));
     EXPECT_CALL(*tileMap, removeTile(_)).Times(0);
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
@@ -246,7 +246,7 @@ TEST_F(EditorStateTest, editorStateDoesNotRemoveAnyTileWhenPositionIsInvalid)
     EXPECT_CALL(*tileMap, isValidPosition(Eq(targetTilePosition))).WillOnce(Return(false));
     EXPECT_CALL(*tileMap, isEmptyAt(_)).Times(0);
     EXPECT_CALL(*tileMap, removeTile(_)).Times(0);
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();
@@ -256,7 +256,7 @@ TEST_F(EditorStateTest, editorStateDoesNotRemoveAnyTileWhenPositionIsInvalid)
 TEST_F(EditorStateTest, editorStateDrawsCreatedTileMapWithWindow)
 {
     EXPECT_CALL(*tileMap, drawTo(A<::Types::Window&>()));
-    EXPECT_CALL(*tileMapManager, createTileMap(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
 
     auto sut = createSut();

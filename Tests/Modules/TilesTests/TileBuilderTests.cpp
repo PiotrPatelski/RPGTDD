@@ -14,7 +14,8 @@ struct TileBuilderTest : public testing::Test
 
 TEST_F(TileBuilderTest, buildsTileWithGivenPosition)
 {
-    TileBuilder sut;
+    const sf::Texture textureSheet;
+    DefaultTileBuilder sut(&textureSheet);
 
     const sf::Vector2i position{20, 20};
     auto result = sut.atPosition(position).build();

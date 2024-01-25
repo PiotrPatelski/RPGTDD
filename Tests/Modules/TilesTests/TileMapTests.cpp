@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <TileBuilder.hpp>
 #include <TileMap.hpp>
 #include <TileMock.hpp>
 #include <WindowMock.hpp>
@@ -19,7 +18,6 @@ struct TileMapTest : public testing::Test
     const sf::Vector2i invalidPosition{720, 720};
     const sf::Vector2i negativePosition{-10, -10};
     NiceMock<::Types::WindowMock> window;
-    TileBuilder builder;
     TileMap sut{tileBoxSize, tileAmountOnX, tileAmountOnY};
 };
 

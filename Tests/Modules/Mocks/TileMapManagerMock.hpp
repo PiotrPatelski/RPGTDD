@@ -12,8 +12,8 @@ using namespace ::testing;
 class TileMapManagerMock : public TileMapManager
 {
 public:
-    MOCK_METHOD(std::unique_ptr<TileMap>, createTileMap, (const FileMgmt::AssetsManager&), (override));
-    MOCK_METHOD(std::unique_ptr<TileBuilder>, moveTileBuilder, (), (override));
+    MOCK_METHOD(std::unique_ptr<TileMap>, createTileMap, (), (override));
+    MOCK_METHOD(std::unique_ptr<TileBuilder>, createTileBuilder, (const FileMgmt::AssetsManager&), (override));
 };
 
 }

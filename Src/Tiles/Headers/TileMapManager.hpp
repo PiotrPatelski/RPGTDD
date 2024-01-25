@@ -16,8 +16,8 @@ class TileMapManager
 public:
     TileMapManager() = default;
     virtual ~TileMapManager() = default;
-    virtual std::unique_ptr<TileMap> createTileMap(const FileMgmt::AssetsManager&) = 0;
-    virtual std::unique_ptr<TileBuilder> moveTileBuilder() = 0;
+    virtual std::unique_ptr<TileMap> createTileMap() = 0;
+    virtual std::unique_ptr<TileBuilder> createTileBuilder(const FileMgmt::AssetsManager&) = 0;
 };
 
 }

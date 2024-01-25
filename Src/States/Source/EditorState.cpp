@@ -18,8 +18,9 @@ EditorState::EditorState(
       inputListener(std::move(inputListener))
 {
     gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
-    tileMap = tileMapManager->createTileMap(*State::assetsManager);
-    currentTileBuilder = tileMapManager->moveTileBuilder();
+
+    tileMap = tileMapManager->createTileMap();
+    currentTileBuilder = tileMapManager->createTileBuilder(*State::assetsManager);
 }
 
 void EditorState::update(const Types::Window& window, const float deltaTime)
