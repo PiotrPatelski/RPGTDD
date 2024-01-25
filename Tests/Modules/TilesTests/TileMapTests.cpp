@@ -54,9 +54,11 @@ TEST_F(TileMapTest, tileMapAdditionThrowsWhenPositionIsInvalid)
 {
     auto tile1 = std::make_unique<NiceMock<TileMock>>();
     auto tile2 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile1, getPosition()).WillOnce(Return(invalidPosition));
+    EXPECT_CALL(*tile2, getPosition()).WillOnce(Return(negativePosition));
 
-    EXPECT_THROW(sut.addTile(std::move(tile1), invalidPosition), std::out_of_range);
-    EXPECT_THROW(sut.addTile(std::move(tile2), negativePosition), std::out_of_range);
+    EXPECT_THROW(sut.addTile(std::move(tile1)), std::out_of_range);
+    EXPECT_THROW(sut.addTile(std::move(tile2)), std::out_of_range);
 }
 
 TEST_F(TileMapTest, tileMapNotEmptyAtPositionWhereTileWasAdded)
@@ -64,7 +66,8 @@ TEST_F(TileMapTest, tileMapNotEmptyAtPositionWhereTileWasAdded)
     const sf::Vector2i notRandomTilePosition{72, 72};
     auto tile = std::make_unique<NiceMock<TileMock>>();
 
-    sut.addTile(std::move(tile), notRandomTilePosition);
+    EXPECT_CALL(*tile, getPosition()).WillOnce(Return(notRandomTilePosition));
+    sut.addTile(std::move(tile));
     EXPECT_FALSE(sut.isEmptyAt(notRandomTilePosition));
 }
 
@@ -72,8 +75,9 @@ TEST_F(TileMapTest, tileMapEmptyAtPositionWhereTileWasRemoved)
 {
     const sf::Vector2i notRandomTilePosition{72, 72};
     auto tile = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile, getPosition()).WillOnce(Return(notRandomTilePosition));
 
-    sut.addTile(std::move(tile), notRandomTilePosition);
+    sut.addTile(std::move(tile));
     EXPECT_FALSE(sut.isEmptyAt(notRandomTilePosition));
 
     sut.removeTile(notRandomTilePosition);
@@ -86,15 +90,20 @@ TEST_F(TileMapTest, tileMapCannotAddMoreThanThreeTilesToAField)
     auto tile2 = std::make_unique<NiceMock<TileMock>>();
     auto tile3 = std::make_unique<NiceMock<TileMock>>();
     auto tile4 = std::make_unique<NiceMock<TileMock>>();
+    EXPECT_CALL(*tile1, getPosition()).WillOnce(Return(validPosition));
+    EXPECT_CALL(*tile2, getPosition()).WillOnce(Return(validPosition));
+    EXPECT_CALL(*tile3, getPosition()).WillOnce(Return(validPosition));
+    EXPECT_CALL(*tile4, getPosition()).WillOnce(Return(validPosition));
+
     EXPECT_CALL(*tile1, drawTo(A<::Types::Window&>()));
     EXPECT_CALL(*tile2, drawTo(A<::Types::Window&>()));
     EXPECT_CALL(*tile3, drawTo(A<::Types::Window&>()));
     EXPECT_CALL(*tile4, drawTo(A<::Types::Window&>())).Times(0);
 
-    sut.addTile(std::move(tile1), validPosition);
-    sut.addTile(std::move(tile2), validPosition);
-    sut.addTile(std::move(tile3), validPosition);
-    sut.addTile(std::move(tile4), validPosition);
+    sut.addTile(std::move(tile1));
+    sut.addTile(std::move(tile2));
+    sut.addTile(std::move(tile3));
+    sut.addTile(std::move(tile4));
 
     sut.drawTo(window);
 }
@@ -105,19 +114,25 @@ TEST_F(TileMapTest, tileMapUpdatesTilesAtDifferentFields)
     auto tile2 = std::make_unique<NiceMock<TileMock>>();
     auto tile3 = std::make_unique<NiceMock<TileMock>>();
     auto tile4 = std::make_unique<NiceMock<TileMock>>();
-    EXPECT_CALL(*tile1, drawTo(A<::Types::Window&>()));
-    EXPECT_CALL(*tile2, drawTo(A<::Types::Window&>()));
-    EXPECT_CALL(*tile3, drawTo(A<::Types::Window&>()));
-    EXPECT_CALL(*tile4, drawTo(A<::Types::Window&>()));
 
     const sf::Vector2i position1{0, 0};
     const sf::Vector2i position2{70, 70};
     const sf::Vector2i position3{0, 120};
     const sf::Vector2i position4{280, 460};
-    sut.addTile(std::move(tile1), position1);
-    sut.addTile(std::move(tile2), position2);
-    sut.addTile(std::move(tile3), position3);
-    sut.addTile(std::move(tile4), position4);
+    EXPECT_CALL(*tile1, getPosition()).WillOnce(Return(position1));
+    EXPECT_CALL(*tile2, getPosition()).WillOnce(Return(position2));
+    EXPECT_CALL(*tile3, getPosition()).WillOnce(Return(position3));
+    EXPECT_CALL(*tile4, getPosition()).WillOnce(Return(position4));
+
+    EXPECT_CALL(*tile1, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile2, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile3, drawTo(A<::Types::Window&>()));
+    EXPECT_CALL(*tile4, drawTo(A<::Types::Window&>()));
+
+    sut.addTile(std::move(tile1));
+    sut.addTile(std::move(tile2));
+    sut.addTile(std::move(tile3));
+    sut.addTile(std::move(tile4));
 
     sut.drawTo(window);
 }

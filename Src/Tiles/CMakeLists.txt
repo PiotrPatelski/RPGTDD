@@ -3,6 +3,7 @@ set(MODULE_NAME Tiles)
 set(SOURCES
     Source/GameMapManager.cpp
     Source/TilePositionGenerator.cpp
+    Source/TileBuilder.cpp
     Source/TileField.cpp
     Source/TileMap.cpp
     Source/Tile.cpp

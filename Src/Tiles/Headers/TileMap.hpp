@@ -16,7 +16,7 @@ public:
     virtual ~TileMap() = default;
     virtual bool isEmptyAt(const sf::Vector2i&) const;
     virtual bool isValidPosition(const sf::Vector2i&) const;
-    virtual void addTile(std::unique_ptr<Tile>, const sf::Vector2i&);
+    virtual void addTile(std::unique_ptr<Tile>);
     virtual void removeTile (const sf::Vector2i&);
     virtual void update();
     virtual void drawTo(Types::Window&);

@@ -5,7 +5,8 @@ set(SOURCES
     TileFieldTests.cpp
     TileMapTests.cpp
     TilePositionGeneratorTests.cpp
-    TileTests.cpp)
+    TileTests.cpp
+    TileBuilderTests.cpp)
 
 add_executable(
     ${MODULE_NAME}

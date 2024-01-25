@@ -42,14 +42,15 @@ bool TileMap::isValidPosition(const sf::Vector2i& position) const
     return isXInRange and isYInRange and isNotNegative;
 }
 
-void TileMap::addTile(std::unique_ptr<Tile> tile, const sf::Vector2i& position)
+void TileMap::addTile(std::unique_ptr<Tile> tile)
 {
+    const auto position = tile->getPosition();
     const uint xIndex = calculateIndex(position.x);
-
     const uint yIndex = calculateIndex(position.y);//Later to add validator class for checks
 
-    if(not map.at(xIndex).at(yIndex).isFull());
-        map.at(xIndex).at(yIndex).pushTile(std::move(tile));
+    auto& targetMapField = map.at(xIndex).at(yIndex);
+    if(not targetMapField.isFull());
+        targetMapField.pushTile(std::move(tile));
 }
 
 void TileMap::removeTile(const sf::Vector2i& position)

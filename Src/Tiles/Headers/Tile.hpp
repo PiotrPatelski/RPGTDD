@@ -21,6 +21,7 @@ public:
         sprite.setColor(sf::Color(0, 255, 0)); //TMP
     }
     virtual ~Tile() = default;
+    virtual sf::Vector2i getPosition() const;
     virtual void setPosition(const sf::Vector2i&);
     virtual void drawTo(Types::Window&);
 private:

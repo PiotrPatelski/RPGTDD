@@ -14,4 +14,9 @@ void Tile::drawTo(Types::Window& window)
     window.draw(sprite);
 }
 
+sf::Vector2i Tile::getPosition() const
+{
+    return static_cast<sf::Vector2i>(sprite.getPosition());
+}
+
 }

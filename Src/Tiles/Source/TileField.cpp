@@ -31,11 +31,13 @@ bool TileField::isFull() const
 
 void TileField::pushTile(std::unique_ptr<Tile> tile)
 {
-    tile->setPosition(fieldPosition);
     auto firstEmptyIndex = std::find_if(layers.begin(), layers.end(),
         [](const auto& layer){return layer == nullptr;});
     if(firstEmptyIndex != std::end(layers))
+    {
+        tile->setPosition(fieldPosition);
         *firstEmptyIndex = std::move(tile);
+    }
 }
 
 void TileField::popTile()
@@ -64,6 +66,7 @@ TileField& TileField::operator=(TileField&& other)
 {
     assert(layers.size() == other.layers.size());
     layers = std::move(other.layers);
+    fieldPosition = other.fieldPosition;
     return *this;
 }
 
