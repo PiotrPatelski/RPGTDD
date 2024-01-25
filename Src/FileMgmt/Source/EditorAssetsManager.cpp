@@ -7,11 +7,12 @@ EditorAssetsManager::EditorAssetsManager()
 {
     std::cout<<"EditorAssetsManager"<<std::endl;
     fetchFontsFromFiles();
+    fetchTexturesFromFiles();
 }
 
 void EditorAssetsManager::fetchTexturesFromFiles()
 {
-
+    textures.emplace("TILESHEET", File<sf::Texture>(buildPath + "/Assets/Textures/Tilesheets/tilesheet4.png"));
     std::cout << "Initialized Editor Textures..." << std::endl;
 }
 

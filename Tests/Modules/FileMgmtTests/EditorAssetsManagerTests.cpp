@@ -31,7 +31,15 @@ TEST_F(EditorAssetsManagerTest, editorAssetsManagerGetsValidFontWhenValidPathIsP
 {
     AssetsManager::setBuildPath(TEST_PATH);
     auto sut = std::make_unique<EditorAssetsManager>();
+    ASSERT_NO_THROW(sut->getFont("MENU_BUTTON"));
     ASSERT_EQ(sut->getFont("MENU_BUTTON").getInfo().family, "xBONES");
+}
+
+TEST_F(EditorAssetsManagerTest, editorAssetsManagerGetsValidTextureWhenValidPathIsProvided)
+{
+    AssetsManager::setBuildPath(TEST_PATH);
+    auto sut = std::make_unique<EditorAssetsManager>();
+    ASSERT_NO_THROW(sut->getTexture("TILESHEET"));
 }
 
 }

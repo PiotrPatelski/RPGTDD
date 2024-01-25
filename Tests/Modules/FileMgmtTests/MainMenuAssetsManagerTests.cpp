@@ -31,6 +31,7 @@ TEST_F(MainMenuAssetsManagerTest, mainMenuAssetsManagerGetsValidFontWhenValidPat
 {
     AssetsManager::setBuildPath(TEST_PATH);
     auto sut = std::make_unique<MainMenuAssetsManager>();
+    ASSERT_NO_THROW(sut->getFont("MENU_BUTTON"));
     ASSERT_EQ(sut->getFont("MENU_BUTTON").getInfo().family, "xBONES");
 }
 
