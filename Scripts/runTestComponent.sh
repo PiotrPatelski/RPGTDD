@@ -13,3 +13,18 @@ openTestComponentWithCheck()
         echo "$exePath has not been found... aborting";
     fi
 }
+
+runTestCoverage()
+{
+    buildPath=`dirname $(realpath $0)`/../build/
+    if test -e "$buildPath";
+    then
+        echo "$buildPath exists";
+        cd $buildPath;
+        LIBGL_ALWAYS_SOFTWARE=1 make $1;
+        cd $buildPath/$1;
+        explorer.exe .;
+    else
+        echo "$buildPath has not been found... aborting";
+    fi
+}
