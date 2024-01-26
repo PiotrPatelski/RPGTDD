@@ -21,7 +21,7 @@ public:
 
     virtual const bool isReadyToChange() const = 0;
     virtual std::unique_ptr<IState> getNextState() = 0;
-    virtual std::shared_ptr<Core::IConfigManager> getConfig() = 0;
+    virtual std::shared_ptr<FileMgmt::IConfigManager> getConfig() = 0;
 
     virtual void update(const Types::Window&, const float) = 0;
     virtual void drawOutput(Types::Window&) = 0;
@@ -31,7 +31,7 @@ class State : public IState
 {
 public:
     State(
-        std::shared_ptr<Core::IConfigManager>,
+        std::shared_ptr<FileMgmt::IConfigManager>,
         std::unique_ptr<FileMgmt::AssetsManager>);
     virtual ~State(){}
 
@@ -40,12 +40,12 @@ public:
 
     virtual const bool isReadyToChange() const override {return readyToChange;}
     virtual std::unique_ptr<IState> getNextState() override {return std::move(nextState);}
-    virtual std::shared_ptr<Core::IConfigManager> getConfig() override {return configManager;}
+    virtual std::shared_ptr<FileMgmt::IConfigManager> getConfig() override {return configManager;}
 protected:
     bool readyToChange{false};
     std::unique_ptr<IState> nextState;
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager;
-    std::shared_ptr<Core::IConfigManager> configManager;
+    std::shared_ptr<FileMgmt::IConfigManager> configManager;
 };
 
 }

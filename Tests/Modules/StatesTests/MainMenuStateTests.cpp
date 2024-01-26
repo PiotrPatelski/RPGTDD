@@ -27,7 +27,7 @@ struct MainMenuStateTest : public testing::Test
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
-        configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
+        configManager = std::make_shared<NiceMock<FileMgmt::ConfigManagerMock>>();
         mainMenuAssetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         mainMenuGuiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
         ON_CALL(*mainMenuAssetsManager, getTexture(_)).WillByDefault(Return(&texture));
@@ -35,15 +35,17 @@ struct MainMenuStateTest : public testing::Test
         dummyConfig.resolution = sf::VideoMode(480, 480);
         ON_CALL(*configManager, getGraphics).WillByDefault(ReturnRef(dummyConfig));
         ON_CALL(*configManager, getKeyboard).WillByDefault(ReturnRef(keyboard));
+        ON_CALL(*configManager, getTileIdConfig).WillByDefault(ReturnRef(tileIds));
     }
     sf::Texture texture;
     sf::Font font;
-    std::shared_ptr<Core::ConfigManagerMock> configManager;
+    std::shared_ptr<FileMgmt::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> mainMenuAssetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> mainMenuGuiManager;
     NiceMock<::Types::WindowMock> window;
     FileMgmt::GraphicsConfig dummyConfig;
     FileMgmt::KeyboardConfig keyboard;
+    std::vector<std::string> tileIds;
 };
 
 TEST_F(MainMenuStateTest, stateIsDoneWhenIsReadyToChange)
@@ -233,7 +235,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsGameStateWhenToGameButton
         .WillOnce(Return(ByMove(std::move(toEditorButton))))
         .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
-        std::make_shared<Core::ConfigManager>(),
+        std::make_shared<FileMgmt::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
             sf::VideoMode(0, 0),
@@ -254,7 +256,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsSettingsStateWhenToSettin
         .WillOnce(Return(ByMove(std::move(toEditorButton))))
         .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
-        std::make_shared<Core::ConfigManager>(),
+        std::make_shared<FileMgmt::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
             sf::VideoMode(0, 0),
@@ -275,7 +277,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsEditorStateWhenToEditorBu
         .WillOnce(Return(ByMove(std::move(toEditorButton))))
         .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
-        std::make_shared<Core::ConfigManager>(),
+        std::make_shared<FileMgmt::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
             sf::VideoMode(0, 0),
@@ -296,7 +298,7 @@ TEST_F(MenuStateButtonActionsTest, mainMenuStateAssignsNullptrWhenToExitButtonIs
         .WillOnce(Return(ByMove(std::move(toEditorButton))))
         .WillOnce(Return(ByMove(std::move(toExitButton))));
     auto sut = std::make_unique<MainMenuState>(
-        std::make_shared<Core::ConfigManager>(),
+        std::make_shared<FileMgmt::ConfigManager>(),
         std::make_unique<FileMgmt::MainMenuAssetsManager>(),
         std::make_unique<Gui::MainMenuGuiManager>(
             sf::VideoMode(0, 0),

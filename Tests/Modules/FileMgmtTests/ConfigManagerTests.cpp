@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <ConfigManager.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
@@ -34,7 +34,7 @@ struct ConfigManagerTest : public testing::Test
             ctxSettings
         };
         FileMgmt::IniParser parser;
-        parser.setGraphicsConfig(defaultTestConfig);
+        parser.overwriteGraphicsConfig(defaultTestConfig);
     }
 };
 
@@ -49,6 +49,14 @@ TEST_F(ConfigManagerTest, configIsModifiedWithDiffOnlyAfterApplyCall)
     sut = std::make_unique<ConfigManager>();
     ASSERT_EQ(sut->getGraphics().resolution.width, requestedResolution.width);
     ASSERT_EQ(sut->getGraphics().resolution.height, requestedResolution.height);
+}
+
+TEST_F(ConfigManagerTest, configManagerReturnsValidTileIdVector)
+{
+    sut = std::make_unique<ConfigManager>();
+    const auto result = sut->getTileIdConfig();
+    std::vector<std::string> matcher{"TILE1", "TILE2", "TILE3", "TILE4"};
+    ASSERT_EQ(result, matcher);
 }
 
 }

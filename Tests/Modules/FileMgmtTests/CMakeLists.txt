@@ -3,7 +3,8 @@ set(MODULE_NAME FileMgmtTests)
 set(SOURCES
     IniParserTests.cpp
     MainMenuAssetsManagerTests.cpp
-    EditorAssetsManagerTests.cpp)
+    EditorAssetsManagerTests.cpp
+    ConfigManagerTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 

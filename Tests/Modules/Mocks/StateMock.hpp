@@ -22,7 +22,7 @@ public:
     MOCK_METHOD(void, setNextState, (std::unique_ptr<IState>), (override));
     MOCK_METHOD(std::unique_ptr<IState>, getNextState, (), (override));
     MOCK_METHOD(const bool, isReadyToChange, (), (const override));
-    MOCK_METHOD(std::shared_ptr<Core::IConfigManager>, getConfig, (), ());
+    MOCK_METHOD(std::shared_ptr<FileMgmt::IConfigManager>, getConfig, (), ());
     MOCK_METHOD(void, drawOutput, (::Types::Window&), (override));
     MOCK_METHOD(void, update, (const ::Types::Window&, const float), (override));
 };
@@ -32,14 +32,14 @@ class MenuStateMock : public MenuState
 public:
     MenuStateMock()
     : MenuState(
-        std::make_shared<NiceMock<Core::ConfigManagerMock>>(),
+        std::make_shared<NiceMock<FileMgmt::ConfigManagerMock>>(),
         std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>())
     {}
     MOCK_METHOD(void, finishState, (), ());
     MOCK_METHOD(void, setNextState, (std::unique_ptr<IState>), (override));
     MOCK_METHOD(std::unique_ptr<IState>, getNextState, (), (override));
     MOCK_METHOD(const bool, isReadyToChange, (), (const override));
-    MOCK_METHOD(std::shared_ptr<Core::IConfigManager>, getConfig, (), ());
+    MOCK_METHOD(std::shared_ptr<FileMgmt::IConfigManager>, getConfig, (), ());
     MOCK_METHOD(void, drawOutput, (::Types::Window&), (override));
     MOCK_METHOD(void, update, (const ::Types::Window&, const float), (override));
 };
@@ -49,14 +49,14 @@ class MapStateMock : public MapState
 public:
     MapStateMock()
     : MapState(
-        std::make_shared<NiceMock<Core::ConfigManagerMock>>(),
+        std::make_shared<NiceMock<FileMgmt::ConfigManagerMock>>(),
         std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>())
     {}
     MOCK_METHOD(void, finishState, (), ());
     MOCK_METHOD(void, setNextState, (std::unique_ptr<IState>), (override));
     MOCK_METHOD(std::unique_ptr<IState>, getNextState, (), (override));
     MOCK_METHOD(const bool, isReadyToChange, (), (const override));
-    MOCK_METHOD(std::shared_ptr<Core::IConfigManager>, getConfig, (), ());
+    MOCK_METHOD(std::shared_ptr<FileMgmt::IConfigManager>, getConfig, (), ());
     MOCK_METHOD(void, drawOutput, (::Types::Window&), (override));
     MOCK_METHOD(void, update, (const ::Types::Window&, const float), (override));
     MOCK_METHOD(void, togglePause, (), (override));

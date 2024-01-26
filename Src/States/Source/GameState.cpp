@@ -4,7 +4,7 @@ namespace States
 {
 
 GameState::GameState(
-    std::shared_ptr<Core::IConfigManager> config,
+    std::shared_ptr<FileMgmt::IConfigManager> config,
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
     std::unique_ptr<Gui::GuiManager> guiManager)
     : MapState(

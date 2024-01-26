@@ -4,32 +4,19 @@
 namespace FileMgmt
 {
 
-class IIniParser
-{
-public:
-    IIniParser(){}
-    virtual ~IIniParser(){}
-
-    virtual GraphicsConfig getGraphicsConfig() = 0;
-    virtual std::unique_ptr<KeyMap> getKeyboardConfig() = 0;
-    virtual std::unique_ptr<KeyMap> getMainMenuKeys(const KeyMap&) = 0;
-    virtual std::unique_ptr<KeyMap> getEditorKeys(const KeyMap&) = 0;
-
-    virtual void setGraphicsConfig(const GraphicsConfig&) = 0;
-};
-
-class IniParser : public IIniParser
+class IniParser
 {
 public:
     IniParser(){}
-    virtual ~IniParser(){}
+    ~IniParser(){}
 
-    virtual GraphicsConfig getGraphicsConfig() override;
-    virtual std::unique_ptr<KeyMap> getKeyboardConfig() override;
-    virtual std::unique_ptr<KeyMap> getMainMenuKeys(const KeyMap&) override;
-    virtual std::unique_ptr<KeyMap> getEditorKeys(const KeyMap&) override;
+    GraphicsConfig getGraphicsConfig();
+    std::unique_ptr<KeyMap> getKeyboardConfig();
+    std::unique_ptr<KeyMap> getMainMenuKeys(const KeyMap&);
+    std::unique_ptr<KeyMap> getEditorKeys(const KeyMap&);
+    std::vector<std::string> getTileIdConfig();
 
-    virtual void setGraphicsConfig(const GraphicsConfig&) override;
+    void overwriteGraphicsConfig(const GraphicsConfig&);
     static void setBuildPath(const std::string& path) {buildPath = path;}
 private:
     std::ifstream openFileForPull(const std::string&);

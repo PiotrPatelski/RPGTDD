@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 #include <ConfigManager.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 using ::testing::Test;
@@ -16,6 +16,7 @@ public:
     MOCK_METHOD(void, applyDiff, (), (override));
     MOCK_METHOD((const FileMgmt::GraphicsConfig&), getGraphics, (), (const, override));
     MOCK_METHOD((const FileMgmt::KeyboardConfig&), getKeyboard, (), (const, override));
+    MOCK_METHOD((const std::vector<std::string>&), getTileIdConfig, (), (const, override));
 };
 
 }

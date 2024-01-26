@@ -1,6 +1,6 @@
 #include <ConfigManager.hpp>
 
-namespace Core
+namespace FileMgmt
 {
 
 ConfigManager::ConfigManager()
@@ -11,13 +11,13 @@ ConfigManager::ConfigManager()
     keyboard.setSupportedKeyboard(parser.getKeyboardConfig());
     keyboard.setMainMenuKeyboard(parser.getMainMenuKeys(keyboard.getSupportedKeyboard()));
     keyboard.setEditorKeyboard(parser.getEditorKeys(keyboard.getSupportedKeyboard()));
+    tileIds = parser.getTileIdConfig();
 }
 
 void ConfigManager::applyDiff()
 {
     graphics = diff;
-    FileMgmt::IniParser parser;
-    parser.setGraphicsConfig(graphics);
+    FileMgmt::IniParser{}.overwriteGraphicsConfig(graphics);
 }
 
 }

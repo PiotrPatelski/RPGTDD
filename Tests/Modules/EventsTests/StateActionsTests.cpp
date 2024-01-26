@@ -17,12 +17,13 @@ struct StateActionsTest : public testing::Test
     StateActionsTest()
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
-        configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
+        configManager = std::make_shared<NiceMock<FileMgmt::ConfigManagerMock>>();
         graphicsConfig.resolution = sf::VideoMode(480, 480);
     }
-    std::shared_ptr<NiceMock<Core::ConfigManagerMock>> configManager;
+    std::shared_ptr<NiceMock<FileMgmt::ConfigManagerMock>> configManager;
     FileMgmt::GraphicsConfig graphicsConfig;
     FileMgmt::KeyboardConfig keyboardConfig;
+    std::vector<std::string> tileIds;
 };
 
 TEST_F(StateActionsTest, toMainMenuStateActionWillFinishCurrentStateAndCreateMainMenuStateAsNextState)
@@ -61,6 +62,7 @@ TEST_F(StateActionsTest, toEditorStateActionWillFinishCurrentStateAndCreateEdito
     EXPECT_CALL(state, getConfig()).WillOnce(Return(configManager));
     EXPECT_CALL(*configManager, getGraphics()).WillOnce(ReturnRef(graphicsConfig));
     EXPECT_CALL(*configManager, getKeyboard()).WillOnce(ReturnRef(keyboardConfig));
+    EXPECT_CALL(*configManager, getTileIdConfig()).WillOnce(ReturnRef(tileIds));
     EXPECT_CALL(state, setNextState(NotNull()));
     EXPECT_CALL(state, finishState());
     ASSERT_NO_THROW(Events::ToEditorState()(state));

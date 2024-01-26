@@ -6,7 +6,6 @@ set(SOURCES
     Source/Clock.cpp
     Source/StateMachine.cpp
     Source/Engine.cpp
-    Source/ConfigManager.cpp
     )
 
 set(HEADERS
@@ -15,7 +14,6 @@ set(HEADERS
     Headers/Clock.hpp
     Headers/StateMachine.hpp
     Headers/Engine.hpp
-    Headers/ConfigManager.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

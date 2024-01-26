@@ -24,7 +24,7 @@ struct SettingsStateTest : public testing::Test
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
-        configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
+        configManager = std::make_shared<NiceMock<FileMgmt::ConfigManagerMock>>();
         settingsAssetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         settingsGuiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
         ON_CALL(*settingsAssetsManager, getTexture(_)).WillByDefault(Return(&texture));
@@ -34,7 +34,7 @@ struct SettingsStateTest : public testing::Test
     }
     sf::Texture texture;
     sf::Font font;
-    std::shared_ptr<Core::ConfigManagerMock> configManager;
+    std::shared_ptr<FileMgmt::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> settingsAssetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> settingsGuiManager;
     FileMgmt::GraphicsConfig dummyConfig;

@@ -7,8 +7,7 @@ set(SOURCES
     WindowTests.cpp
     GameLoopTests.cpp
     CoreBuilderTests.cpp
-    StateMachineTests.cpp
-    ConfigManagerTests.cpp)
+    StateMachineTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 

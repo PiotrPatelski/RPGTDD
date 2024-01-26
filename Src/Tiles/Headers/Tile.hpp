@@ -12,15 +12,21 @@ namespace Tiles
 class Tile
 {
 public:
-    Tile()
-    {
-        //TODO remove placeholder code
-        sf::Texture texture; //TMP
-        texture.create(64, 64); //TMP
-        sprite.setTexture(texture); //TMP
-        sprite.setColor(sf::Color(0, 255, 0)); //TMP
-    }
+    Tile() = default;
     virtual ~Tile() = default;
+    virtual sf::Vector2i getPosition() const = 0;
+    virtual void setPosition(const sf::Vector2i&) = 0;
+    virtual void drawTo(Types::Window&) = 0;
+};
+
+class NormalTile : public Tile
+{
+public:
+    NormalTile(const sf::Texture* texture)
+    {
+        sprite.setTexture(*texture);
+    }
+    virtual ~NormalTile() = default;
     virtual sf::Vector2i getPosition() const;
     virtual void setPosition(const sf::Vector2i&);
     virtual void drawTo(Types::Window&);

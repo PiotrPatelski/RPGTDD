@@ -13,7 +13,9 @@ public:
     GameMapManager();
     virtual ~GameMapManager() = default;
     virtual std::unique_ptr<TileMap> createTileMap() override;
-    virtual std::unique_ptr<TileBuilder> createTileBuilder(const FileMgmt::AssetsManager&) override;
+    virtual std::unique_ptr<TileBuilder> createTileBuilder(
+        const FileMgmt::AssetsManager&,
+        const FileMgmt::IConfigManager&) override;
 private:
     std::unique_ptr<TileBuilder> defaultTileBuilder;
 };

@@ -54,7 +54,7 @@ void Engine::launchWindow(const FileMgmt::GraphicsConfig& config)
     window->openWithSettings(config);
 }
 
-void Engine::runInitialState(std::shared_ptr<ConfigManager> configManager)
+void Engine::runInitialState(std::shared_ptr<FileMgmt::IConfigManager> configManager)
 {
     stateMachine->setState(
         std::make_shared<States::MainMenuState>(

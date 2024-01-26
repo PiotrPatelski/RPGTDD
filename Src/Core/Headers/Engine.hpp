@@ -19,7 +19,7 @@ public:
     virtual bool updateState() = 0;
     virtual void launchWindow(const FileMgmt::GraphicsConfig&) = 0;
     virtual void closeWindow() = 0;
-    virtual void runInitialState(std::shared_ptr<ConfigManager>) = 0;
+    virtual void runInitialState(std::shared_ptr<FileMgmt::IConfigManager>) = 0;
     virtual void displayRenderedFrame() = 0;
 private:
 
@@ -35,7 +35,7 @@ public:
     virtual bool updateState();
     virtual void launchWindow(const FileMgmt::GraphicsConfig&);
     virtual void closeWindow();
-    virtual void runInitialState(std::shared_ptr<ConfigManager>);
+    virtual void runInitialState(std::shared_ptr<FileMgmt::IConfigManager>);
     virtual void displayRenderedFrame();
 private:
     std::unique_ptr<Types::Window> window;

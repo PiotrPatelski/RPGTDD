@@ -26,7 +26,7 @@ class EditorState : public MapState
 {
 public:
     EditorState(
-        std::shared_ptr<Core::IConfigManager>,
+        std::shared_ptr<FileMgmt::IConfigManager>,
         std::unique_ptr<FileMgmt::AssetsManager>,
         std::unique_ptr<Gui::GuiManager>,
         std::unique_ptr<Tiles::TileMapManager>,

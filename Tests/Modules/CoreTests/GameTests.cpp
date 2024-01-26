@@ -3,7 +3,6 @@
 #include <Game.hpp>
 #include "ClockMock.hpp"
 #include "EngineMock.hpp"
-#include "IniParserMock.hpp"
 
 #define TEST_PATH _PROJECT_ROOT_FOLDER"/TestResources"
 
@@ -19,7 +18,6 @@ struct GameTest : public testing::Test
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
     }
     std::unique_ptr<NiceMock<EngineMock>> engine = std::make_unique<NiceMock<EngineMock>>();
-    NiceMock<FileMgmt::IniParserMock> iniParser;
     std::unique_ptr<IGame> sut;
 };
 
@@ -48,7 +46,7 @@ TEST_F(GameTest, engineLaunchesWindowWhenCalledByGame)
 
 TEST_F(GameTest, engineActivatesStateMachineWhenGameItsRun)
 {
-    EXPECT_CALL(*engine, runInitialState(A<std::shared_ptr<ConfigManager>>()));
+    EXPECT_CALL(*engine, runInitialState(A<std::shared_ptr<FileMgmt::IConfigManager>>()));
     sut = std::make_unique<Game>(std::move(engine));
     sut->startStateMachine();
 }

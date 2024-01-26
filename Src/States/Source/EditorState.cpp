@@ -7,7 +7,7 @@ namespace States
 {
 
 EditorState::EditorState(
-    std::shared_ptr<Core::IConfigManager> config,
+    std::shared_ptr<FileMgmt::IConfigManager> config,
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
     std::unique_ptr<Gui::GuiManager> guiManager,
     std::unique_ptr<Tiles::TileMapManager> tileMapManager,
@@ -20,7 +20,7 @@ EditorState::EditorState(
     gui = guiManager->createGui(State::assetsManager->getFont("MENU_BUTTON"));
 
     tileMap = tileMapManager->createTileMap();
-    currentTileBuilder = tileMapManager->createTileBuilder(*State::assetsManager);
+    currentTileBuilder = tileMapManager->createTileBuilder(*State::assetsManager, *State::configManager);
 }
 
 void EditorState::update(const Types::Window& window, const float deltaTime)

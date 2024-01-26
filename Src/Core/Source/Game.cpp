@@ -5,9 +5,8 @@ namespace Core
 {
 
 Game::Game(std::unique_ptr<IEngine> engine)
-:   IGame::IGame(),
-    engine(std::move(engine)),
-    config(std::make_shared<ConfigManager>())
+:   engine(std::move(engine)),
+    config(std::make_shared<FileMgmt::ConfigManager>())
 {}
 
 void Game::startStateMachine()

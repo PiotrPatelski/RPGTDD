@@ -9,13 +9,13 @@ using namespace ::testing;
 
 struct TileBuilderTest : public testing::Test
 {
-
+    const sf::Texture textureSheet;
+    const std::vector<std::string> tileIds;
 };
 
 TEST_F(TileBuilderTest, buildsTileWithGivenPosition)
 {
-    const sf::Texture textureSheet;
-    DefaultTileBuilder sut(&textureSheet);
+    DefaultTileBuilder sut(&textureSheet, tileIds);
 
     const sf::Vector2i position{20, 20};
     auto result = sut.atPosition(position).build();

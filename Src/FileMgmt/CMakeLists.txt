@@ -5,6 +5,7 @@ set(SOURCES
     Source/AssetsManager.cpp
     Source/MainMenuAssetsManager.cpp
     Source/EditorAssetsManager.cpp
+    Source/ConfigManager.cpp
     )
 
 set(HEADERS
@@ -14,6 +15,7 @@ set(HEADERS
     Headers/EditorAssetsManager.hpp
     Headers/GameAssetsManager.hpp
     Headers/Config.hpp
+    Headers/ConfigManager.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

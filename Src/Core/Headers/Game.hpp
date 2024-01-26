@@ -36,7 +36,7 @@ public:
     virtual void updateClock() override;
     virtual void render() override;
 private:
-    std::shared_ptr<ConfigManager> config;
+    std::shared_ptr<FileMgmt::IConfigManager> config;
     std::unique_ptr<IEngine> engine;
 };
 

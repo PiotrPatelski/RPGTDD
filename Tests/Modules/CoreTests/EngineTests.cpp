@@ -24,13 +24,13 @@ struct EngineTest : public testing::Test
     {
         FileMgmt::AssetsManager::setBuildPath(TEST_PATH);
         FileMgmt::IniParser::setBuildPath(TEST_PATH);
-        configManager = std::make_shared<ConfigManager>();
+        configManager = std::make_shared<FileMgmt::ConfigManager>();
         window = std::make_unique<NiceMock<::Types::WindowMock>>();
         clock = std::make_unique<NiceMock<ClockMock>>();
         stateMachine = std::make_unique<NiceMock<StateMachineMock>>();
         assetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
     }
-    std::shared_ptr<ConfigManager> configManager;
+    std::shared_ptr<FileMgmt::IConfigManager> configManager;
     std::unique_ptr<NiceMock<::Types::WindowMock>> window;
     std::unique_ptr<NiceMock<ClockMock>> clock;
     std::unique_ptr<NiceMock<StateMachineMock>> stateMachine;

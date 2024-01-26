@@ -18,15 +18,17 @@ public:
 class DefaultTileBuilder : public TileBuilder
 {
 public:
-    DefaultTileBuilder(const sf::Texture* textureSheet)
-    {}
+    DefaultTileBuilder(const sf::Texture*, const std::vector<std::string>&);
     virtual ~DefaultTileBuilder()
     {}
 
-    virtual DefaultTileBuilder& atPosition(const sf::Vector2i& position);
+    virtual DefaultTileBuilder& atPosition(const sf::Vector2i&);
     virtual std::unique_ptr<Tile> build();
 private:
     sf::Vector2i currentPosition;
+    const sf::Texture* tileTextureSheet;
+
+    std::map<std::string, sf::Texture> tileTextures;
 };
 
 }

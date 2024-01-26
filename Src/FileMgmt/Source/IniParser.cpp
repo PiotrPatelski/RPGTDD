@@ -31,7 +31,7 @@ std::ofstream IniParser::openFileForPush(const std::string& path)
     return std::move(targetFile);
 }
 
-void IniParser::setGraphicsConfig(const GraphicsConfig& config)
+void IniParser::overwriteGraphicsConfig(const GraphicsConfig& config)
 {
     auto sourceFile = openFileForPush("/Config/graphics.ini");
 
@@ -93,6 +93,18 @@ std::unique_ptr<KeyMap> IniParser::getEditorKeys(const KeyMap& availableKeys)
 
     sourceFile.close();
     return std::move(keyboard);
+}
+
+std::vector<std::string> IniParser::getTileIdConfig()
+{
+    auto sourceFile = openFileForPull("/Config/tile_ids.ini");
+    std::vector<std::string> tileIdConfig;
+    std::string tileId;
+    while (sourceFile >> tileId)
+    {
+        tileIdConfig.push_back(tileId);
+    }
+    return std::move(tileIdConfig);
 }
 
 std::unique_ptr<KeyMap> IniParser::parseWithValidation(std::ifstream& file, const KeyMap& availableKeys)

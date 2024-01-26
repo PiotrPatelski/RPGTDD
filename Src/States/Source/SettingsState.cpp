@@ -4,7 +4,7 @@ namespace States
 {
 
 SettingsState::SettingsState(
-    std::shared_ptr<Core::IConfigManager> configManager,
+    std::shared_ptr<FileMgmt::IConfigManager> configManager,
     std::unique_ptr<FileMgmt::AssetsManager> assetsManager,
     std::unique_ptr<Gui::GuiManager> guiManager,
     std::unique_ptr<Events::InputListener> inputListener)

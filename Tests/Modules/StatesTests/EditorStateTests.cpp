@@ -24,7 +24,7 @@ struct EditorStateTest : public testing::Test
 {
     EditorStateTest()
     {
-        configManager = std::make_shared<NiceMock<Core::ConfigManagerMock>>();
+        configManager = std::make_shared<NiceMock<FileMgmt::ConfigManagerMock>>();
         assetsManager = std::make_unique<NiceMock<FileMgmt::AssetsManagerMock>>();
         guiManager = std::make_unique<NiceMock<Gui::GuiManagerMock>>();
         tileMapManager = std::make_unique<NiceMock<Tiles::TileMapManagerMock>>();
@@ -34,7 +34,7 @@ struct EditorStateTest : public testing::Test
         ON_CALL(*assetsManager, getFont(_)).WillByDefault(ReturnRef(font));
         ON_CALL(*guiManager, createGui(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Gui::UserInterfaceMock>>())));
         ON_CALL(*tileMapManager, createTileMap()).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileMapMock>>())));
-        ON_CALL(*tileMapManager, createTileBuilder(_)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileBuilderMock>>())));
+        ON_CALL(*tileMapManager, createTileBuilder(_, _)).WillByDefault(Return(ByMove(std::make_unique<NiceMock<Tiles::TileBuilderMock>>())));
     }
     EditorState createSut()
     {
@@ -45,7 +45,7 @@ struct EditorStateTest : public testing::Test
             std::move(tileMapManager),
             std::move(inputListener));
     }
-    std::shared_ptr<Core::ConfigManagerMock> configManager;
+    std::shared_ptr<FileMgmt::ConfigManagerMock> configManager;
     std::unique_ptr<NiceMock<FileMgmt::AssetsManagerMock>> assetsManager;
     std::unique_ptr<NiceMock<Gui::GuiManagerMock>> guiManager;
     std::unique_ptr<NiceMock<Tiles::TileMapManagerMock>> tileMapManager;
@@ -175,7 +175,7 @@ TEST_F(EditorStateTest, editorStateInitializesTileMapWithManager)
 {
     EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::make_unique<NiceMock<Tiles::TileMapMock>>())));
-    EXPECT_CALL(*tileMapManager, createTileBuilder(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileBuilder(_, _)).WillOnce
         (Return(ByMove(std::make_unique<NiceMock<Tiles::TileBuilderMock>>())));
 
     auto sut = createSut();
@@ -191,7 +191,7 @@ TEST_F(EditorStateTest, editorStateDoesNotAddTileWhenGivenPositionIsInvalid)
     EXPECT_CALL(*tileBuilder, build()).Times(0);
     EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
-    EXPECT_CALL(*tileMapManager, createTileBuilder(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileBuilder(_, _)).WillOnce
         (Return(ByMove(std::move(tileBuilder))));
 
     auto sut = createSut();
@@ -207,7 +207,7 @@ TEST_F(EditorStateTest, editorStateAddsTilesWithTileBuilderAtGivenPositionWhenTh
     EXPECT_CALL(*tileBuilder, build()).WillOnce(Return(ByMove(std::make_unique<NiceMock<Tiles::TileMock>>())));
     EXPECT_CALL(*tileMapManager, createTileMap()).WillOnce
         (Return(ByMove(std::move(tileMap))));
-    EXPECT_CALL(*tileMapManager, createTileBuilder(_)).WillOnce
+    EXPECT_CALL(*tileMapManager, createTileBuilder(_, _)).WillOnce
         (Return(ByMove(std::move(tileBuilder))));
 
     auto sut = createSut();
