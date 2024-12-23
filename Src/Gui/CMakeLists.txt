@@ -32,6 +32,7 @@ set(HEADERS
     Headers/ButtonListBuilder.hpp
     Headers/DropDownListBuilder.hpp
     Headers/DropDownList.hpp
+    Headers/TileSelector.hpp
     )
 
 add_library(${MODULE_NAME} ${SOURCES} ${HEADERS})

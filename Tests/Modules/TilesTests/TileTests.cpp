@@ -15,8 +15,7 @@ struct TileTest : public testing::Test
 
 TEST_F(TileTest, tileFieldDelegatesDrawingToWindow)
 {
-    sf::Texture texture;
-    NormalTile sut(&texture);
+    NormalTile sut(sf::Sprite(sf::Texture{}));
 
     EXPECT_CALL(window, draw(A<const sf::Drawable&>()));
     sut.drawTo(window);

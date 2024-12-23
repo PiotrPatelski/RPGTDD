@@ -1,6 +1,7 @@
 #include <EditorGuiManager.hpp>
 #include <State.hpp>
 #include <ButtonMenu.hpp>
+#include <TileSelector.hpp>
 
 namespace Gui
 {
@@ -8,8 +9,7 @@ std::unique_ptr<Gui::UserInterface> EditorGuiManager::createGui(const sf::Font& 
 {
     std::cout<<"EditorGuiManager::createGui"<<std::endl;
 
-    auto gui = std::make_unique<Gui::EditorGui>();
-    gui->addPauseMenu(createPauseMenu(font));
+    auto gui = std::make_unique<Gui::EditorGui>(createPauseMenu(font), std::make_unique<TileSelector>());
 
     std::cout<<"EditorGuiManager::createGui done"<<std::endl;
     return std::move(gui);

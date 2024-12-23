@@ -5,6 +5,11 @@
 namespace Gui
 {
 
+EditorGui::EditorGui(PauseMenu&& pauseImpl, std::unique_ptr<TileSelector> tileSelectorImpl)
+: pauseMenu{std::move(pauseImpl)},
+  tileSelector(std::move(tileSelectorImpl))
+{}
+
 void EditorGui::acceptRequest(Events::GuiAction& action)
 {
     action.execute(*this);
@@ -18,11 +23,6 @@ void EditorGui::addButton(std::unique_ptr<Button> button, Events::StateAction ac
 void EditorGui::addButtonList(std::unique_ptr<ButtonList> list)
 {
 
-}
-
-void EditorGui::addPauseMenu(PauseMenu&& list)
-{
-    pauseMenu = std::move(list);
 }
 
 std::optional<Events::StateAction> EditorGui::getActiveAction()
@@ -48,10 +48,17 @@ void EditorGui::togglePause()
     pauseMenu.paused = not(pauseMenu.paused);
 }
 
+void EditorGui::toggleTileSelector()
+{
+    tileSelector->toggle();
+}
+
 void EditorGui::update(const sf::Vector2i& currentMousePos)
 {
     if(pauseMenu.paused)
         pauseMenu.impl->update(currentMousePos);
+    else if(tileSelector->isActive())
+        tileSelector->update(currentMousePos);
 }
 
 std::optional<Events::StateAction> EditorGui::pollActionFromButtons()

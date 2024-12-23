@@ -15,7 +15,7 @@ struct GuiActionsTest : public testing::Test
 
 TEST_F(GuiActionsTest, guiIsPausedAfterPauseActionExecutesOnIt)
 {
-    Gui::EditorGui gui;
+    Gui::EditorGui gui(Gui::PauseMenu{}, nullptr);
     EXPECT_FALSE(gui.isPaused());
     TogglePause{}.execute(gui);
     EXPECT_TRUE(gui.isPaused());

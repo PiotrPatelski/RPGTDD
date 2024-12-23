@@ -3,6 +3,7 @@
 #include <StateActions.hpp>
 #include <ButtonList.hpp>
 #include <UserInterface.hpp>
+#include <TileSelector.hpp>
 
 namespace Core
 {
@@ -26,8 +27,7 @@ struct PauseMenu
 class EditorGui : public UserInterface
 {
 public:
-    EditorGui()
-    {}
+    EditorGui(PauseMenu&&, std::unique_ptr<TileSelector>);
     virtual ~EditorGui(){}
     virtual void acceptRequest(Events::GuiAction&) override;
     virtual void addButton(std::unique_ptr<Button>, Events::StateAction) override;
@@ -35,8 +35,8 @@ public:
     virtual std::optional<Events::StateAction> getActiveAction() override;
     virtual void drawTo(Types::Window&) override;
     virtual void update(const sf::Vector2i&) override;
-    virtual void addPauseMenu(PauseMenu&&);
     virtual void togglePause();
+    virtual void toggleTileSelector();
     virtual bool isPaused() const {return pauseMenu.paused;}
 private:
     std::optional<Events::StateAction> pollActionFromButtons();
@@ -44,7 +44,7 @@ private:
     std::vector<ActionButton> buttons;
     std::vector<std::unique_ptr<ButtonList>> dropDownLists;
     PauseMenu pauseMenu;
-
+    std::unique_ptr<TileSelector> tileSelector;
 };
 
 }

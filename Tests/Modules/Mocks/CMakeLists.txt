@@ -20,7 +20,8 @@ set(HEADERS
     ButtonListMock.hpp
     TileMapManagerMock.hpp
     TileBuilderMock.hpp
-    TileMock.hpp)
+    TileMock.hpp
+    TileSelectorMock.hpp)
 
 add_library(Mocks ${HEADERS})
 set_target_properties(Mocks PROPERTIES LINKER_LANGUAGE CXX)

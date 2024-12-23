@@ -15,11 +15,13 @@ void applyEmptyFields(std::vector<TileField>& column, const uint amount, TilePos
 TileMap::TileMap(const uint tileBoxSize, const uint amountOfTilesOnX, const uint amountOfTilesOnY)
 : tileBoxSize{tileBoxSize}
 {
+    std::cout<<"TileMap:: init "<<std::endl;
     TilePositionGenerator positioner{amountOfTilesOnY, tileBoxSize};
 
     map.resize(amountOfTilesOnX);
     for(auto& fieldX : map)
         applyEmptyFields(fieldX, amountOfTilesOnY, positioner);
+    std::cout<<"TileMap:: init done"<<std::endl;
 }
 
 bool TileMap::isEmptyAt(const sf::Vector2i& position) const

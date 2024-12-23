@@ -3,11 +3,6 @@
 #include <ButtonBuilder.hpp>
 #include <Background.hpp>
 
-namespace Core
-{
-class Window;
-}
-
 namespace Gui
 {
 

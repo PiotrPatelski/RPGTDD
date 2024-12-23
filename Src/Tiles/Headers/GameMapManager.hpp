@@ -18,6 +18,7 @@ public:
         const FileMgmt::IConfigManager&) override;
 private:
     std::unique_ptr<TileBuilder> defaultTileBuilder;
+    const uint tileBoxSize;
 };
 
 }

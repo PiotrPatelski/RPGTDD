@@ -13,7 +13,8 @@ set(SOURCES
     EditorGuiManagerTests.cpp
     GameGuiManagerTests.cpp
     DropDownListTests.cpp
-    DropDownListBuilderTests.cpp)
+    DropDownListBuilderTests.cpp
+    TileSelectorTests.cpp)
 
 add_executable(
     ${MODULE_NAME} 

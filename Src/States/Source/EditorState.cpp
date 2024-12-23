@@ -26,7 +26,6 @@ EditorState::EditorState(
 void EditorState::update(const Types::Window& window, const float deltaTime)
 {
     const auto currentMousePosition = window.getMousePosition();
-
     gui->update(currentMousePosition);
     handleAction(gui->getActiveAction());
     handleAction(inputListener->getKeyboardAction());
@@ -59,7 +58,8 @@ void EditorState::togglePause()
 void EditorState::tryTileAdditionAt(const sf::Vector2i& position)
 {
     if(tileMap->isValidPosition(position))
-        tileMap->addTile(currentTileBuilder->atPosition(position).build());
+        tileMap->addTile(currentTileBuilder->atPosition(position).build("INVALID_TILE")); //TODO continue from here impl. with ids from TileSelector once its implemented
+        //CURRENTLY IT THROWS SINCE "INVALID_TILE" IS NOT IN THE MAP
 }
 
 void EditorState::tryTileRemovalAt(const sf::Vector2i& position)

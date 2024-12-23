@@ -22,9 +22,10 @@ public:
 class NormalTile : public Tile
 {
 public:
-    NormalTile(const sf::Texture* texture)
+    NormalTile(const sf::Sprite& sprite)
     {
-        sprite.setTexture(*texture);
+        this->sprite.setTexture(*(sprite.getTexture()));
+        this->sprite.setTextureRect(sprite.getTextureRect());
     }
     virtual ~NormalTile() = default;
     virtual sf::Vector2i getPosition() const;

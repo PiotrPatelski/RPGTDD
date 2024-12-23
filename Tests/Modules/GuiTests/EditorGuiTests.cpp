@@ -4,6 +4,7 @@
 #include <ButtonListMock.hpp>
 #include <WindowMock.hpp>
 #include <EditorGui.hpp>
+#include <TileSelectorMock.hpp>
 
 namespace Gui
 {
@@ -13,6 +14,9 @@ using namespace ::testing;
 struct EditorGuiTest : public testing::Test
 {
     std::unique_ptr<EditorGui> sut;
+    std::unique_ptr<NiceMock<ButtonListMock>> pauseButtons = std::make_unique<NiceMock<ButtonListMock>>();
+    std::unique_ptr<NiceMock<TileSelectorMock>> tileSelector = std::make_unique<NiceMock<TileSelectorMock>>();
+    const sf::Vector2i currentMousePosition{30, 30};
 };
 
 
@@ -20,50 +24,75 @@ TEST_F(EditorGuiTest, EditorGuiExecutesGivenAction)
 {
     NiceMock<Events::GuiActionMock> guiAction;
     EXPECT_CALL(guiAction, execute(A<EditorGui&>()));
-    sut = std::make_unique<EditorGui>();
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
     sut->acceptRequest(guiAction);
 }
 
-TEST_F(EditorGuiTest, EditorGuiDoesNotUpdateAddedPauseMenuWhenNotPaused)
+TEST_F(EditorGuiTest, EditorGuiDoesNotUpdatePauseMenuWhenNotPaused)
 {
-    auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    const sf::Vector2i currentMousePosition{30, 30};
-    EXPECT_CALL(*pauseMenu, update(_)).Times(0);
-    sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
+    EXPECT_CALL(*pauseButtons, update(_)).Times(0);
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
     sut->update(currentMousePosition);
 }
 
-TEST_F(EditorGuiTest, EditorGuiUpdatesAddedPauseMenuWhenPaused)
+TEST_F(EditorGuiTest, EditorGuiUpdatesPauseMenuWhenPaused)
 {
-    auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    const sf::Vector2i currentMousePosition{30, 30};
-    EXPECT_CALL(*pauseMenu, update(Eq(currentMousePosition)));
-    sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
+    auto pauseButtons = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    EXPECT_CALL(*pauseButtons, update(Eq(currentMousePosition)));
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
     sut->togglePause();
     sut->update(currentMousePosition);
 }
 
-TEST_F(EditorGuiTest, EditorGuiDrawsAddedPauseMenuWhenPaused)
+TEST_F(EditorGuiTest, EditorGuiDrawsPauseMenuWhenPaused)
 {
-    auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::Window&>()));
-    sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
+    auto pauseButtons = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    EXPECT_CALL(*pauseButtons, drawTo(A<::Types::Window&>()));
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
     sut->togglePause();
     NiceMock<::Types::WindowMock> window;
     sut->drawTo(window);
 }
 
-TEST_F(EditorGuiTest, EditorGuiDoesNotDrawAddedPauseMenuWhenNotPaused)
+TEST_F(EditorGuiTest, EditorGuiDoesNotDrawPauseMenuWhenNotPaused)
 {
-    auto pauseMenu = std::make_unique<NiceMock<Gui::ButtonListMock>>();
-    EXPECT_CALL(*pauseMenu, drawTo(A<::Types::Window&>())).Times(0);
-    sut = std::make_unique<EditorGui>();
-    sut->addPauseMenu(PauseMenu{std::move(pauseMenu), ::Types::Background{}});
+    auto pauseButtons = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    EXPECT_CALL(*pauseButtons, drawTo(A<::Types::Window&>())).Times(0);
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
     NiceMock<::Types::WindowMock> window;
     sut->drawTo(window);
+}
+
+TEST_F(EditorGuiTest, EditorGuiDoesNotUpdateTextureSelectorWhenPaused)
+{
+    auto pauseButtons = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    auto tileSelector = std::make_unique<NiceMock<TileSelectorMock>>();
+    EXPECT_CALL(*pauseButtons, update(Eq(currentMousePosition)));
+    EXPECT_CALL(*tileSelector, update(Eq(currentMousePosition))).Times(0);
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
+    sut->togglePause();
+    sut->update(currentMousePosition);
+}
+
+TEST_F(EditorGuiTest, EditorGuiDoesNotUpdateTileSelectorWhenIsNotToggledAndIsNotPaused)
+{
+    auto pauseButtons = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    auto tileSelector = std::make_unique<NiceMock<TileSelectorMock>>();
+    EXPECT_CALL(*pauseButtons, update(Eq(currentMousePosition))).Times(0);
+    EXPECT_CALL(*tileSelector, update(Eq(currentMousePosition))).Times(0);
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
+    sut->update(currentMousePosition);
+}
+
+TEST_F(EditorGuiTest, EditorGuiUpdatesTileSelectorWhenIsToggledAndIsNotPaused)
+{
+    auto pauseButtons = std::make_unique<NiceMock<Gui::ButtonListMock>>();
+    auto tileSelector = std::make_unique<NiceMock<TileSelectorMock>>();
+    EXPECT_CALL(*pauseButtons, update(Eq(currentMousePosition))).Times(0);
+    EXPECT_CALL(*tileSelector, update(Eq(currentMousePosition)));
+    sut = std::make_unique<EditorGui>(PauseMenu{std::move(pauseButtons), ::Types::Background{}}, std::move(tileSelector));
+    sut->toggleTileSelector();
+    sut->update(currentMousePosition);
 }
 
 }
